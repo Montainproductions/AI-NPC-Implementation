@@ -14,8 +14,10 @@ public class Sc_Player_Movement : MonoBehaviour{
     [Tooltip("How fast can the character speed up and reach its max speed.")]
     [Range(0f, 100f)]
     private float acceleration;
-    private Vector3 desiredVelocity, velocity;
-    public Rigidbody rb;
+    private Vector3 movement, velocity;
+    [HideInInspector]
+    public Vector3 desiredVelocity;
+    private Rigidbody rb;
 
     private Vector2 inputVector;
 
@@ -37,8 +39,8 @@ public class Sc_Player_Movement : MonoBehaviour{
     private bool canCrouch;
     private bool isCrouching;
 
-    //Gravity and jumping
-    private Vector3 upAxis;
+    //HeadBobbing
+    //https://sharpcoderblog.com/blog/head-bobbing-effect-in-unity-3d
 
     public void Awake(){
         playerInputActions = new PlayerInputActions();
@@ -46,16 +48,15 @@ public class Sc_Player_Movement : MonoBehaviour{
         playerInputActions.Player.Jump.performed += Jump_Performed;
         playerInputActions.Player.Crouch.performed += Crouch_performed;
         playerInputActions.Player.Crouch.canceled += Crouch_performed;
+
+        rb = GetComponent<Rigidbody>();
     }
 
     // Start is called before the first frame update
     void Start(){
+        //Jumping
         groundDistance = 0.1f;
         jumping = false;
-    }
-
-    public void FixedUpdate(){
-        upAxis = -Physics.gravity.normalized;
     }
 
     // Update is called once per frame
@@ -81,7 +82,7 @@ public class Sc_Player_Movement : MonoBehaviour{
         Vector3 displacement = velocity * Time.deltaTime;
         //transform.position += displacement;
 
-        Vector3 movement = transform.right * displacement.x + transform.up * displacement.y + transform.forward * displacement.z;
+        movement = transform.right * displacement.x + transform.up * displacement.y + transform.forward * displacement.z;
         transform.position += movement;
     }
 

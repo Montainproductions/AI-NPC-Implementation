@@ -13,9 +13,12 @@ I mostly plan on mostly working on this 3D character since I mostly like working
 - Health
 - Healing over time
 - Crouching
+- Camera/head bobbing while walking
 
 ## Features Im working on
-- Camera bobbing while walking
+- Combat
+- Melee combat
+- Firearm (Shooting) combat
 
 ## Features I plan to impliment
 - Picking up items
