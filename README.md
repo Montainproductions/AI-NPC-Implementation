@@ -12,10 +12,10 @@ I mostly plan on mostly working on this 3D character since I mostly like working
 - Jumping
 - Health
 - Healing over time
+- Crouching
 
 ## Features Im working on
 - Camera bobbing while walking
-- Crouching
 
 ## Features I plan to impliment
 - Picking up items

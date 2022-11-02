@@ -21,6 +21,9 @@ public class Sc_Player_Movement : MonoBehaviour{
 
     //Ground check shenanigens
     [SerializeField]
+    [Tooltip("Is jumping allowed?")]
+    private bool canJump;
+    [SerializeField]
     [Tooltip("Height power that will control how high the character can jump.")]
     [Range(0f, 100f)]
     private float jumpingPower;
@@ -29,6 +32,11 @@ public class Sc_Player_Movement : MonoBehaviour{
     private float groundDistance;
     private bool isGrounded, jumping;
 
+    [SerializeField]
+    [Tooltip("Is crouching allowed?")]
+    private bool canCrouch;
+    private bool isCrouching;
+
     //Gravity and jumping
     private Vector3 upAxis;
 
@@ -36,6 +44,8 @@ public class Sc_Player_Movement : MonoBehaviour{
         playerInputActions = new PlayerInputActions();
         playerInputActions.Player.Enable();
         playerInputActions.Player.Jump.performed += Jump_Performed;
+        playerInputActions.Player.Crouch.performed += Crouch_performed;
+        playerInputActions.Player.Crouch.canceled += Crouch_performed;
     }
 
     // Start is called before the first frame update
@@ -60,10 +70,9 @@ public class Sc_Player_Movement : MonoBehaviour{
         //Debug.Log(jumping);
         //Debug.Log(transform.up);
 
-        if (jumping){
-            jumping = false;
-            Jump();
-        }
+        Jump();
+
+        Crouching();
 
         desiredVelocity = new Vector3(inputVector.x, 0f, inputVector.y) * maxSpeed;
         float maxSpeedChange = acceleration * Time.deltaTime;
@@ -77,15 +86,43 @@ public class Sc_Player_Movement : MonoBehaviour{
     }
 
     public void Jump(){
+        if(!canJump) return;
+        if(!jumping) return;
+
         if (isGrounded){
             //Debug.Log("Jumping high");
             rb.AddForce(Vector3.up * jumpingPower,ForceMode.Impulse);
+        }
+
+        jumping = false;
+    }
+
+    public void Crouching(){
+
+        if (!canCrouch) return;
+        
+        if (isCrouching && transform.localScale.y > 0.5f){
+            //Debug.Log("Crouching");
+            transform.localScale -= new Vector3(0, 0.5f, 0);
+        }else if (!isCrouching && transform.localScale.y < 1f){
+            //Debug.Log("Standing up");
+            transform.localScale += new Vector3(0, 0.5f, 0);
         }
     }
 
     public void Jump_Performed(InputAction.CallbackContext context){
         if (!context.performed) return;
-        Debug.Log("Jumping");
+        //Debug.Log("Jumping");
         jumping = true;
+    }
+
+    private void Crouch_performed(InputAction.CallbackContext context){
+        if(context.performed){
+            //Debug.Log("Crouching");
+            isCrouching = true;
+        }else if(context.canceled){
+            //Debug.Log("Standing up");
+            isCrouching = false;
+        }
     }
 }

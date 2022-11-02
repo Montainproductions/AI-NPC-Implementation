@@ -14,11 +14,10 @@ public class Sc_Health : MonoBehaviour{
     [Range(0, 1000)]
     private float maxHealth;
     private float lastTimeHitTimer;
-    private bool recentlyHit;
     [SerializeField]
-    [Tooltip("Can the character heal X HP per second?")]
-    [Range(0, 1000)]
-    private bool healingAllowed;
+    [Tooltip("Can the character heal healingRate HP per second?")]
+    private bool healingOverTimeAllowed;
+    private bool recentlyHit;
     [SerializeField]
     [Tooltip("Rate in which the character will heal over time.")]
     [Range(0, 1000)]
@@ -35,9 +34,8 @@ public class Sc_Health : MonoBehaviour{
     void Update(){
         if(currentHealth <= 0){} //If no more Health then tell the game manager to go to end game
 
-        if (healingAllowed){
-            Healing();
-        }
+        if(!healingOverTimeAllowed) return;
+        Healing();
     }
 
     public void Healing(){
