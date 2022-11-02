@@ -5,9 +5,24 @@ using UnityEngine;
 public class Sc_Health : MonoBehaviour{
 
     //Health
-    public float currentHealth, maxHealth;
+    [SerializeField]
+    [Tooltip("Current health that the character has at any point.")]
+    [Range(0,1000)]
+    private float currentHealth;
+    [SerializeField]
+    [Tooltip("Max health character can have at any point in time.")]
+    [Range(0, 1000)]
+    private float maxHealth;
     private float lastTimeHitTimer;
     private bool recentlyHit;
+    [SerializeField]
+    [Tooltip("Can the character heal X HP per second?")]
+    [Range(0, 1000)]
+    private bool healingAllowed;
+    [SerializeField]
+    [Tooltip("Rate in which the character will heal over time.")]
+    [Range(0, 1000)]
+    private int healingRate;
 
     // Start is called before the first frame update
     void Start(){
@@ -20,7 +35,9 @@ public class Sc_Health : MonoBehaviour{
     void Update(){
         if(currentHealth <= 0){} //If no more Health then tell the game manager to go to end game
 
-        Healing();
+        if (healingAllowed){
+            Healing();
+        }
     }
 
     public void Healing(){
@@ -35,7 +52,7 @@ public class Sc_Health : MonoBehaviour{
             recentlyHit = false;
         }else{
             lastTimeHitTimer = 0;
-            currentHealth += 1 * Time.deltaTime;
+            currentHealth += healingRate * Time.deltaTime;
         }
     }
 

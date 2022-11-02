@@ -552,8 +552,9 @@ GameObject:
   - component: {fileID: 884952686}
   - component: {fileID: 884952685}
   - component: {fileID: 884952684}
-  - component: {fileID: 884952688}
   - component: {fileID: 884952689}
+  - component: {fileID: 884952688}
+  - component: {fileID: 884952690}
   m_Layer: 0
   m_Name: Player
   m_TagString: Player
@@ -656,13 +657,12 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   maxSpeed: 6
   acceleration: 5.5
-  inputVector: {x: 0, y: 0}
-  jumpingHeight: 2
+  rb: {fileID: 884952689}
+  jumpingPower: 5
   groundCheck: {fileID: 292857525}
   groundMask:
     serializedVersion: 2
     m_Bits: 8
-  upAxis: {x: 0, y: 0, z: 0}
 --- !u!54 &884952689
 Rigidbody:
   m_ObjectHideFlags: 0
@@ -671,14 +671,30 @@ Rigidbody:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 884952683}
   serializedVersion: 2
-  m_Mass: 2
-  m_Drag: 0
-  m_AngularDrag: 0.05
+  m_Mass: 1
+  m_Drag: 0.1
+  m_AngularDrag: 0.1
   m_UseGravity: 1
   m_IsKinematic: 0
   m_Interpolate: 0
   m_Constraints: 112
-  m_CollisionDetection: 0
+  m_CollisionDetection: 1
+--- !u!114 &884952690
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 884952683}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 46379d01e2457ac47aff58c2f987be41, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  currentHealth: 0
+  maxHealth: 100
+  healingAllowed: 0
+  healingRate: 1
 --- !u!1 &963194225
 GameObject:
   m_ObjectHideFlags: 0
