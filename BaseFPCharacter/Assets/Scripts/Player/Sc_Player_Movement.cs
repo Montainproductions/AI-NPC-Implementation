@@ -7,17 +7,23 @@ public class Sc_Player_Movement : MonoBehaviour
 {
     private PlayerInputActions playerInputActions;
 
-    public float speed;
+    public float speed, jumpingPower;
     public CharacterController controller;
     public Rigidbody rb;
 
+    public Vector2 inputVector;
+    public Vector3 movement;
+
     //Ground check shenanigens
     private float gravity;
-    private Vector3 velocity;
+    private Vector3 velocity, jumpingVelocity;
     public Transform groundCheck;
     private float groundDistance;
     public LayerMask groundMask;
-    private bool isGrounded;
+    private bool isGrounded, jumping;
+
+    //Gravity and jumping
+    public Vector3 upAxis;
 
     public void Awake(){
         playerInputActions = new PlayerInputActions();
@@ -28,11 +34,17 @@ public class Sc_Player_Movement : MonoBehaviour
     // Start is called before the first frame update
     void Start(){
         gravity = -9.81f;
-        groundDistance = 0.4f;
+        groundDistance = 0.1f;
+        jumping = false;
+        isGrounded= true;
     }
 
     // Update is called once per frame
     void Update(){Movement();}
+
+    public void FixedUpdate(){
+        upAxis = -Physics.gravity.normalized;
+    }
 
     public void Movement(){
         isGrounded = Physics.CheckSphere(groundCheck.position, groundDistance, groundMask);
@@ -44,15 +56,27 @@ public class Sc_Player_Movement : MonoBehaviour
 
         controller.Move(velocity * Time.deltaTime);
 
-        Vector2 inputVector = playerInputActions.Player.Movement.ReadValue<Vector2>();
-        Vector3 movement = transform.right * inputVector.x + transform.forward * inputVector.y;
+        if (jumping && isGrounded){
+            Debug.Log("Is Jumping");
+            jumpingVelocity = new Vector3(0, 20f, 0);
+            //controller.Move(jumpingVelocity * Time.deltaTime);
+            gameObject.transform.position += jumpingVelocity;
+        }
+
+        inputVector = playerInputActions.Player.Movement.ReadValue<Vector2>();
+        inputVector = Vector2.ClampMagnitude(inputVector, 1f);
+        movement = transform.right * inputVector.x + transform.forward * inputVector.y;
+
+        velocity = new Vector3(inputVector.x, 0f, inputVector.y);
+        movement = velocity * Time.deltaTime;
+        transform.localPosition += movement;
 
         controller.Move(movement * Time.deltaTime * speed);
     }
 
     public void Jump_Performed(InputAction.CallbackContext context){
         if (!context.performed) return;
-
-        rb.AddForce(Vector3.up * 5.0f, ForceMode.Impulse);
+        Debug.Log("Jumping");
+        jumping = true;
     }
 }

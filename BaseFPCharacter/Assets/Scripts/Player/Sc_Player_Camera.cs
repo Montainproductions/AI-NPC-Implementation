@@ -21,7 +21,7 @@ public class Sc_Player_Camera : MonoBehaviour{
     }
 
     // Start is called before the first frame update
-    void Start(){inUI = true;}
+    void Start(){inUI = false;}
 
     // Update is called once per frame
     void Update(){
