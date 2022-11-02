@@ -5,6 +5,7 @@ using UnityEngine.InputSystem;
 
 public class Sc_Player_Movement : MonoBehaviour{
     private PlayerInputActions playerInputActions;
+    public static Sc_Player_Movement Instance { get; private set; }
 
     [SerializeField]
     [Tooltip("Max speed character can go at after it has fully accelerated.")]
@@ -43,6 +44,8 @@ public class Sc_Player_Movement : MonoBehaviour{
     //https://sharpcoderblog.com/blog/head-bobbing-effect-in-unity-3d
 
     public void Awake(){
+        Instance = this;
+
         playerInputActions = new PlayerInputActions();
         playerInputActions.Player.Enable();
         playerInputActions.Player.Jump.performed += Jump_Performed;

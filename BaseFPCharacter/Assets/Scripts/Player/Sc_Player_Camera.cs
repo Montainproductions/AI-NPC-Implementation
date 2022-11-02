@@ -16,6 +16,8 @@ public class Sc_Player_Camera : MonoBehaviour{
     public float xRotation = 0f;
 
     public void Awake(){
+        Instance = this;
+
         playerInputActions = new PlayerInputActions();
         playerInputActions.Player.Enable();
     }
