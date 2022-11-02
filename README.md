@@ -19,6 +19,7 @@ I mostly plan on mostly working on this 3D character since I mostly like working
 - Combat
 - Melee combat
 - Firearm (Shooting) combat
+- UI (Mostly to show that the other features are working)
 
 ## Features I plan to impliment
 - Picking up items
@@ -44,6 +45,7 @@ After working and finishing the 3D character I plan on working on a 2D character
 ## Current features
 - Health
 - Healing over time
+- Crouching
 
 ## Features Im working on
 
@@ -51,8 +53,6 @@ After working and finishing the 3D character I plan on working on a 2D character
 ## Features I plan to impliment
 - Movement (Transform position)
 - Jumping
-- Camera bobbing while walking
-- Crouching
 - Picking up items
 - Melee combat
 - Firearm (Shooting) combat
