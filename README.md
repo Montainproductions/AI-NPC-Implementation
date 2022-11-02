@@ -20,11 +20,11 @@ Over the past couple of years whenever I have started a new Unity project I find
 - UI (Mostly to show that the other features are working)
 
 ## Features future implimentation
-### Depending on how fast I complete the other features and if I feel like this are interesting things to still implementing
+### Depending on how the other implimentation is added the bottem section might be added.
 - Wall running
 - Throwables
 - Grapple gun
-- Blocking
+- Blocking melee attacks
 
 ## Things I am currently not planning on implementing
 - Animation. There will be Debug.Log() that can show current values and some basic UI to demonstrate when certain things are active.
