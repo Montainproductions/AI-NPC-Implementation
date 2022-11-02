@@ -4,9 +4,9 @@
 Over the past couple of years whenever I have started a new Unity project I find my self spending a few hours to a few days recreating a first person character just so that I could finally start testing any ideas that I might of originally wanted. This lead me to creating this Repo where I have a basic first person character based on 'Catslike coding" tutorial ([Link](https://catlikecoding.com/unity/tutorials/)) and adding some extra things that I normally like to have in my character. At the same time many of the turorials are made for the old movement system which isent as friendly for adding and having diffrent controllers working which is why I also implimented the new input system and Im planning over time implementing more controller support.
 
 ## Current features
-- Movement (Character controller)
+- Movement (Transform position)
 - Camera looking
-- Jumping
+- Jumping (Sort of)
 
 ## Features I wish to impliment
 - Picking up items

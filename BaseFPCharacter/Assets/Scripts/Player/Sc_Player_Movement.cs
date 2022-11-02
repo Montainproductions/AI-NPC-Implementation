@@ -13,13 +13,14 @@ public class Sc_Player_Movement : MonoBehaviour{
     [Range(0f, 100f)]
     private float acceleration;
     private Vector3 desiredVelocity, velocity;
-    private float jumpingPower;
     //public Rigidbody rb;
 
     public Vector2 inputVector;
 
     //Ground check shenanigens
-    private float gravity;
+    [SerializeField]
+    [Range(0f, 100f)]
+    private float jumpingHeight;
     private Vector3 jumpingVelocity;
     public Transform groundCheck;
     private float groundDistance;
@@ -39,7 +40,6 @@ public class Sc_Player_Movement : MonoBehaviour{
     void Start(){
         groundDistance = 0.1f;
         jumping = false;
-        isGrounded= true;
     }
 
     // Update is called once per frame
@@ -47,27 +47,15 @@ public class Sc_Player_Movement : MonoBehaviour{
 
     public void FixedUpdate(){
         upAxis = -Physics.gravity.normalized;
+
+        if (jumping && isGrounded)
+        {
+            jumping = false;
+            Jump();
+        }
     }
 
     public void Movement(){
-        isGrounded = Physics.CheckSphere(groundCheck.position, groundDistance, groundMask);
-        //Debug.Log(isGrounded);
-
-        /*if (isGrounded && velocity.y < 0){velocity.y = -1;}
-
-        velocity.y += gravity * Time.deltaTime;
-
-        controller.Move(velocity * Time.deltaTime);
-        */
-
-        if (jumping && isGrounded){
-            Debug.Log("Is Jumping");
-            jumpingVelocity = new Vector3(0, 20f, 0);
-            //controller.Move(jumpingVelocity * Time.deltaTime);
-            //gameObject.transform.position += jumpingVelocity;
-            jumping = false;
-        }
-
         inputVector = playerInputActions.Player.Movement.ReadValue<Vector2>();
         inputVector = Vector2.ClampMagnitude(inputVector, 1f);
 
@@ -76,7 +64,20 @@ public class Sc_Player_Movement : MonoBehaviour{
         velocity.x = Mathf.MoveTowards(velocity.x, desiredVelocity.x, maxSpeedChange);
         velocity.z = Mathf.MoveTowards(velocity.z, desiredVelocity.z, maxSpeedChange);
         Vector3 displacement = velocity * Time.deltaTime;
-        transform.localPosition += displacement;
+        //transform.position += displacement;
+
+        isGrounded = Physics.CheckSphere(groundCheck.position, groundDistance, groundMask);
+        Debug.Log(isGrounded);
+
+        Vector3 movement = transform.right * displacement.x + transform.up * displacement.y + transform.forward * displacement.z;
+        transform.position += movement;
+    }
+
+    public void Jump(){
+        //if (isGrounded){
+            velocity.y += 4;//Mathf.Sqrt(-2f * Physics.gravity.y * jumpingHeight);
+            Debug.Log(velocity.y);
+        //}
     }
 
     public void Jump_Performed(InputAction.CallbackContext context){
@@ -84,4 +85,12 @@ public class Sc_Player_Movement : MonoBehaviour{
         Debug.Log("Jumping");
         jumping = true;
     }
+
+    public void OnCollisionEnter(Collision collision){
+        isGrounded = true;
+    }
+    public void OnCollisionStay(){
+        isGrounded = true;
+    }
+
 }
