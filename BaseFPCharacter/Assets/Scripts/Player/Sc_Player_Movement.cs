@@ -3,20 +3,24 @@ using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.InputSystem;
 
-public class Sc_Player_Movement : MonoBehaviour
-{
+public class Sc_Player_Movement : MonoBehaviour{
     private PlayerInputActions playerInputActions;
 
-    public float speed, jumpingPower;
-    public CharacterController controller;
-    public Rigidbody rb;
+    [SerializeField]
+    [Range(0f, 100f)]
+    private float maxSpeed;
+    [SerializeField]
+    [Range(0f, 100f)]
+    private float acceleration;
+    private Vector3 desiredVelocity, velocity;
+    private float jumpingPower;
+    //public Rigidbody rb;
 
     public Vector2 inputVector;
-    public Vector3 movement;
 
     //Ground check shenanigens
     private float gravity;
-    private Vector3 velocity, jumpingVelocity;
+    private Vector3 jumpingVelocity;
     public Transform groundCheck;
     private float groundDistance;
     public LayerMask groundMask;
@@ -33,7 +37,6 @@ public class Sc_Player_Movement : MonoBehaviour
 
     // Start is called before the first frame update
     void Start(){
-        gravity = -9.81f;
         groundDistance = 0.1f;
         jumping = false;
         isGrounded= true;
@@ -50,28 +53,30 @@ public class Sc_Player_Movement : MonoBehaviour
         isGrounded = Physics.CheckSphere(groundCheck.position, groundDistance, groundMask);
         //Debug.Log(isGrounded);
 
-        if (isGrounded && velocity.y < 0){velocity.y = -1;}
+        /*if (isGrounded && velocity.y < 0){velocity.y = -1;}
 
         velocity.y += gravity * Time.deltaTime;
 
         controller.Move(velocity * Time.deltaTime);
+        */
 
         if (jumping && isGrounded){
             Debug.Log("Is Jumping");
             jumpingVelocity = new Vector3(0, 20f, 0);
             //controller.Move(jumpingVelocity * Time.deltaTime);
-            gameObject.transform.position += jumpingVelocity;
+            //gameObject.transform.position += jumpingVelocity;
+            jumping = false;
         }
 
         inputVector = playerInputActions.Player.Movement.ReadValue<Vector2>();
         inputVector = Vector2.ClampMagnitude(inputVector, 1f);
-        movement = transform.right * inputVector.x + transform.forward * inputVector.y;
 
-        velocity = new Vector3(inputVector.x, 0f, inputVector.y);
-        movement = velocity * Time.deltaTime;
-        transform.localPosition += movement;
-
-        controller.Move(movement * Time.deltaTime * speed);
+        desiredVelocity = new Vector3(inputVector.x, 0f, inputVector.y) * maxSpeed;
+        float maxSpeedChange = acceleration * Time.deltaTime;
+        velocity.x = Mathf.MoveTowards(velocity.x, desiredVelocity.x, maxSpeedChange);
+        velocity.z = Mathf.MoveTowards(velocity.z, desiredVelocity.z, maxSpeedChange);
+        Vector3 displacement = velocity * Time.deltaTime;
+        transform.localPosition += displacement;
     }
 
     public void Jump_Performed(InputAction.CallbackContext context){
