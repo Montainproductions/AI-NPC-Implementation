@@ -19,7 +19,8 @@ Over the past couple of years whenever I have started a new Unity project I find
 - Inventory (Both quick by changing through mouse wheel and backpack style of inventory)
 - UI (Mostly to show that the other features are working)
 
-## Features future implimentation (Depending on how fast I complete the other features and if I feel like this are interesting things to still implementing)
+## Features future implimentation
+### Depending on how fast I complete the other features and if I feel like this are interesting things to still implementing
 - Wall running
 - Throwables
 - Grapple gun
