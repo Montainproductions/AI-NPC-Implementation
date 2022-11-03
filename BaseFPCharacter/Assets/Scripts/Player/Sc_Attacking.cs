@@ -49,9 +49,18 @@ public class Sc_Attacking : MonoBehaviour{
         var rotation = Quaternion.LookRotation(lookPos);
         transform.rotation = Quaternion.Slerp(transform.rotation, rotation, Time.deltaTime * damping);
 
-        if (hitTarget){enemyAttacked.GetComponent<Sc_Health>().TakeDamage(meleeDamage);}
+        //if (hitTarget){enemyAttacked.GetComponent<Sc_Health>().TakeDamage(meleeDamage);}
 
         if (!canFireGunAttack) return;
+    }
+
+    public void OnCollisionEnter(Collider collision){
+        if(collision.tag == "Enemy"){
+            if (attacking){
+                Debug.Log("Hit Enemy");
+                collision.gameObject.GetComponent<Sc_Health>().TakeDamage(meleeDamage);
+            }
+        }
     }
 
     private void Attacking_performed(UnityEngine.InputSystem.InputAction.CallbackContext obj){
