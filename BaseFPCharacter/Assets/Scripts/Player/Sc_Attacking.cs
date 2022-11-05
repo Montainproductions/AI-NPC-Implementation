@@ -1,6 +1,7 @@
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.InputSystem;
 
 public class Sc_Attacking : MonoBehaviour{
     private PlayerInputActions playerInputActions;
@@ -19,7 +20,6 @@ public class Sc_Attacking : MonoBehaviour{
     private float meleeDamage;
     private float lastAttackTimer;
     private bool attacking, hitTarget;
-    private GameObject enemyAttacked;
 
     //Shooting
     [SerializeField]
@@ -42,7 +42,7 @@ public class Sc_Attacking : MonoBehaviour{
         if(!canMeleeAttack) return;
 
         if(attacking){lastAttackTimer -= Time.deltaTime;}
-        if(lastAttackTimer <= 0){attacking = false;}
+        if(lastAttackTimer <= 2.0f){attacking = false;}
         
         var lookPos = (Vector3.up * Sc_Player_Camera.Instance.mouseX) - transform.position;
         lookPos.y = 0;
@@ -54,16 +54,18 @@ public class Sc_Attacking : MonoBehaviour{
         if (!canFireGunAttack) return;
     }
 
-    public void OnCollisionEnter(Collider collision){
+    public void OnTriggerEnter(Collider collision){
         if(collision.tag == "Enemy"){
-            if (attacking){
+            if(attacking){
                 Debug.Log("Hit Enemy");
                 collision.gameObject.GetComponent<Sc_Health>().TakeDamage(meleeDamage);
             }
         }
     }
 
-    private void Attacking_performed(UnityEngine.InputSystem.InputAction.CallbackContext obj){
+    private void Attacking_performed(InputAction.CallbackContext context){
+        if(!context.performed) return;
+        lastAttackTimer = 4.0f;
         attacking = true;
     }
 }

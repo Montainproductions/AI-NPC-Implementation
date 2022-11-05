@@ -1,6 +1,7 @@
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.InputSystem;
 
 public class Sc_Player_Camera : MonoBehaviour{
     public static Sc_Player_Camera Instance{get; private set;}
