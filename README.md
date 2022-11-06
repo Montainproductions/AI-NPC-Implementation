@@ -23,10 +23,7 @@ I mostly plan on mostly working on this 3D character since I mostly like working
 
 ## Features I plan to impliment
 - Picking up items
-- Melee combat
-- Firearm (Shooting) combat
 - Inventory (Both quick by changing through mouse wheel and backpack style of inventory)
-- UI (Mostly to show that the other features are working)
 
 ## Features future implimentation
 ### Depending on how the other implimentation is added the bottem section might be added.
