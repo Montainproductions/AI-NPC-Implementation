@@ -14,10 +14,10 @@ I mostly plan on mostly working on this 3D character since I mostly like working
 - Healing over time
 - Crouching
 - Camera/head bobbing while walking
+- Melee combat
 
 ## Features Im working on
 - Combat
-- Melee combat
 - Firearm (Shooting) combat
 - UI (Mostly to show that the other features are working)
 

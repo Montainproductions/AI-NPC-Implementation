@@ -39,8 +39,8 @@ public class Sc_Player_Camera : MonoBehaviour{
         float horizontal = playerInputActions.Player.Mouse.ReadValue<Vector2>().x;
         float vertical = playerInputActions.Player.Mouse.ReadValue<Vector2>().y;
 
-        float mouseX = horizontal * mouseSensativity * Time.deltaTime;
-        float mouseY = vertical * mouseSensativity * Time.deltaTime;
+        mouseX = horizontal * mouseSensativity * Time.deltaTime;
+        mouseY = vertical * mouseSensativity * Time.deltaTime;
 
         xRotation -= mouseY;
         xRotation = Mathf.Clamp(xRotation, -90f, 90f);
