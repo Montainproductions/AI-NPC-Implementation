@@ -46,9 +46,11 @@ public class Sc_Attacking : MonoBehaviour{
         var rotation = Quaternion.LookRotation(lookPos);
         transform.rotation = Quaternion.Slerp(transform.rotation, rotation, Time.deltaTime * damping);
 
-        if (!canMeleeAttack){
-            if (lastAttackTimer >= 0.0f) { lastAttackTimer -= Time.deltaTime; }
-            if (lastAttackTimer <= 2.0f) { attacking = false; }
+        if (canMeleeAttack){
+            if(attacking){Sc_Basic_UI.Instance.CantAttackUI();}
+            if(!attacking){Sc_Basic_UI.Instance.CanAttackUI();}
+            if(lastAttackTimer >= 0.0f){lastAttackTimer -= Time.deltaTime;}
+            if(lastAttackTimer <= 2.0f){attacking = false;}
             Debug.Log(attacking);
         }
         //if (hitTarget){enemyAttacked.GetComponent<Sc_Health>().TakeDamage(meleeDamage);}
@@ -59,9 +61,10 @@ public class Sc_Attacking : MonoBehaviour{
     }
 
     public void OnTriggerStay(Collider collision){
-        if(!(collision.tag == "Enemy") && !attacking) return;
-        if(canMeleeAttack){
-            collision.GetComponent<Sc_Health>().TakeDamage(meleeDamage);
+        if ((collision.tag == "Enemy") && attacking){
+            if (canMeleeAttack){
+                collision.GetComponent<Sc_Health>().TakeDamage(meleeDamage);
+            }
         }
     }
 
