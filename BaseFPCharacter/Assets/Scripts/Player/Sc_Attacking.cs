@@ -48,14 +48,13 @@ public class Sc_Attacking : MonoBehaviour{
 
         if (canMeleeAttack){
             if(attacking){Sc_Basic_UI.Instance.CantAttackUI();}
-            if(!attacking){Sc_Basic_UI.Instance.CanAttackUI();}
+            else{Sc_Basic_UI.Instance.CanAttackUI();}
             if(lastAttackTimer >= 0.0f){lastAttackTimer -= Time.deltaTime;}
             if(lastAttackTimer <= 2.0f){attacking = false;}
-            Debug.Log(attacking);
+            //Debug.Log(attacking);
         }
-        //if (hitTarget){enemyAttacked.GetComponent<Sc_Health>().TakeDamage(meleeDamage);}
 
-        if (!canFireGunAttack){
+        if (canFireGunAttack){
 
         }
     }
