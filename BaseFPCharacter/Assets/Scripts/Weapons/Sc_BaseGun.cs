@@ -4,6 +4,9 @@ using UnityEngine;
 
 public class Sc_BaseGun : MonoBehaviour{
     [SerializeField]
+    private float dmgPerBullet;
+
+    [SerializeField]
     private bool canShoot;
     [SerializeField]
     private bool hasShot;
@@ -48,7 +51,8 @@ public class Sc_BaseGun : MonoBehaviour{
 
     public void Shotfired(){
         currentAmmoAmount--;
-        Instantiate(spawnBullets, mainHole.transform);
+        GameObject newBullet = Instantiate(spawnBullets, mainHole.transform);
+        newBullet.GetComponent<Sc_Bullet>().SetDamageAmount(dmgPerBullet);
     }
 
     public void Reloaded(){
