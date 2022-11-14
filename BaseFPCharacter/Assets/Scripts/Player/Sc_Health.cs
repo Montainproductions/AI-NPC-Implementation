@@ -13,11 +13,11 @@ public class Sc_Health : MonoBehaviour{
     [Tooltip("Max health character can have at any point in time.")]
     [Range(0, 1000)]
     private float maxHealth;
-    private float lastTimeHitTimer;
+    private float lastTimeHitTimer; //Timer to know when to start the self healing
     [SerializeField]
     [Tooltip("Can the character heal healingRate HP per second?")]
     private bool healingOverTimeAllowed;
-    private bool recentlyHit;
+    private bool recentlyHit; //If the character was recently hit most for the healing
     [SerializeField]
     [Tooltip("Rate in which the character will heal over time.")]
     [Range(0, 1000)]
@@ -34,28 +34,33 @@ public class Sc_Health : MonoBehaviour{
     void Update(){
         if(currentHealth <= 0){Destroy(gameObject);} //If no more Health then tell the game manager to go to end game
 
-        if(!healingOverTimeAllowed) return;
+        if(!healingOverTimeAllowed) return; //If the player isnt allowed to heal automaticly then return
         Healing();
     }
 
+    //Heal over time at a certain amount of hp per second
     public void Healing(){
+        //If the current hp is over the max just set it to the max
         if(currentHealth >= maxHealth){
             currentHealth = maxHealth;
             return;
         }
 
+        //If the player was recently hit then increase timer
         if(recentlyHit){lastTimeHitTimer += Time.deltaTime;}
-        else if(recentlyHit && lastTimeHitTimer > 5.0f){
+        else if(recentlyHit && lastTimeHitTimer > 5.0f){ //Else if it was recently hit but 5 seconds have passed then they player wasnt hit recently
             lastTimeHitTimer = 0;
             recentlyHit = false;
-        }else{
+        }else{ //Start healing
             lastTimeHitTimer = 0;
             currentHealth += healingRate * Time.deltaTime;
         }
     }
 
+    //Take damage will reduce the amount of health the player currently has
     public void TakeDamage(float damage){
         currentHealth -= damage;
+        recentlyHit = true;
         Debug.Log(currentHealth);
     }
 }

@@ -17,8 +17,8 @@ public class Sc_HeadBobbing : MonoBehaviour{
     [Range(0f, 1f)]
     public float bobbingAmount = 0.05f;
     public Sc_Player_Movement controller;
-    float defaultPosY = 0;
-    float timer = 0;
+    float defaultPosY = 0; //Current position of camera
+    float timer = 0; //Timer for camera restart
 
     // Start is called before the first frame update
     void Start(){
@@ -27,7 +27,8 @@ public class Sc_HeadBobbing : MonoBehaviour{
 
     // Update is called once per frame
     void Update(){
-        if(!canBob) return;
+        if(!canBob) return; //If the player isnt allowed to have a bobbing head then stop
+        //Some fancy sine movment for the camera so it is moving up and down at a constant rate
         if(Mathf.Abs(controller.desiredVelocity.x) > 0.1f || Mathf.Abs(controller.desiredVelocity.z) > 0.1f){
             //Player is moving
             timer += Time.deltaTime * walkingBobbingSpeed;
