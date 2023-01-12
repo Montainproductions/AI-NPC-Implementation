@@ -7,12 +7,10 @@ public class Sc_BaseGun : MonoBehaviour{
     private float dmgPerBullet;
 
     [SerializeField]
-    private bool canShoot;
-    [SerializeField]
-    private bool hasShot;
+    private int bulletQuant;
 
     [SerializeField]
-    private GameObject spawnBullets;
+    private GameObject spawnBullet;
     [SerializeField]
     private GameObject mainHole;
 
@@ -26,41 +24,46 @@ public class Sc_BaseGun : MonoBehaviour{
     private bool reloaded;
     [SerializeField]
     private float reloadTimer;
-    private float currentReloadTimer;
 
     // Start is called before the first frame update
-    void Start(){
+    void Start()
+    {
         maxAmmo -= maxClipAmmo;
         currentAmmoAmount = maxClipAmmo;
     }
 
     // Update is called once per frame
-    void Update(){
-        if(!canShoot) return;
+    void Update()
+    {
+    }
 
-        if(reloaded && maxAmmo >= maxClipAmmo){
-            Reloaded();
-        }else if(maxAmmo < maxClipAmmo){
+    public IEnumerator ShotFired()
+    {
+        if (currentAmmoAmount > 0)
+        {
+            for (int i = 0; i < bulletQuant; i++)
+            {
+                currentAmmoAmount--;
+                GameObject newBullet = Instantiate(spawnBullet, mainHole.transform);
+                newBullet.GetComponent<Sc_Bullet>().SetDamageAmount(dmgPerBullet);
+                newBullet.GetComponent<Rigidbody>().AddForce(0, 0, 1, ForceMode.Impulse);
+            }
+        }
+        else
+        {
             //Play audio clip
             Debug.Log("Not enough ammo");
         }
-
-        if (!hasShot && currentAmmoAmount > 0) return;
-        Shotfired();
+        yield return null;
     }
 
-    public void Shotfired(){
-        currentAmmoAmount--;
-        GameObject newBullet = Instantiate(spawnBullets, mainHole.transform);
-        newBullet.GetComponent<Sc_Bullet>().SetDamageAmount(dmgPerBullet);
-    }
 
-    public void Reloaded(){
-        //Play reloading audio clip
-        currentReloadTimer += Time.deltaTime;
-        if(currentReloadTimer >= reloadTimer) {
-            currentAmmoAmount = maxClipAmmo;
-            maxAmmo -= maxClipAmmo;
-        }
+
+    public IEnumerator Reloading()
+    {
+        yield return new WaitForSeconds(reloadTimer);
+        currentAmmoAmount = maxClipAmmo;
+        maxAmmo -= maxClipAmmo;
+        yield return null;
     }
 }

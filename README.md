@@ -26,14 +26,14 @@ I mostly plan on mostly working on this 3D character since I mostly like working
 - Inventory (Both quick by changing through mouse wheel and backpack style of inventory)
 
 ## Features future implimentation
-### Depending on how the other implimentation is added the bottem section might be added.
+### If more people start using this package then I might add the following features
 - Wall running
 - Throwables
 - Grapple gun
 - Blocking melee attacks
 
 ## Things I am currently not planning on implementing
-- Animation. There will be Debug.Log() that can show current values and some basic UI to demonstrate when certain things are active.
+- Animation. Since animations are very dependent on the models being used I want it to still be open for each project and the models they use.
 - Sound. This might be to much since it can be very diffrent depending on the game each person is planning on making and it would be very hard to make enough audio clips for each situation that a person can find themselves in. Especially for the scope of this project.
 
 ## 2D
@@ -42,7 +42,6 @@ After working and finishing the 3D character I plan on working on a 2D character
 ## Current features
 - Health
 - Healing over time
-- Crouching
 
 ## Features Im working on
 
@@ -50,6 +49,7 @@ After working and finishing the 3D character I plan on working on a 2D character
 ## Features I plan to impliment
 - Movement (Transform position)
 - Jumping
+- Crouching
 - Picking up items
 - Melee combat
 - Firearm (Shooting) combat
@@ -57,7 +57,7 @@ After working and finishing the 3D character I plan on working on a 2D character
 - UI (Mostly to show that the other features are working)
 
 ## Features future implimentation
-### Depending on how the other implimentation is added the bottem section might be added.
+### If more people start using this package then I might add the following features
 - Throwables
 - Grapple gun
 - Blocking melee attacks
