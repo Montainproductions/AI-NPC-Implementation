@@ -10,14 +10,10 @@ public class Sc_BaseGun : MonoBehaviour{
     private int bulletQuant;
 
     [SerializeField]
-    private GameObject spawnBullet;
-    [SerializeField]
-    private GameObject mainHole;
+    private GameObject spawnBullet, mainHole;
 
     [SerializeField]
-    private int maxAmmo;
-    [SerializeField]
-    private int maxClipAmmo;
+    private int maxAmmo, maxClipAmmo;
     private int currentAmmoAmount;
 
     [SerializeField]
@@ -46,13 +42,14 @@ public class Sc_BaseGun : MonoBehaviour{
                 currentAmmoAmount--;
                 GameObject newBullet = Instantiate(spawnBullet, mainHole.transform);
                 newBullet.GetComponent<Sc_Bullet>().SetDamageAmount(dmgPerBullet);
-                newBullet.GetComponent<Rigidbody>().AddForce(0, 0, 1, ForceMode.Impulse);
+                newBullet.GetComponent<Rigidbody>().AddForce(0, 0, 75, ForceMode.Impulse);
+                //Debug.Log(currentAmmoAmount);
             }
         }
         else
         {
             //Play audio clip
-            Debug.Log("Not enough ammo");
+            //Debug.Log("Not enough ammo");
         }
         yield return null;
     }
@@ -61,9 +58,14 @@ public class Sc_BaseGun : MonoBehaviour{
 
     public IEnumerator Reloading()
     {
+        if (reloaded) yield return null;
+        //Debug.Log("Reloading");
+        reloaded = true;
         yield return new WaitForSeconds(reloadTimer);
         currentAmmoAmount = maxClipAmmo;
         maxAmmo -= maxClipAmmo;
+        reloaded = false;
+        //Debug.Log("Reloaded");
         yield return null;
     }
 }
