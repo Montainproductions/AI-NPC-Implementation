@@ -15,15 +15,15 @@ I mostly plan on mostly working on this 3D character since I mostly like working
 - Crouching
 - Camera/head bobbing while walking
 - Melee combat
-
-## Features Im working on
 - Combat
 - Firearm (Shooting) combat
+
+## Features Im working on
 - UI (Mostly to show that the other features are working)
 
 ## Features I plan to impliment
 - Picking up items
-- Inventory (Both quick by changing through mouse wheel and backpack style of inventory)
+- Inventory (Both "quick" inventory and backpack style of inventory)
 
 ## Features future implimentation
 ### If more people start using this package then I might add the following features

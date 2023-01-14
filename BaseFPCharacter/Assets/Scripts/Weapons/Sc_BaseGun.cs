@@ -2,15 +2,17 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
-public class Sc_BaseGun : MonoBehaviour{
+public class Sc_BaseGun : MonoBehaviour {
     [SerializeField]
-    private float dmgPerBullet;
+    private float dmgPerBullet, bulletSpeed;
 
     [SerializeField]
     private int bulletQuant;
 
     [SerializeField]
     private GameObject spawnBullet, mainHole;
+    [SerializeField]
+    private AudioSource audioSC;
 
     [SerializeField]
     private int maxAmmo, maxClipAmmo;
@@ -33,6 +35,7 @@ public class Sc_BaseGun : MonoBehaviour{
     {
     }
 
+    //A Coroutine that runs whenever the player shoots the current gun.
     public IEnumerator ShotFired()
     {
         if (currentAmmoAmount > 0)
@@ -42,20 +45,22 @@ public class Sc_BaseGun : MonoBehaviour{
                 currentAmmoAmount--;
                 GameObject newBullet = Instantiate(spawnBullet, mainHole.transform);
                 newBullet.GetComponent<Sc_Bullet>().SetDamageAmount(dmgPerBullet);
-                newBullet.GetComponent<Rigidbody>().AddForce(0, 0, 75, ForceMode.Impulse);
-                //Debug.Log(currentAmmoAmount);
+                newBullet.GetComponent<Rigidbody>().AddRelativeForce(Vector3.forward * bulletSpeed, ForceMode.Impulse);
+                Debug.Log(currentAmmoAmount);
+                audioSC.Play();
+                yield return new WaitForSeconds(0.1f);
             }
         }
         else
         {
             //Play audio clip
-            //Debug.Log("Not enough ammo");
+            Debug.Log("Not enough ammo");
         }
         yield return null;
     }
 
 
-
+    //Will reload gun
     public IEnumerator Reloading()
     {
         if (reloaded) yield return null;
