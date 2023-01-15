@@ -1,6 +1,7 @@
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.AI;
 
 public class Sc_AIStateManager : MonoBehaviour
 {
@@ -11,17 +12,18 @@ public class Sc_AIStateManager : MonoBehaviour
 
     [SerializeField]
     private float speed;
+    [SerializeField]
+    private NavMeshAgent navMeshAgent;
 
     [Header("Patroling")]
     [SerializeField]
     private GameObject[] patrolPoints;
-    private int pointsPerEnemy;
 
     // Start is called before the first frame update
     void Start()
     {
         currentState = patrolState;
-        patrolState.PatrolStateInfo(patrolPoints, pointsPerEnemy);
+        patrolState.PatrolStateInfo(patrolPoints, navMeshAgent);
 
         currentState.EnterState(this, speed);
     }
