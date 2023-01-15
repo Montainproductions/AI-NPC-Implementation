@@ -4,6 +4,9 @@ using UnityEngine;
 using UnityEngine.InputSystem;
 
 public class Sc_Attacking : MonoBehaviour{
+    //Is player info
+    [SerializeField]
+    private bool attackForPlayer;
     //The player input system
     private PlayerInputActions playerInputActions;
 
@@ -36,20 +39,19 @@ public class Sc_Attacking : MonoBehaviour{
 
     //Sets up the player input system for later
     public void Awake(){
-        playerInputActions = new PlayerInputActions();
-        playerInputActions.Player.Enable();
-        playerInputActions.Player.Attacking.performed += Attacking_performed;
-        playerInputActions.Player.Reload.performed += Reload_preformed;
+        if (attackForPlayer)
+        {
+            playerInputActions = new PlayerInputActions();
+            playerInputActions.Player.Enable();
+            playerInputActions.Player.Attacking.performed += Attacking_performed;
+            playerInputActions.Player.Reload.performed += Reload_preformed;
+        }
     }
 
     // Update is called once per frame
     void Update(){
-        var lookPos = (Vector3.up * Sc_Player_Camera.Instance.mouseX) - transform.position;
-        lookPos.y = 0;
-        var rotation = Quaternion.LookRotation(lookPos);
-        transform.rotation = Quaternion.Slerp(transform.rotation, rotation, Time.deltaTime * damping);
-
         baseGunScript = currentGun.GetComponent<Sc_BaseGun>();
+        if (attackForPlayer) { PlayerAttackBox(); }
     }
 
     //Checks if the enemy is hiting the collidor and then deal damage
@@ -59,6 +61,14 @@ public class Sc_Attacking : MonoBehaviour{
                 collision.GetComponent<Sc_Health>().TakeDamage(meleeDamage);
             }
         }
+    }
+
+    public void PlayerAttackBox()
+    {
+        var lookPos = (Vector3.up * Sc_Player_Camera.Instance.mouseX) - transform.position;
+        lookPos.y = 0;
+        var rotation = Quaternion.LookRotation(lookPos);
+        transform.rotation = Quaternion.Slerp(transform.rotation, rotation, Time.deltaTime * damping);
     }
 
     IEnumerator Attacking(){
@@ -79,15 +89,24 @@ public class Sc_Attacking : MonoBehaviour{
 
     //If the attack button is pressed (Left mouse button currently) then flip some values to allow for damage to take place
     private void Attacking_performed(InputAction.CallbackContext context){
-        if(!context.performed) return;
-        //lastAttackTimer = 4.0f;
+        if(!context.performed && attackForPlayer) return;
+
         StartCoroutine(Attacking());
     }
 
     private void Reload_preformed(InputAction.CallbackContext context)
     {
-        if (!context.performed) return;
+        if (!context.performed && attackForPlayer) return;
 
         StartCoroutine(baseGunScript.Reloading());
+    }
+
+    public void OnDestroy()
+    {
+        if (attackForPlayer)
+        {
+            playerInputActions.Player.Attacking.performed -= Attacking_performed;
+            playerInputActions.Player.Reload.performed -= Reload_preformed;
+        }
     }
 }

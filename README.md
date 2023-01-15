@@ -20,6 +20,7 @@ I mostly plan on mostly working on this 3D character since I mostly like working
 
 ## Features Im working on
 - UI (Mostly to show that the other features are working)
+- Chasing AI that will shoot when close (Mostly to test if Weapons can work on AI objects besides just Player)
 
 ## Features I plan to impliment
 - Picking up items
