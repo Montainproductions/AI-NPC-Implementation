@@ -71,7 +71,7 @@ public class Sc_Attacking : MonoBehaviour{
         transform.rotation = Quaternion.Slerp(transform.rotation, rotation, Time.deltaTime * damping);
     }
 
-    IEnumerator Attacking(){
+    public IEnumerator Attacking(){
         if (canMeleeAttack)
         {
             Sc_Basic_UI.Instance.CantAttackUI();

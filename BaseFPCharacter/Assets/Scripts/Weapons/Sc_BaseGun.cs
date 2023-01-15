@@ -48,7 +48,7 @@ public class Sc_BaseGun : MonoBehaviour {
                 newBullet.GetComponent<Rigidbody>().AddRelativeForce(Vector3.forward * bulletSpeed, ForceMode.Impulse);
                 Debug.Log(currentAmmoAmount);
                 audioSC.Play();
-                yield return new WaitForSeconds(0.1f);
+                yield return new WaitForSeconds(0.15f);
             }
         }
         else
