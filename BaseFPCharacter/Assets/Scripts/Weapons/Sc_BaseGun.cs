@@ -17,6 +17,7 @@ public class Sc_BaseGun : MonoBehaviour {
     [SerializeField]
     private int maxAmmo, maxClipAmmo;
     private int currentAmmoAmount;
+    private bool shotRecently;
 
     [SerializeField]
     private bool reloaded;
@@ -28,6 +29,7 @@ public class Sc_BaseGun : MonoBehaviour {
     {
         maxAmmo -= maxClipAmmo;
         currentAmmoAmount = maxClipAmmo;
+        shotRecently = false;
     }
 
     // Update is called once per frame
@@ -38,7 +40,7 @@ public class Sc_BaseGun : MonoBehaviour {
     //A Coroutine that runs whenever the player shoots the current gun.
     public IEnumerator ShotFired()
     {
-        if (currentAmmoAmount > 0)
+        if (currentAmmoAmount > 0 && !shotRecently)
         {
             for (int i = 0; i < bulletQuant; i++)
             {
@@ -50,6 +52,8 @@ public class Sc_BaseGun : MonoBehaviour {
                 audioSC.Play();
                 yield return new WaitForSeconds(0.15f);
             }
+            shotRecently = true;
+            yield return new WaitForSeconds(1);
         }
         else
         {
