@@ -35,6 +35,7 @@ public class Sc_BaseGun : MonoBehaviour {
     // Update is called once per frame
     void Update()
     {
+
     }
 
     //A Coroutine that runs whenever the player shoots the current gun.
@@ -54,6 +55,7 @@ public class Sc_BaseGun : MonoBehaviour {
             }
             shotRecently = true;
             yield return new WaitForSeconds(1);
+            shotRecently= false;
         }
         else
         {

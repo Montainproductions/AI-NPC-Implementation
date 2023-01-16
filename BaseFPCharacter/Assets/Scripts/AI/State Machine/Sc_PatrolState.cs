@@ -5,8 +5,8 @@ using UnityEngine.AI;
 
 public class Sc_PatrolState : Sc_AIBaseState
 {
-    private GameObject[] allPatrolPoints, patrolPoints;
-    private int amountOfPoints, currentPos;
+    private GameObject[] allPatrolPoints, patrolPoints = new GameObject[5];
+    private int currentPos;
 
     private NavMeshAgent navMeshAgent;
 
@@ -39,9 +39,10 @@ public class Sc_PatrolState : Sc_AIBaseState
 
     public void ChooseRandomPatrolPos()
     {
-        amountOfPoints = Random.Range(0, allPatrolPoints.Length);
-        for (int i = 0; i < amountOfPoints; i++)
+        
+        for (int i = 0; i < 5; i++)
         {
+            //Debug.Log(allPatrolPoints[Random.Range(0, allPatrolPoints.Length)]);
             patrolPoints[i] = allPatrolPoints[Random.Range(0, allPatrolPoints.Length)];
         }
         currentPos = 0;
@@ -50,7 +51,7 @@ public class Sc_PatrolState : Sc_AIBaseState
 
     public void Patroling()
     {
-        if (currentPos > patrolPoints.Length)
+        if (currentPos >= patrolPoints.Length)
         {
             currentPos = 0;
         }

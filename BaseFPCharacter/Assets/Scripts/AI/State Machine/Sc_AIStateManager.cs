@@ -19,11 +19,16 @@ public class Sc_AIStateManager : MonoBehaviour
     [SerializeField]
     private GameObject[] patrolPoints;
 
+    [Header("Attacking/Chasing")]
+    [SerializeField]
+    private GameObject player;
+
     // Start is called before the first frame update
     void Start()
     {
         currentState = patrolState;
         patrolState.PatrolStateInfo(patrolPoints, navMeshAgent);
+        attackState.AttackStateInfo(player);
 
         currentState.EnterState(this, speed);
     }
