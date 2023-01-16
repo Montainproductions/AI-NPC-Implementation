@@ -6,7 +6,7 @@ public class Sc_IdleState : Sc_AIBaseState
 {
     public override void EnterState(Sc_AIStateManager state, float speed) { }
 
-    public override void UpdateState(Sc_AIStateManager state) { }
+    public override void UpdateState(Sc_AIStateManager state, float distPlayer, float angleToPlayer) { }
 
     public override void OnCollisionEnter(Sc_AIStateManager state) { }
 }

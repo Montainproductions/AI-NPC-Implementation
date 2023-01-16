@@ -982,7 +982,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   currentHealth: 0
-  maxHealth: 50
+  maxHealth: 40
   healingOverTimeAllowed: 1
   healingRate: 0
 --- !u!4 &779936236
@@ -1052,6 +1052,10 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   speed: 7
   navMeshAgent: {fileID: 779936237}
+  visionRange: 35
+  visionConeAngle: 50
+  alertedTimer: 5
+  rayCastRange: 10
   patrolPoints:
   - {fileID: 1435768226}
   - {fileID: 144707001}
@@ -1063,6 +1067,8 @@ MonoBehaviour:
   - {fileID: 1205445396}
   - {fileID: 1565716015}
   - {fileID: 1921915414}
+  player: {fileID: 884952683}
+  currentWeapon: {fileID: 1386134676}
 --- !u!1 &812050749
 GameObject:
   m_ObjectHideFlags: 0
@@ -2030,7 +2036,7 @@ GameObject:
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 1
+  m_IsActive: 0
 --- !u!4 &1299149000
 Transform:
   m_ObjectHideFlags: 0
@@ -2153,6 +2159,11 @@ BoxCollider:
   serializedVersion: 2
   m_Size: {x: 2, y: 2, z: 2}
   m_Center: {x: 0, y: 0, z: 0}
+--- !u!1 &1386134676 stripped
+GameObject:
+  m_CorrespondingSourceObject: {fileID: 7687749147566294080, guid: 7133376c2d13887488df58dced69d27c, type: 3}
+  m_PrefabInstance: {fileID: 880998637}
+  m_PrefabAsset: {fileID: 0}
 --- !u!1 &1407904420
 GameObject:
   m_ObjectHideFlags: 0

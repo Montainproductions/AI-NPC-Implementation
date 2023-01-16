@@ -12,14 +12,15 @@ public class Sc_PatrolState : Sc_AIBaseState
 
     private Transform movePositionTransfrom;
 
-    private float speed;
+    private float visionRange, visionConeAngle, alertedTimer, rayCastRange, distPlayer;
 
     public override void EnterState(Sc_AIStateManager state, float speed) {
-        this.speed = speed;
         ChooseRandomPatrolPos();
     }
 
-    public override void UpdateState(Sc_AIStateManager state) {
+    public override void UpdateState(Sc_AIStateManager state, float distPlayer, float angleToPlayer) {
+        CanSeePlayer(state, distPlayer, angleToPlayer);
+
         navMeshAgent.destination = movePositionTransfrom.position;
 
         if (Vector3.Distance(navMeshAgent.destination, movePositionTransfrom.position) < 0.5f)
@@ -31,10 +32,12 @@ public class Sc_PatrolState : Sc_AIBaseState
     public override void OnCollisionEnter(Sc_AIStateManager state) { }
 
 
-    public void PatrolStateInfo(GameObject[] patrolPoints, NavMeshAgent aiNavigationAgent)
+    public void PatrolStartStateInfo(GameObject[] patrolPoints, NavMeshAgent aiNavigationAgent, float distRange, float visionAngleRange)
     {
         allPatrolPoints = patrolPoints;
         navMeshAgent = aiNavigationAgent;
+        this.visionRange = distRange;
+        this.visionConeAngle = visionAngleRange;
     }
 
     public void ChooseRandomPatrolPos()
@@ -51,7 +54,7 @@ public class Sc_PatrolState : Sc_AIBaseState
 
     public void Patroling()
     {
-        if (currentPos >= patrolPoints.Length)
+        if (currentPos >= patrolPoints.Length - 1)
         {
             currentPos = 0;
         }
@@ -62,6 +65,15 @@ public class Sc_PatrolState : Sc_AIBaseState
 
 
         movePositionTransfrom = patrolPoints[currentPos].transform;
+    }
+
+
+    public void CanSeePlayer(Sc_AIStateManager state, float distPlayer, float angleToPlayer)
+    {
+        if (distPlayer <= visionRange && angleToPlayer <= visionConeAngle)
+        {
+            state.SwitchState(state.attackState);
+        }
     }
 
     IEnumerator Waiting()
