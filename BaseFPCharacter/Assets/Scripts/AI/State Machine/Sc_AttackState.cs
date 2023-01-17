@@ -10,29 +10,25 @@ public class Sc_AttackState : Sc_AIBaseState
     private GameObject player, currentWeapon;
     private Vector3 playerPos;
 
-    private float visionRange, visionConeAngle, attackRangeMin, attackRangeMax, attackRange, alertedTimer;
+    private float visionRange, visionConeAngle, attackRange, alertedTimer;
+
+    private int desicionVal;
 
     public override void EnterState(Sc_AIStateManager state, float speed) {
-        AttackDistance();
     }
 
     public override void UpdateState(Sc_AIStateManager state, float distPlayer, float angleToPlayer) {
-        CanSeePlayer(state, distPlayer, angleToPlayer);
+        CantSeePlayer(state, distPlayer, angleToPlayer);
         playerPos = player.transform.position;
         state.transform.LookAt(playerPos);
-        if(Vector3.Distance(player.transform.position, state.transform.position) <= attackRange)
-        {
-            state.StartCoroutine(AttackingWithGun());
-        }
-        else
-        {
-            navMeshAgent.destination = player.transform.position;
-        }
+        float distFromPlayer = Vector3.Distance(player.transform.position, state.transform.position);
+        //Debug.Log(distFromPlayer);
+        WhenToAttack(state, distFromPlayer);
     }
 
     public override void OnCollisionEnter(Sc_AIStateManager state) { }
 
-    public void CanSeePlayer(Sc_AIStateManager state,float distPlayer, float angleToPlayer)
+    public void CantSeePlayer(Sc_AIStateManager state,float distPlayer, float angleToPlayer)
     {
         if(distPlayer >= visionRange && angleToPlayer >= visionConeAngle)
         {
@@ -40,14 +36,16 @@ public class Sc_AttackState : Sc_AIBaseState
         }
     }
 
-    public void Shooting()
+    public void WhenToAttack(Sc_AIStateManager state, float distFromPlayer)
     {
+        float currentAttackRange = Random.Range(attackRange + 2, attackRange - 2);
+        if (currentAttackRange > distFromPlayer)
+        {
+            desicionVal++;
+            
+        }
 
-    }
 
-    public void AttackDistance()
-    {
-        attackRange = Random.Range(attackRangeMin, attackRangeMax);
     }
 
     public void AttackStateInfo(GameObject playerObj, GameObject currentWeaponObj, NavMeshAgent aiNavigationAgent)
@@ -62,7 +60,6 @@ public class Sc_AttackState : Sc_AIBaseState
         yield return new WaitForSeconds(1.25f);
         currentWeapon.GetComponent<Sc_BaseGun>().ShotFired();
         yield return new WaitForSeconds(1);
-        AttackDistance();
         yield return null;
     }
 }
