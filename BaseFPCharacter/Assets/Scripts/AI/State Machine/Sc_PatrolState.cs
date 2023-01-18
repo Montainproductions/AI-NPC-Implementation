@@ -5,6 +5,7 @@ using UnityEngine.AI;
 
 public class Sc_PatrolState : Sc_AIBaseState
 {
+    private GameObject self;
     private GameObject[] allPatrolPoints, patrolPoints = new GameObject[5];
     private int currentPos;
 
@@ -19,7 +20,7 @@ public class Sc_PatrolState : Sc_AIBaseState
     }
 
     public override void UpdateState(Sc_AIStateManager state, float distPlayer, float angleToPlayer) {
-        CanSeePlayer(state, distPlayer, angleToPlayer);
+        state.StartCoroutine(CanSeePlayer(state, distPlayer, angleToPlayer));
 
         navMeshAgent.destination = movePositionTransfrom.position;
 
@@ -32,12 +33,13 @@ public class Sc_PatrolState : Sc_AIBaseState
     public override void OnCollisionEnter(Sc_AIStateManager state) { }
 
 
-    public void PatrolStartStateInfo(GameObject[] patrolPoints, NavMeshAgent aiNavigationAgent, float distRange, float visionAngleRange)
+    public void PatrolStartStateInfo(GameObject[] patrolPoints, NavMeshAgent aiNavigationAgent, float distRange, float visionAngleRange, GameObject selfObj)
     {
         allPatrolPoints = patrolPoints;
         navMeshAgent = aiNavigationAgent;
         this.visionRange = distRange;
         this.visionConeAngle = visionAngleRange;
+        self = selfObj;
     }
 
     public void ChooseRandomPatrolPos()
@@ -67,18 +69,15 @@ public class Sc_PatrolState : Sc_AIBaseState
         movePositionTransfrom = patrolPoints[currentPos].transform;
     }
 
-
-    public void CanSeePlayer(Sc_AIStateManager state, float distPlayer, float angleToPlayer)
+    IEnumerator CanSeePlayer(Sc_AIStateManager state, float distPlayer, float angleToPlayer)
     {
-        if (distPlayer <= visionRange && angleToPlayer <= visionConeAngle)
+        if (distPlayer <= visionRange - 5 && angleToPlayer <= visionConeAngle - 5)
         {
-            state.SwitchState(state.attackState);
+            //yield return new WaitForSeconds(0.75f);
+            navMeshAgent.destination = self.transform.position;
+            state.SwitchState(state.aggressionState);
+            yield return null;
         }
-    }
-
-    IEnumerator Waiting()
-    {
-        yield return new WaitForSeconds(0.75f);
         yield return null;
     }
 }

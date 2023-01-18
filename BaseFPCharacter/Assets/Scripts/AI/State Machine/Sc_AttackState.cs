@@ -12,8 +12,6 @@ public class Sc_AttackState : Sc_AIBaseState
 
     private float visionRange, visionConeAngle, attackRange, alertedTimer;
 
-    private int desicionVal;
-
     public override void EnterState(Sc_AIStateManager state, float speed) {
     }
 
@@ -21,9 +19,7 @@ public class Sc_AttackState : Sc_AIBaseState
         CantSeePlayer(state, distPlayer, angleToPlayer);
         playerPos = player.transform.position;
         state.transform.LookAt(playerPos);
-        float distFromPlayer = Vector3.Distance(player.transform.position, state.transform.position);
         //Debug.Log(distFromPlayer);
-        WhenToAttack(state, distFromPlayer);
     }
 
     public override void OnCollisionEnter(Sc_AIStateManager state) { }
@@ -36,19 +32,7 @@ public class Sc_AttackState : Sc_AIBaseState
         }
     }
 
-    public void WhenToAttack(Sc_AIStateManager state, float distFromPlayer)
-    {
-        float currentAttackRange = Random.Range(attackRange + 2, attackRange - 2);
-        if (currentAttackRange > distFromPlayer)
-        {
-            desicionVal++;
-            
-        }
-
-
-    }
-
-    public void AttackStateInfo(GameObject playerObj, GameObject currentWeaponObj, NavMeshAgent aiNavigationAgent)
+    public void AttackStartStateInfo(GameObject playerObj, GameObject currentWeaponObj, NavMeshAgent aiNavigationAgent)
     {
         player = playerObj;
         currentWeapon = currentWeaponObj;

@@ -26,14 +26,14 @@ public class Sc_Basic_UI : MonoBehaviour{
 
     //Activates the green square to signify that the player can melee
     public void CanAttackUI(){
-        Debug.Log("Can attack");
+        //Debug.Log("Can attack");
         canAttack.SetActive(true);
         cantAttack.SetActive(false);
     }
 
     //Activates red square to signify that the player can not melee
     public void CantAttackUI(){
-        Debug.Log("Cant attack");
+        //Debug.Log("Cant attack");
         canAttack.SetActive(false);
         cantAttack.SetActive(true);
     }

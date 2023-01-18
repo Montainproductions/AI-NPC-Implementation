@@ -6,6 +6,7 @@ TagManager:
   tags:
   - Enemy
   - Gun
+  - CoverPos
   layers:
   - Default
   - TransparentFX
