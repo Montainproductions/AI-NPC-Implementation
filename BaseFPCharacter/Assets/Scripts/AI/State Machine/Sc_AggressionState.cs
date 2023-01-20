@@ -20,7 +20,7 @@ public class Sc_AggressionState : Sc_AIBaseState
 
     public override void EnterState(Sc_AIStateManager state, float speed)
     {
-        Debug.Log("Detected");
+        Debug.Log("Player detected");
         decisionVal = 0;
         attackRange = baseGunScript.effectiveRange;
         WhenToAttack(state);
@@ -63,7 +63,7 @@ public class Sc_AggressionState : Sc_AIBaseState
                 decisionVal--;
             }
         }
-        Debug.Log(decisionVal);
+        Debug.Log("Obj: " + self.name + " Value: " + decisionVal);
 
         manager.SetDecisionValue(decisionVal);
         directorAI.AIAttackAddList(self);

@@ -20,6 +20,8 @@ public class Sc_AIDirector : MonoBehaviour
     // Start is called before the first frame update
     void Start()
     {
+        enemyAIDesicionValue = new GameObject[allCurrentEnemy.Length];
+
         playerSeen = false;
         StartCoroutine(WhatToDoTimer());
     }
@@ -68,17 +70,9 @@ public class Sc_AIDirector : MonoBehaviour
 
     public IEnumerator AIAttackAddList(GameObject enemyObj)
     {
-        for (int i = 0; i < enemyAIDesicionValue.Length; i++)
-        {
-            if (enemyAIDesicionValue[i] == enemyObj)
-            {
-                break;
-            }
-            else if (enemyAIDesicionValue[i] == null)
-            {
-                enemyAIDesicionValue[i] = enemyObj;
-                break;
-            }
+        foreach(GameObject i in enemyAIDesicionValue) {
+            Debug.Log("Enemy added");
+            enemyAIDesicionValue[i] = enemyObj;
         }
         yield return null;
     }
