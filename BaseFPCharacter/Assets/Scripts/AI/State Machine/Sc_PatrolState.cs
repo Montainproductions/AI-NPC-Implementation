@@ -23,6 +23,7 @@ public class Sc_PatrolState : Sc_AIBaseState
         state.StartCoroutine(CanSeePlayer(state, distPlayer, angleToPlayer));
 
         navMeshAgent.destination = movePositionTransfrom.position;
+        //Debug.Log(self.name + " Desination: " + navMeshAgent.destination);
 
         if (Vector3.Distance(navMeshAgent.destination, movePositionTransfrom.position) < 0.5f)
         {
@@ -73,8 +74,6 @@ public class Sc_PatrolState : Sc_AIBaseState
     {
         if (distPlayer <= visionRange - 5 && angleToPlayer <= visionConeAngle - 5)
         {
-            //yield return new WaitForSeconds(0.75f);
-            navMeshAgent.destination = self.transform.position;
             state.SwitchState(state.aggressionState);
             yield return null;
         }

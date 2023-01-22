@@ -13,6 +13,7 @@ public class Sc_AttackState : Sc_AIBaseState
     private float visionRange, visionConeAngle, attackRange, alertedTimer;
 
     public override void EnterState(Sc_AIStateManager state, float speed) {
+        Debug.Log("Going to attack");
     }
 
     public override void UpdateState(Sc_AIStateManager state, float distPlayer, float angleToPlayer) {

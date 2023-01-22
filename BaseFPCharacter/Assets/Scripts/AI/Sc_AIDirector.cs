@@ -9,7 +9,13 @@ public class Sc_AIDirector : MonoBehaviour
 
     [SerializeField]
     private GameObject[] allCurrentEnemy, spawnLocations;
-    private GameObject[] enemyAIDesicionValue;
+    //private GameObject[] enemyAIDesicionValue;
+    public static List<GameObject> enemyAIDesicionValue = new List<GameObject>();
+    private Sc_AIStateManager stateManager;
+
+    [SerializeField]
+    private int maxAttacking, currentAttacking, diffStateCounter;
+    private int lowest = 2;
 
     private GameObject enemy;
 
@@ -20,7 +26,8 @@ public class Sc_AIDirector : MonoBehaviour
     // Start is called before the first frame update
     void Start()
     {
-        enemyAIDesicionValue = new GameObject[allCurrentEnemy.Length];
+        //enemyAIDesicionValue = new GameObject[allCurrentEnemy.Length];
+        diffStateCounter = 0;
 
         playerSeen = false;
         StartCoroutine(WhatToDoTimer());
@@ -59,32 +66,80 @@ public class Sc_AIDirector : MonoBehaviour
         yield return null;
     }
 
-    IEnumerator WhatToDo()
+    IEnumerator WhatToDo(int valueLimit)
     {
-        Debug.Log(enemyAIDesicionValue.Length);
         quickSort.Main(enemyAIDesicionValue);
+        Debug.Log(enemyAIDesicionValue.Count);
         Debug.Log("Ready to decide");
-        //Debug.Log(enemyAIDesicionValue.Length);
+
+        if(diffStateCounter == enemyAIDesicionValue.Count)
+        {
+            diffStateCounter = 0;
+            enemyAIDesicionValue.Clear();
+            yield return null;
+        }
+
+        if (lowest > valueLimit)
+        {
+            yield return null;
+        }
+
+        diffStateCounter = 0;
+        for (int i = 0; i < enemyAIDesicionValue.Count; i++)
+        {
+            stateManager = enemyAIDesicionValue[i].GetComponent<Sc_AIStateManager>();
+            if (stateManager.currentState != stateManager.aggressionState)
+            {
+                diffStateCounter++;
+                break;
+            }
+            if (currentAttacking >= maxAttacking)
+            {
+                stateManager.SwitchState(stateManager.coverState);
+
+            }
+            else if(stateManager.decisionValue == 2)
+            {
+                stateManager.SwitchState(stateManager.attackState);
+                currentAttacking++;
+            }
+            else if (stateManager.decisionValue >= valueLimit)
+            {
+                float v = Random.Range(1.0f, 10.0f);
+                if(v >= 2.5f)
+                {
+                    stateManager.SwitchState(stateManager.attackState);
+                    currentAttacking++;
+                }
+            }
+        }
+
+        //Debug.Log(enemyAIDesicionValue.Count);
+        //StartCoroutine(WhatToDo(valueLimit--));
         yield return null;
     }
 
     public IEnumerator AIAttackAddList(GameObject enemyObj)
     {
-        foreach(GameObject i in enemyAIDesicionValue) {
-            Debug.Log("Enemy added");
-            enemyAIDesicionValue[i] = enemyObj;
-        }
+        enemyAIDesicionValue.Add(enemyObj);
+        StartCoroutine(LowestDecisionValue());
         yield return null;
     }
 
     public IEnumerator AIAttackRemoveList(GameObject enemyObj)
     {
-        for (int i = 0; i < enemyAIDesicionValue.Length; i++)
+        enemyAIDesicionValue.Remove(enemyObj);
+        yield return null;
+    }
+
+    IEnumerator LowestDecisionValue()
+    {
+        for (int i = 0; i < enemyAIDesicionValue.Count; i++)
         {
-            if (enemyAIDesicionValue[i] == enemyObj)
+            stateManager = enemyAIDesicionValue[i].GetComponent<Sc_AIStateManager>();
+            if (stateManager.decisionValue < lowest)
             {
-                enemyAIDesicionValue[i] = null;
-                break;
+                lowest = stateManager.decisionValue;
             }
         }
         yield return null;
@@ -93,7 +148,8 @@ public class Sc_AIDirector : MonoBehaviour
     IEnumerator WhatToDoTimer()
     {
         yield return new WaitForSeconds(2);
-        //StartCoroutine(WhatToDo());
+        diffStateCounter = 0;
+        StartCoroutine(WhatToDo(2));
         StartCoroutine(WhatToDoTimer());
         yield return null;
     }

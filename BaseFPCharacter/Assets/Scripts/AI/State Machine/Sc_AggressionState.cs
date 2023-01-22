@@ -14,13 +14,17 @@ public class Sc_AggressionState : Sc_AIBaseState
     private Sc_AIDirector directorAI;
     private Sc_AIStateManager manager;
 
+    private Vector3 playerPos;
+
     private float visionRange, visionConeAngle, attackRange, alertedTimer, coverDistance;
 
     private int decisionVal;
 
     public override void EnterState(Sc_AIStateManager state, float speed)
     {
-        Debug.Log("Player detected");
+        state.StartCoroutine(StoppingAI());
+        Debug.Log(self.name + " Player detected");
+
         decisionVal = 0;
         attackRange = baseGunScript.effectiveRange;
         WhenToAttack(state);
@@ -28,7 +32,8 @@ public class Sc_AggressionState : Sc_AIBaseState
 
     public override void UpdateState(Sc_AIStateManager state, float distPlayer, float angleToPlayer)
     {
-
+        playerPos = player.transform.position;
+        state.transform.LookAt(playerPos);
     }
 
     public override void OnCollisionEnter(Sc_AIStateManager state)
@@ -36,7 +41,7 @@ public class Sc_AggressionState : Sc_AIBaseState
 
     }
 
-    public void AggressionStartStateInfo(GameObject playerObj, GameObject currentWeapon, GameObject[] coverPos, GameObject currentEnemy, float coverDist, Sc_AIDirector directorAI, Sc_AIStateManager aiManager)
+    public void AggressionStartStateInfo(GameObject playerObj, GameObject currentWeapon, GameObject[] coverPos, GameObject currentEnemy, float coverDist, Sc_AIDirector directorAI, Sc_AIStateManager aiManager, NavMeshAgent navMesh)
     {
         player = playerObj;
         baseGunScript = currentWeapon.GetComponent<Sc_BaseGun>();
@@ -45,6 +50,8 @@ public class Sc_AggressionState : Sc_AIBaseState
         coverDistance = coverDist;
         this.directorAI = directorAI;
         manager = aiManager;
+        navMeshAgent = navMesh;
+
     }
 
     public void WhenToAttack(Sc_AIStateManager state)
@@ -66,6 +73,16 @@ public class Sc_AggressionState : Sc_AIBaseState
         Debug.Log("Obj: " + self.name + " Value: " + decisionVal);
 
         manager.SetDecisionValue(decisionVal);
-        directorAI.AIAttackAddList(self);
+        state.StartCoroutine(directorAI.AIAttackAddList(self));
+    }
+
+    IEnumerator StoppingAI()
+    {
+        yield return new WaitForSeconds(0.45f);
+        navMeshAgent.isStopped = true;
+        navMeshAgent.ResetPath();
+        navMeshAgent.SetDestination(self.transform.position);
+        //Debug.Log(navMeshAgent.destination);
+        yield return null;
     }
 }

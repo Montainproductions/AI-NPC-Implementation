@@ -6,7 +6,7 @@ public class Sc_CoverState : Sc_AIBaseState
 {
     public override void EnterState(Sc_AIStateManager state, float speed)
     {
-
+        Debug.Log("Going to cover");
     }
 
     public override void UpdateState(Sc_AIStateManager state, float distPlayer, float angleToPlayer)

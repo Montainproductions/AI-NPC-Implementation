@@ -11,7 +11,7 @@ using UnityEngine;
 public class Sc_QuickSort : MonoBehaviour
 {
     // A utility function to swap two elements
-    static void Swap(GameObject[] mainArr, int i, int j)
+    static void Swap(List<GameObject> mainArr, int i, int j)
     {
         GameObject temp = mainArr[i];
         mainArr[i] = mainArr[j];
@@ -23,7 +23,7 @@ public class Sc_QuickSort : MonoBehaviour
          array, and places all smaller (smaller than pivot)
          to left of pivot and all greater elements to right
          of pivot */
-    static int Partition(GameObject[] arrayObjects, int lowEnd, int highEnd)
+    static int Partition(List<GameObject> arrayObjects, int lowEnd, int highEnd)
     {
 
         // pivot
@@ -57,7 +57,7 @@ public class Sc_QuickSort : MonoBehaviour
                 low --> Starting index,
                 highEnd --> Ending index
        */
-    static void QuickSort(GameObject[] arrayObjects, int lowEnd, int highEnd)
+    static void QuickSort(List<GameObject> arrayObjects, int lowEnd, int highEnd)
     {
         if (lowEnd < highEnd)
         {
@@ -83,9 +83,9 @@ public class Sc_QuickSort : MonoBehaviour
     }
 
     // Driver Code
-    public void Main(GameObject[] arrayObjects)
+    public void Main(List<GameObject> arrayObjects)
     {
-        int length = arrayObjects.Length;
+        int length = arrayObjects.Count;
 
         QuickSort(arrayObjects, 0, length - 1);
         Console.Write("Sorted array: ");

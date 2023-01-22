@@ -5,7 +5,8 @@ using UnityEngine.AI;
 
 public class Sc_AIStateManager : MonoBehaviour
 {
-    private Sc_AIBaseState currentState;
+    [HideInInspector]
+    public Sc_AIBaseState currentState;
     [HideInInspector]
     public Sc_AttackState attackState = new Sc_AttackState();
     [HideInInspector]
@@ -51,7 +52,7 @@ public class Sc_AIStateManager : MonoBehaviour
         currentState = patrolState;
         patrolState.PatrolStartStateInfo(patrolPoints, navMeshAgent, visionRange, visionConeAngle, gameObject);
         attackState.AttackStartStateInfo(player, currentWeapon, navMeshAgent);
-        aggressionState.AggressionStartStateInfo(player, currentWeapon, cover, gameObject, coverDistance, directorAI, this);
+        aggressionState.AggressionStartStateInfo(player, currentWeapon, cover, gameObject, coverDistance, directorAI, this, navMeshAgent);
         currentState.EnterState(this, speed);
     }
 
