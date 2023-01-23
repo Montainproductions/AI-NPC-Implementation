@@ -5,7 +5,6 @@ using UnityEngine.AI;
 
 public class Sc_PatrolState : Sc_AIBaseState
 {
-    private GameObject self;
     private GameObject[] allPatrolPoints, patrolPoints = new GameObject[5];
     private int currentPos;
 
@@ -38,9 +37,8 @@ public class Sc_PatrolState : Sc_AIBaseState
     {
         allPatrolPoints = patrolPoints;
         navMeshAgent = aiNavigationAgent;
-        this.visionRange = distRange;
-        this.visionConeAngle = visionAngleRange;
-        self = selfObj;
+        visionRange = distRange;
+        visionConeAngle = visionAngleRange;
     }
 
     public void ChooseRandomPatrolPos()

@@ -4,6 +4,8 @@ using UnityEngine;
 
 public class Sc_CoverState : Sc_AIBaseState
 {
+    private GameObject[] allCover;
+
     public override void EnterState(Sc_AIStateManager state, float speed)
     {
         Debug.Log("Going to cover");

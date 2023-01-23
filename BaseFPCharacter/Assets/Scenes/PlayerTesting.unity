@@ -2216,6 +2216,9 @@ MonoBehaviour:
   - {fileID: 1011132574}
   - {fileID: 282412708}
   spawnLocations: []
+  maxAttacking: 3
+  currentAttacking: 0
+  diffStateCounter: 0
 --- !u!4 &736088066
 Transform:
   m_ObjectHideFlags: 0

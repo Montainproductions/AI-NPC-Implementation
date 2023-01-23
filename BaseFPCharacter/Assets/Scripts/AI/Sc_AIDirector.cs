@@ -14,8 +14,8 @@ public class Sc_AIDirector : MonoBehaviour
     private Sc_AIStateManager stateManager;
 
     [SerializeField]
-    private int maxAttacking, currentAttacking, diffStateCounter;
-    private int lowest = 2;
+    private int maxAttacking, currentAttacking;
+    private float average = 0;
 
     private GameObject enemy;
 
@@ -27,7 +27,6 @@ public class Sc_AIDirector : MonoBehaviour
     void Start()
     {
         //enemyAIDesicionValue = new GameObject[allCurrentEnemy.Length];
-        diffStateCounter = 0;
 
         playerSeen = false;
         StartCoroutine(WhatToDoTimer());
@@ -66,63 +65,63 @@ public class Sc_AIDirector : MonoBehaviour
         yield return null;
     }
 
-    IEnumerator WhatToDo(int valueLimit)
+    IEnumerator WhatToDo(float valueLimit)
     {
         quickSort.Main(enemyAIDesicionValue);
-        Debug.Log(enemyAIDesicionValue.Count);
-        Debug.Log("Ready to decide");
+        //Debug.Log(enemyAIDesicionValue.Count);
+        //Debug.Log("Ready to decide");
 
-        if(diffStateCounter == enemyAIDesicionValue.Count)
-        {
-            diffStateCounter = 0;
-            enemyAIDesicionValue.Clear();
-            yield return null;
-        }
-
-        if (lowest > valueLimit)
-        {
-            yield return null;
-        }
-
-        diffStateCounter = 0;
         for (int i = 0; i < enemyAIDesicionValue.Count; i++)
         {
             stateManager = enemyAIDesicionValue[i].GetComponent<Sc_AIStateManager>();
-            if (stateManager.currentState != stateManager.aggressionState)
-            {
-                diffStateCounter++;
-                break;
-            }
+            float v = Random.Range(1.0f, 10.0f);
+            
+            //Debug.Log(v);
+            
             if (currentAttacking >= maxAttacking)
             {
                 stateManager.SwitchState(stateManager.coverState);
 
             }
-            else if(stateManager.decisionValue == 2)
-            {
-                stateManager.SwitchState(stateManager.attackState);
-                currentAttacking++;
-            }
             else if (stateManager.decisionValue >= valueLimit)
             {
-                float v = Random.Range(1.0f, 10.0f);
                 if(v >= 2.5f)
                 {
+                    //Debug.Log("Attacking");
                     stateManager.SwitchState(stateManager.attackState);
                     currentAttacking++;
+                }
+                else
+                {
+                    //Debug.Log("Lower");
+                    stateManager.SwitchState(stateManager.coverState);
+                }
+            }
+            else
+            {
+                if (v >= 6f)
+                {
+                    //Debug.Log("Attacking part 2");
+                    stateManager.SwitchState(stateManager.attackState);
+                    currentAttacking++;
+                }
+                else
+                {
+                    //Debug.Log("Lower Part 2");
+                    stateManager.SwitchState(stateManager.coverState);
                 }
             }
         }
 
-        //Debug.Log(enemyAIDesicionValue.Count);
-        //StartCoroutine(WhatToDo(valueLimit--));
+        enemyAIDesicionValue.Clear();
+        //Debug.Log("All enemies decided");
         yield return null;
     }
 
     public IEnumerator AIAttackAddList(GameObject enemyObj)
     {
         enemyAIDesicionValue.Add(enemyObj);
-        StartCoroutine(LowestDecisionValue());
+        StartCoroutine(AverageDecisionValue());
         yield return null;
     }
 
@@ -132,24 +131,21 @@ public class Sc_AIDirector : MonoBehaviour
         yield return null;
     }
 
-    IEnumerator LowestDecisionValue()
+    IEnumerator AverageDecisionValue()
     {
         for (int i = 0; i < enemyAIDesicionValue.Count; i++)
         {
             stateManager = enemyAIDesicionValue[i].GetComponent<Sc_AIStateManager>();
-            if (stateManager.decisionValue < lowest)
-            {
-                lowest = stateManager.decisionValue;
-            }
+            average += stateManager.decisionValue;
         }
+        average = average / enemyAIDesicionValue.Count;
         yield return null;
     }
 
     IEnumerator WhatToDoTimer()
     {
         yield return new WaitForSeconds(2);
-        diffStateCounter = 0;
-        StartCoroutine(WhatToDo(2));
+        StartCoroutine(WhatToDo(average));
         StartCoroutine(WhatToDoTimer());
         yield return null;
     }
