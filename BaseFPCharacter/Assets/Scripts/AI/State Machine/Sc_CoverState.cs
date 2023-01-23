@@ -20,4 +20,9 @@ public class Sc_CoverState : Sc_AIBaseState
     {
 
     }
+
+    public void AttackStartStateInfo()
+    {
+
+    }
 }

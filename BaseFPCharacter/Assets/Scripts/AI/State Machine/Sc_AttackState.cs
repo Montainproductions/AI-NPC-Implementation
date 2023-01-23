@@ -8,12 +8,14 @@ public class Sc_AttackState : Sc_AIBaseState
     private NavMeshAgent navMeshAgent;
 
     private GameObject player, currentWeapon;
+    private Sc_BaseGun gunScript;
     private Vector3 playerPos;
 
     private float visionRange, visionConeAngle, attackRange, alertedTimer;
 
     public override void EnterState(Sc_AIStateManager state, float speed) {
         Debug.Log("Going to attack");
+
     }
 
     public override void UpdateState(Sc_AIStateManager state, float distPlayer, float angleToPlayer) {
@@ -38,6 +40,8 @@ public class Sc_AttackState : Sc_AIBaseState
         player = playerObj;
         currentWeapon = currentWeaponObj;
         navMeshAgent = aiNavigationAgent;
+        gunScript = currentWeapon.GetComponent<Sc_BaseGun>();
+        attackRange = gunScript.effectiveRange;
     }
 
     IEnumerator AttackingWithGun()
