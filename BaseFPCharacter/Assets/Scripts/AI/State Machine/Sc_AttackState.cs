@@ -7,9 +7,11 @@ public class Sc_AttackState : Sc_AIBaseState
 {
     private NavMeshAgent navMeshAgent;
 
-    private GameObject player, currentWeapon;
+    private GameObject self, player, currentWeapon, walkingPoint;
     private Sc_BaseGun gunScript;
     private Vector3 playerPos;
+
+    private Transform newPositionToMove;
 
     private float visionRange, visionConeAngle, attackRange, alertedTimer;
 
@@ -27,7 +29,7 @@ public class Sc_AttackState : Sc_AIBaseState
 
     public override void OnCollisionEnter(Sc_AIStateManager state) { }
 
-    public void CantSeePlayer(Sc_AIStateManager state,float distPlayer, float angleToPlayer)
+    public void CantSeePlayer(Sc_AIStateManager state, float distPlayer, float angleToPlayer)
     {
         if(distPlayer >= visionRange && angleToPlayer >= visionConeAngle)
         {
@@ -35,13 +37,37 @@ public class Sc_AttackState : Sc_AIBaseState
         }
     }
 
-    public void AttackStartStateInfo(GameObject playerObj, GameObject currentWeaponObj, NavMeshAgent aiNavigationAgent)
+    public void AttackStartStateInfo(GameObject thisObj, GameObject playerObj, GameObject currentWeaponObj, NavMeshAgent aiNavigationAgent)
     {
+        self = thisObj;
         player = playerObj;
         currentWeapon = currentWeaponObj;
         navMeshAgent = aiNavigationAgent;
         gunScript = currentWeapon.GetComponent<Sc_BaseGun>();
         attackRange = gunScript.effectiveRange;
+    }
+
+    public void GetClose(Sc_AIStateManager state)
+    {
+        float playerDist = Vector3.Distance(playerPos, self.transform.position);
+        float diffDistToAttack = playerDist - attackRange;
+        if (diffDistToAttack > 0)
+        {
+            float aprochDistance = Random.Range(diffDistToAttack, diffDistToAttack + 2);
+            Vector3 newPosition = CreatePosition();
+            float magnDistance = Vector3.Magnitude(newPosition);
+            if(magnDistance >= diffDistToAttack && playerDist >= magnDistance)
+            {
+                newPositionToMove.position = newPosition;
+                //state.Instantiate(walkingPoint, newPositionToMove);
+            }
+        }
+    }
+
+    public Vector3 CreatePosition()
+    {
+        Vector3 newVectorPos = new Vector3(0,0,0);
+        return newVectorPos;
     }
 
     IEnumerator AttackingWithGun()
