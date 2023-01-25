@@ -47,27 +47,23 @@ public class Sc_AttackState : Sc_AIBaseState
         attackRange = gunScript.effectiveRange;
     }
 
-    public void GetClose(Sc_AIStateManager state)
+    public Vector3 CreatePosition()
+    {
+        Vector3 newVectorPos = new Vector3(0,0,0);
+        return newVectorPos;
+    }
+
+    IEnumerator GettingCloser(Sc_AIStateManager state)
     {
         float playerDist = Vector3.Distance(playerPos, self.transform.position);
         float diffDistToAttack = playerDist - attackRange;
         if (diffDistToAttack > 0)
         {
             float aprochDistance = Random.Range(diffDistToAttack, diffDistToAttack + 2);
-            Vector3 newPosition = CreatePosition();
-            float magnDistance = Vector3.Magnitude(newPosition);
-            if(magnDistance >= diffDistToAttack && playerDist >= magnDistance)
-            {
-                newPositionToMove.position = newPosition;
-                //state.Instantiate(walkingPoint, newPositionToMove);
-            }
+            Vector3 newPosition = state.transform.position + state.transform.forward * aprochDistance;
+            navMeshAgent.destination = newPosition;
         }
-    }
-
-    public Vector3 CreatePosition()
-    {
-        Vector3 newVectorPos = new Vector3(0,0,0);
-        return newVectorPos;
+        yield return null;
     }
 
     IEnumerator AttackingWithGun()

@@ -41,12 +41,12 @@ public class Sc_AggressionState : Sc_AIBaseState
 
     }
 
-    public void AggressionStartStateInfo(GameObject playerObj, GameObject currentWeapon, GameObject[] coverPos, GameObject currentEnemy, float coverDist, Sc_AIDirector directorAI, Sc_AIStateManager aiManager, NavMeshAgent navMesh)
+    public void AggressionStartStateInfo(GameObject currentEnemy, GameObject playerObj, GameObject currentWeapon, GameObject[] coverPos, float coverDist, Sc_AIDirector directorAI, Sc_AIStateManager aiManager, NavMeshAgent navMesh)
     {
+        self = currentEnemy;
         player = playerObj;
         baseGunScript = currentWeapon.GetComponent<Sc_BaseGun>();
         coverPositions = coverPos;
-        self = currentEnemy;
         coverDistance = coverDist;
         this.directorAI = directorAI;
         manager = aiManager;
