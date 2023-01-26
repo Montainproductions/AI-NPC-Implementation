@@ -53,6 +53,7 @@ public class Sc_AIStateManager : MonoBehaviour
         patrolState.PatrolStartStateInfo(patrolPoints, navMeshAgent, visionRange, visionConeAngle, gameObject);
         attackState.AttackStartStateInfo(gameObject, player, currentWeapon, navMeshAgent);
         aggressionState.AggressionStartStateInfo(gameObject, player, currentWeapon, cover, coverDistance, directorAI, this, navMeshAgent);
+        coverState.CoverStartStateInfo(gameObject, cover);
         currentState.EnterState(this, speed);
     }
 

@@ -9,33 +9,40 @@ public class Sc_AttackState : Sc_AIBaseState
 
     private GameObject self, player, currentWeapon, walkingPoint;
     private Sc_BaseGun gunScript;
-    private Vector3 playerPos;
+    private Vector3 playerPos, newPosition;
 
-    private Transform newPositionToMove;
+    private bool isDeciding;
 
     private float visionRange, visionConeAngle, attackRange, alertedTimer;
 
     public override void EnterState(Sc_AIStateManager state, float speed) {
         Debug.Log("Going to attack");
-
+        isDeciding = false;
     }
 
     public override void UpdateState(Sc_AIStateManager state, float distPlayer, float angleToPlayer) {
         CantSeePlayer(state, distPlayer, angleToPlayer);
         playerPos = player.transform.position;
         state.transform.LookAt(playerPos);
+
+        float playerDist = Vector3.Distance(playerPos, self.transform.position);
+        float diffDistToAttack = playerDist - attackRange;
+        Debug.Log(diffDistToAttack);
+        navMeshAgent.destination = newPosition;
+        if (diffDistToAttack > 0 && !isDeciding)
+        {
+            isDeciding = true;
+            state.StartCoroutine(GettingCloser(state ,diffDistToAttack));
+        }
+        else
+        {
+            state.StartCoroutine(AttackingWithGun(state));
+        }
+
         //Debug.Log(distFromPlayer);
     }
 
     public override void OnCollisionEnter(Sc_AIStateManager state) { }
-
-    public void CantSeePlayer(Sc_AIStateManager state, float distPlayer, float angleToPlayer)
-    {
-        if(distPlayer >= visionRange && angleToPlayer >= visionConeAngle)
-        {
-            //state.SwitchState(state.patrolState);
-        }
-    }
 
     public void AttackStartStateInfo(GameObject thisObj, GameObject playerObj, GameObject currentWeaponObj, NavMeshAgent aiNavigationAgent)
     {
@@ -47,30 +54,32 @@ public class Sc_AttackState : Sc_AIBaseState
         attackRange = gunScript.effectiveRange;
     }
 
-    public Vector3 CreatePosition()
+    public void CantSeePlayer(Sc_AIStateManager state, float distPlayer, float angleToPlayer)
     {
-        Vector3 newVectorPos = new Vector3(0,0,0);
-        return newVectorPos;
+        if (distPlayer >= visionRange && angleToPlayer >= visionConeAngle)
+        {
+            //state.SwitchState(state.patrolState);
+        }
     }
 
-    IEnumerator GettingCloser(Sc_AIStateManager state)
+    IEnumerator GettingCloser(Sc_AIStateManager state, float diffDistToAttack)
     {
-        float playerDist = Vector3.Distance(playerPos, self.transform.position);
-        float diffDistToAttack = playerDist - attackRange;
-        if (diffDistToAttack > 0)
-        {
-            float aprochDistance = Random.Range(diffDistToAttack, diffDistToAttack + 2);
-            Vector3 newPosition = state.transform.position + state.transform.forward * aprochDistance;
-            navMeshAgent.destination = newPosition;
-        }
+        float zDistance = Random.Range(diffDistToAttack + 1, diffDistToAttack + 6);
+        Debug.Log(zDistance);
+        //float yDistance = Random.Range(-diffDistToAttack, diffDistToAttack);
+        newPosition = state.transform.position + state.transform.forward * zDistance;
+        Debug.Log(newPosition);
+        isDeciding = false;
         yield return null;
     }
 
-    IEnumerator AttackingWithGun()
+    IEnumerator AttackingWithGun(Sc_AIStateManager state)
     {
-        yield return new WaitForSeconds(1.25f);
-        currentWeapon.GetComponent<Sc_BaseGun>().ShotFired();
-        yield return new WaitForSeconds(1);
+        Debug.Log("Shooting");
+        //yield return new WaitForSeconds(0.30f);
+        Sc_BaseGun gunScript = currentWeapon.GetComponent<Sc_BaseGun>();
+        state.StartCoroutine(gunScript.ShotFired());
+        yield return new WaitForSeconds(1.75f);
         yield return null;
     }
 }

@@ -38,11 +38,12 @@ public class Sc_BaseGun : MonoBehaviour {
 
     }
 
-    //A Coroutine that runs whenever the player shoots the current gun.
+    //A Coroutine that runs whenever the player or the AI trys shoots the current gun.
     public IEnumerator ShotFired()
     {
         if (currentAmmoAmount > 0 && !shotRecently)
         {
+            shotRecently = true;
             for (int i = 0; i < fireRate; i++)
             {
                 currentAmmoAmount--;
@@ -51,16 +52,19 @@ public class Sc_BaseGun : MonoBehaviour {
                 newBullet.GetComponent<Rigidbody>().AddRelativeForce(Vector3.forward * bulletSpeed, ForceMode.Impulse);
                 //Debug.Log(currentAmmoAmount);
                 audioSC.Play();
-                yield return new WaitForSeconds(0.15f);
+                yield return new WaitForSeconds(0.2f);
             }
-            shotRecently = true;
             yield return new WaitForSeconds(1);
             shotRecently= false;
         }
-        else
+        else if(shotRecently)
         {
             //Play audio clip
-            Debug.Log("Not enough ammo");
+            Debug.Log("Recently Shot");
+        }
+        else
+        {
+            Debug.Log("No more ammo");
         }
         yield return null;
     }

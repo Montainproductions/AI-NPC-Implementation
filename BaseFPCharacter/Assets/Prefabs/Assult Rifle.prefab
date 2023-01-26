@@ -343,7 +343,8 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   dmgPerBullet: 20
   bulletSpeed: 75
-  bulletQuant: 6
+  fireRate: 6
+  effectiveRange: 50
   spawnBullet: {fileID: 619712338987558872, guid: 87c710d6419587a40a1795ff8d4323cc, type: 3}
   mainHole: {fileID: 7687749147882011698}
   audioSC: {fileID: 7687749147882011708}
