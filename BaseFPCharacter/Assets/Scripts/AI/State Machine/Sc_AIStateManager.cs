@@ -17,13 +17,20 @@ public class Sc_AIStateManager : MonoBehaviour
     public Sc_AggressionState aggressionState = new Sc_AggressionState();
     [HideInInspector]
     public Sc_CoverState coverState = new Sc_CoverState();
+    [HideInInspector]
+    public Sc_SearchState searchState = new Sc_SearchState();
 
     [SerializeField]
     private float speed;
+    
     [SerializeField]
     private NavMeshAgent navMeshAgent;
+    
     [SerializeField]
     private Sc_AIDirector directorAI;
+
+    [SerializeField]
+    private GameObject player;
 
     [SerializeField]
     private float visionRange, visionConeAngle, alertedTimer;
@@ -38,7 +45,7 @@ public class Sc_AIStateManager : MonoBehaviour
 
     [Header("Attacking/Chasing")]
     [SerializeField]
-    private GameObject player, currentWeapon;
+    private GameObject currentWeapon;
 
     [Header("Cover")]
     [SerializeField]
@@ -51,9 +58,9 @@ public class Sc_AIStateManager : MonoBehaviour
     {
         currentState = patrolState;
         patrolState.PatrolStartStateInfo(patrolPoints, navMeshAgent, visionRange, visionConeAngle, gameObject);
-        attackState.AttackStartStateInfo(gameObject, player, currentWeapon, navMeshAgent);
+        attackState.AttackStartStateInfo(gameObject, player, currentWeapon, navMeshAgent, visionRange, visionConeAngle);
         aggressionState.AggressionStartStateInfo(gameObject, player, currentWeapon, cover, coverDistance, directorAI, this, navMeshAgent);
-        coverState.CoverStartStateInfo(gameObject, cover);
+        coverState.CoverStartStateInfo(gameObject, player, currentWeapon, cover, navMeshAgent, visionRange, visionConeAngle);
         currentState.EnterState(this, speed);
     }
 
