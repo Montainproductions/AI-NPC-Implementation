@@ -18,7 +18,8 @@ public class Sc_CoverState : Sc_AIBaseState
     public override void EnterState(Sc_AIStateManager state, float speed)
     {
         closestDist = Mathf.Infinity;
-        Debug.Log("Going to cover");
+        //Debug.Log("Going to cover Start");
+        coverPosition = Vector3.zero;
         state.StartCoroutine(ChoosingCover());
         state.StartCoroutine(NewDecisionToTake(state));
     }
@@ -27,15 +28,20 @@ public class Sc_CoverState : Sc_AIBaseState
     {
         playerPos = player.transform.position;
         state.transform.LookAt(playerPos);
-
-        if (Vector3.Distance(self.transform.position, closestCover.transform.position) > 0.4f)
+        if (coverPosition != Vector3.zero)
         {
-            navMeshAgent.destination = closestCover.transform.position;
-        }
-        else
-        {
-            //self.transform.localScale = new Vector3(1,0.75f,1);
-            state.StartCoroutine(AtCover(state));
+            if (Vector3.Distance(self.transform.position, coverPosition) > 0.6f)
+            {
+                Debug.Log("Going to Cover");
+                navMeshAgent.destination = coverPosition;
+            }
+            else
+            {
+                Debug.Log("At Cover");
+                //self.transform.localScale = new Vector3(1,0.75f,1);
+                coverPosition = Vector3.zero;
+                state.StartCoroutine(AtCover(state));
+            }
         }
     }
 
@@ -64,7 +70,7 @@ public class Sc_CoverState : Sc_AIBaseState
     }
 
     IEnumerator ChoosingCover() {
-        for (int i = 0; i >= allCover.Length; i++)
+        for (int i = 0; i < allCover.Length; i++)
         {
             if (Vector3.Distance(allCover[i].transform.position, self.transform.position) <= closestDist)
             {
@@ -72,14 +78,15 @@ public class Sc_CoverState : Sc_AIBaseState
                 closestCover = allCover[i];
             }
         }
-        int allCoverPos = closestCover.transform.childCount;
+        //Debug.Log(closestCover);
+        //int allCoverPos = closestCover.transform.childCount;
 
-        for (int i = 1; i >= allCoverPos; i++)
+        for (int i = 1; i <= 4; i++)
         {
-            //GameObject coverPoint = closestCover.transform.GetChild(i);
             Sc_CoverPoints coverScript = closestCover.transform.GetChild(i).GetComponent<Sc_CoverPoints>();
             if (coverScript.behindCover && !coverScript.beingUsed)
             {
+                Debug.Log(closestCover.transform.GetChild(i));
                 coverPosition = closestCover.transform.GetChild(i).transform.position;
                 coverScript.beingUsed = true;
             }

@@ -168,6 +168,8 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   player: {fileID: 884952683}
+  behindCover: 0
+  beingUsed: 0
 --- !u!1 &24189106
 GameObject:
   m_ObjectHideFlags: 0
@@ -529,6 +531,8 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   player: {fileID: 884952683}
+  behindCover: 0
+  beingUsed: 0
 --- !u!1 &99031833
 GameObject:
   m_ObjectHideFlags: 0
@@ -609,6 +613,8 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   player: {fileID: 884952683}
+  behindCover: 0
+  beingUsed: 0
 --- !u!1 &115094131
 GameObject:
   m_ObjectHideFlags: 0
@@ -751,6 +757,8 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   player: {fileID: 884952683}
+  behindCover: 0
+  beingUsed: 0
 --- !u!1 &143077975
 GameObject:
   m_ObjectHideFlags: 0
@@ -1184,6 +1192,8 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   player: {fileID: 884952683}
+  behindCover: 0
+  beingUsed: 0
 --- !u!1 &205292806
 GameObject:
   m_ObjectHideFlags: 0
@@ -1229,6 +1239,8 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   player: {fileID: 884952683}
+  behindCover: 0
+  beingUsed: 0
 --- !u!1 &220573453
 GameObject:
   m_ObjectHideFlags: 0
@@ -1264,7 +1276,7 @@ RectTransform:
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0.5, y: 0.5}
   m_AnchorMax: {x: 0.5, y: 0.5}
-  m_AnchoredPosition: {x: -236.2, y: -138.3}
+  m_AnchoredPosition: {x: -477.9, y: -273.4}
   m_SizeDelta: {x: 85, y: 30}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!114 &220573455
@@ -1409,6 +1421,8 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   player: {fileID: 884952683}
+  behindCover: 0
+  beingUsed: 0
 --- !u!1 &232526891
 GameObject:
   m_ObjectHideFlags: 0
@@ -1454,6 +1468,8 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   player: {fileID: 884952683}
+  behindCover: 0
+  beingUsed: 0
 --- !u!1 &273341700
 GameObject:
   m_ObjectHideFlags: 0
@@ -1630,6 +1646,8 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   player: {fileID: 884952683}
+  behindCover: 0
+  beingUsed: 0
 --- !u!1 &282412708
 GameObject:
   m_ObjectHideFlags: 0
@@ -1649,7 +1667,7 @@ GameObject:
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 0
+  m_IsActive: 1
 --- !u!4 &282412709
 Transform:
   m_ObjectHideFlags: 0
@@ -1737,15 +1755,16 @@ MonoBehaviour:
   currentWeapon: {fileID: 1319887813}
   cover:
   - {fileID: 322979980}
-  - {fileID: 0}
-  - {fileID: 0}
-  - {fileID: 0}
-  - {fileID: 0}
-  - {fileID: 0}
-  - {fileID: 0}
-  - {fileID: 0}
-  - {fileID: 0}
-  - {fileID: 0}
+  - {fileID: 2053982672}
+  - {fileID: 1609950726}
+  - {fileID: 1371054777}
+  - {fileID: 322350899}
+  - {fileID: 956292227}
+  - {fileID: 805788509}
+  - {fileID: 935133619}
+  - {fileID: 520232410}
+  - {fileID: 1933587044}
+  - {fileID: 160399570}
   coverDistance: 15
 --- !u!114 &282412713
 MonoBehaviour:
@@ -1839,6 +1858,8 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   player: {fileID: 884952683}
+  behindCover: 0
+  beingUsed: 0
 --- !u!1 &315458749
 GameObject:
   m_ObjectHideFlags: 0
@@ -2170,7 +2191,7 @@ MonoBehaviour:
   m_UiScaleMode: 1
   m_ReferencePixelsPerUnit: 100
   m_ScaleFactor: 1
-  m_ReferenceResolution: {x: 800, y: 600}
+  m_ReferenceResolution: {x: 1280, y: 720}
   m_ScreenMatchMode: 0
   m_MatchWidthOrHeight: 0
   m_PhysicalUnit: 3
@@ -2318,6 +2339,8 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   player: {fileID: 884952683}
+  behindCover: 0
+  beingUsed: 0
 --- !u!1 &417791556
 GameObject:
   m_ObjectHideFlags: 0
@@ -2460,6 +2483,8 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   player: {fileID: 884952683}
+  behindCover: 0
+  beingUsed: 0
 --- !u!1 &482739750
 GameObject:
   m_ObjectHideFlags: 0
@@ -2602,6 +2627,8 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   player: {fileID: 884952683}
+  behindCover: 0
+  beingUsed: 0
 --- !u!1 &503822662
 GameObject:
   m_ObjectHideFlags: 0
@@ -2647,6 +2674,8 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   player: {fileID: 884952683}
+  behindCover: 0
+  beingUsed: 0
 --- !u!1 &520232410
 GameObject:
   m_ObjectHideFlags: 0
@@ -2728,6 +2757,8 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   player: {fileID: 884952683}
+  behindCover: 0
+  beingUsed: 0
 --- !u!1 &568184548
 GameObject:
   m_ObjectHideFlags: 0
@@ -2773,6 +2804,8 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   player: {fileID: 884952683}
+  behindCover: 0
+  beingUsed: 0
 --- !u!1 &692823707
 GameObject:
   m_ObjectHideFlags: 0
@@ -2818,6 +2851,8 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   player: {fileID: 884952683}
+  behindCover: 0
+  beingUsed: 0
 --- !u!1 &705507993
 GameObject:
   m_ObjectHideFlags: 0
@@ -3068,6 +3103,8 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   player: {fileID: 884952683}
+  behindCover: 0
+  beingUsed: 0
 --- !u!1 &779936234
 GameObject:
   m_ObjectHideFlags: 0
@@ -3112,7 +3149,7 @@ Transform:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 779936234}
   m_LocalRotation: {x: 0, y: 1, z: 0, w: 0}
-  m_LocalPosition: {x: 0, y: 1, z: 0}
+  m_LocalPosition: {x: 0, y: 1, z: -10}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children:
@@ -3190,16 +3227,17 @@ MonoBehaviour:
   decisionValue: 0
   currentWeapon: {fileID: 1386134676}
   cover:
-  - {fileID: 0}
-  - {fileID: 0}
-  - {fileID: 0}
-  - {fileID: 0}
-  - {fileID: 0}
-  - {fileID: 0}
   - {fileID: 322979980}
-  - {fileID: 0}
-  - {fileID: 0}
-  - {fileID: 0}
+  - {fileID: 2053982672}
+  - {fileID: 1609950726}
+  - {fileID: 1371054777}
+  - {fileID: 322350899}
+  - {fileID: 956292227}
+  - {fileID: 805788509}
+  - {fileID: 935133619}
+  - {fileID: 520232410}
+  - {fileID: 1933587044}
+  - {fileID: 160399570}
   coverDistance: 15
 --- !u!1 &786304685
 GameObject:
@@ -3246,6 +3284,8 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   player: {fileID: 884952683}
+  behindCover: 0
+  beingUsed: 0
 --- !u!1 &805788509
 GameObject:
   m_ObjectHideFlags: 0
@@ -3317,7 +3357,7 @@ RectTransform:
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0.5, y: 0.5}
   m_AnchorMax: {x: 0.5, y: 0.5}
-  m_AnchoredPosition: {x: -337.09998, y: -137.3}
+  m_AnchoredPosition: {x: -568, y: -273}
   m_SizeDelta: {x: 125, y: 30}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!114 &812050751
@@ -3883,6 +3923,8 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   player: {fileID: 884952683}
+  behindCover: 0
+  beingUsed: 0
 --- !u!1 &935133619
 GameObject:
   m_ObjectHideFlags: 0
@@ -4233,6 +4275,8 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   player: {fileID: 884952683}
+  behindCover: 0
+  beingUsed: 0
 --- !u!1 &989608893
 GameObject:
   m_ObjectHideFlags: 0
@@ -4346,7 +4390,7 @@ GameObject:
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 0
+  m_IsActive: 1
 --- !u!4 &1011132575
 Transform:
   m_ObjectHideFlags: 0
@@ -4434,15 +4478,16 @@ MonoBehaviour:
   currentWeapon: {fileID: 190699553}
   cover:
   - {fileID: 322979980}
-  - {fileID: 0}
-  - {fileID: 0}
-  - {fileID: 0}
-  - {fileID: 0}
-  - {fileID: 0}
-  - {fileID: 0}
-  - {fileID: 0}
-  - {fileID: 0}
-  - {fileID: 0}
+  - {fileID: 2053982672}
+  - {fileID: 1609950726}
+  - {fileID: 1371054777}
+  - {fileID: 322350899}
+  - {fileID: 956292227}
+  - {fileID: 805788509}
+  - {fileID: 935133619}
+  - {fileID: 520232410}
+  - {fileID: 1933587044}
+  - {fileID: 160399570}
   coverDistance: 15
 --- !u!114 &1011132579
 MonoBehaviour:
@@ -4505,6 +4550,8 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   player: {fileID: 884952683}
+  behindCover: 0
+  beingUsed: 0
 --- !u!1 &1078577436
 GameObject:
   m_ObjectHideFlags: 0
@@ -4550,6 +4597,8 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   player: {fileID: 884952683}
+  behindCover: 0
+  beingUsed: 0
 --- !u!1 &1111640689
 GameObject:
   m_ObjectHideFlags: 0
@@ -4977,6 +5026,8 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   player: {fileID: 884952683}
+  behindCover: 0
+  beingUsed: 0
 --- !u!1 &1256897554
 GameObject:
   m_ObjectHideFlags: 0
@@ -5012,8 +5063,8 @@ RectTransform:
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0.5, y: 0.5}
   m_AnchorMax: {x: 0.5, y: 0.5}
-  m_AnchoredPosition: {x: 382.5, y: 141.9}
-  m_SizeDelta: {x: 35, y: 35}
+  m_AnchoredPosition: {x: 610.2, y: 271.7}
+  m_SizeDelta: {x: 60, y: 60}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!114 &1256897556
 MonoBehaviour:
@@ -5195,6 +5246,8 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   player: {fileID: 884952683}
+  behindCover: 0
+  beingUsed: 0
 --- !u!1 &1318719823
 GameObject:
   m_ObjectHideFlags: 0
@@ -5240,6 +5293,8 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   player: {fileID: 884952683}
+  behindCover: 0
+  beingUsed: 0
 --- !u!1001 &1319887811
 PrefabInstance:
   m_ObjectHideFlags: 0
@@ -5449,6 +5504,8 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   player: {fileID: 884952683}
+  behindCover: 0
+  beingUsed: 0
 --- !u!1 &1347692186
 GameObject:
   m_ObjectHideFlags: 0
@@ -5494,6 +5551,8 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   player: {fileID: 884952683}
+  behindCover: 0
+  beingUsed: 0
 --- !u!1 &1371054777
 GameObject:
   m_ObjectHideFlags: 0
@@ -5663,6 +5722,8 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   player: {fileID: 884952683}
+  behindCover: 0
+  beingUsed: 0
 --- !u!1 &1435768226
 GameObject:
   m_ObjectHideFlags: 0
@@ -5753,6 +5814,8 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   player: {fileID: 884952683}
+  behindCover: 0
+  beingUsed: 0
 --- !u!1 &1465215613
 GameObject:
   m_ObjectHideFlags: 0
@@ -5798,6 +5861,8 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   player: {fileID: 884952683}
+  behindCover: 0
+  beingUsed: 0
 --- !u!1 &1488979076
 GameObject:
   m_ObjectHideFlags: 0
@@ -5940,6 +6005,8 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   player: {fileID: 884952683}
+  behindCover: 0
+  beingUsed: 0
 --- !u!1 &1503358538
 GameObject:
   m_ObjectHideFlags: 0
@@ -6079,6 +6146,8 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   player: {fileID: 884952683}
+  behindCover: 0
+  beingUsed: 0
 --- !u!1 &1519004699
 GameObject:
   m_ObjectHideFlags: 0
@@ -6124,6 +6193,8 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   player: {fileID: 884952683}
+  behindCover: 0
+  beingUsed: 0
 --- !u!1 &1528988340
 GameObject:
   m_ObjectHideFlags: 0
@@ -6169,6 +6240,8 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   player: {fileID: 884952683}
+  behindCover: 0
+  beingUsed: 0
 --- !u!1 &1542228136
 GameObject:
   m_ObjectHideFlags: 0
@@ -6346,8 +6419,8 @@ RectTransform:
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0.5, y: 0.5}
   m_AnchorMax: {x: 0.5, y: 0.5}
-  m_AnchoredPosition: {x: 382.5, y: 141.89996}
-  m_SizeDelta: {x: 35, y: 35}
+  m_AnchoredPosition: {x: 610.2001, y: 271.7}
+  m_SizeDelta: {x: 60, y: 60}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!114 &1573968105
 MonoBehaviour:
@@ -6539,7 +6612,7 @@ GameObject:
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 0
+  m_IsActive: 1
 --- !u!4 &1625225020
 Transform:
   m_ObjectHideFlags: 0
@@ -6548,7 +6621,7 @@ Transform:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 1625225019}
   m_LocalRotation: {x: -0, y: -0.95427364, z: -0, w: 0.2989345}
-  m_LocalPosition: {x: 20.7, y: 1.0667391, z: -32.8}
+  m_LocalPosition: {x: 18.76, y: 1.0667391, z: -35.59}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children:
@@ -6627,15 +6700,16 @@ MonoBehaviour:
   currentWeapon: {fileID: 47633447}
   cover:
   - {fileID: 322979980}
-  - {fileID: 0}
-  - {fileID: 0}
-  - {fileID: 0}
-  - {fileID: 0}
-  - {fileID: 0}
-  - {fileID: 0}
-  - {fileID: 0}
-  - {fileID: 0}
-  - {fileID: 0}
+  - {fileID: 2053982672}
+  - {fileID: 1609950726}
+  - {fileID: 1371054777}
+  - {fileID: 322350899}
+  - {fileID: 956292227}
+  - {fileID: 805788509}
+  - {fileID: 935133619}
+  - {fileID: 520232410}
+  - {fileID: 1933587044}
+  - {fileID: 160399570}
   coverDistance: 15
 --- !u!114 &1625225024
 MonoBehaviour:
@@ -6698,6 +6772,8 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   player: {fileID: 884952683}
+  behindCover: 0
+  beingUsed: 0
 --- !u!1 &1658173841
 GameObject:
   m_ObjectHideFlags: 0
@@ -6743,6 +6819,8 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   player: {fileID: 884952683}
+  behindCover: 0
+  beingUsed: 0
 --- !u!1 &1664541089
 GameObject:
   m_ObjectHideFlags: 0
@@ -6788,6 +6866,8 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   player: {fileID: 884952683}
+  behindCover: 0
+  beingUsed: 0
 --- !u!1 &1674764161
 GameObject:
   m_ObjectHideFlags: 0
@@ -6930,6 +7010,8 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   player: {fileID: 884952683}
+  behindCover: 0
+  beingUsed: 0
 --- !u!1 &1778350971
 GameObject:
   m_ObjectHideFlags: 0
@@ -6975,6 +7057,8 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   player: {fileID: 884952683}
+  behindCover: 0
+  beingUsed: 0
 --- !u!1 &1802290123
 GameObject:
   m_ObjectHideFlags: 0
@@ -7020,6 +7104,8 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   player: {fileID: 884952683}
+  behindCover: 0
+  beingUsed: 0
 --- !u!1 &1837077191
 GameObject:
   m_ObjectHideFlags: 0
@@ -7259,6 +7345,8 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   player: {fileID: 884952683}
+  behindCover: 0
+  beingUsed: 0
 --- !u!1 &1857325997
 GameObject:
   m_ObjectHideFlags: 0
@@ -7401,6 +7489,8 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   player: {fileID: 884952683}
+  behindCover: 0
+  beingUsed: 0
 --- !u!1 &1921915414
 GameObject:
   m_ObjectHideFlags: 0
@@ -7854,6 +7944,8 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   player: {fileID: 884952683}
+  behindCover: 0
+  beingUsed: 0
 --- !u!1 &2126496995
 GameObject:
   m_ObjectHideFlags: 0

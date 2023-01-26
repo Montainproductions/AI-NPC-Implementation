@@ -23,21 +23,18 @@ public class Sc_CoverPoints : MonoBehaviour
 
     public void FixedUpdate()
     {
-        // This would cast rays only against colliders in layer 8.
-        // But instead we want to collide against everything except layer 8. The ~ operator does this, it inverts a bitmask.
-        //layerMask = ~layerMask;
-
-        if (Physics.Raycast(gameObject.transform.position, gameObject.transform.TransformDirection(player.transform.position), out hit, Mathf.Infinity, layerMask))
+        Vector3 direction = player.transform.position - gameObject.transform.position;
+        if (Physics.Raycast(gameObject.transform.position, direction, out hit, 10, layerMask))
         {
-            Debug.DrawRay(gameObject.transform.position, gameObject.transform.TransformDirection(player.transform.position) * hit.distance, Color.red);
-            Debug.Log("Object Hit, Can be used for cover");
+            //Debug.DrawRay(gameObject.transform.position, direction * hit.distance, Color.red);
+            //Debug.Log("Object Hit, Can be used for cover");*/
 
             behindCover = true;
         }
         else
         {
-            Debug.DrawRay(gameObject.transform.position, gameObject.transform.TransformDirection(player.transform.position) * 1000, Color.white);
-            Debug.Log("Did not Hit");
+            //Debug.DrawRay(gameObject.transform.position, direction * 1000, Color.white);
+            //Debug.Log("Did not Hit");*/
 
             behindCover = false;
         }
