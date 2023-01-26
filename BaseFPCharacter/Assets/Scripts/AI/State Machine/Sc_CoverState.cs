@@ -32,12 +32,12 @@ public class Sc_CoverState : Sc_AIBaseState
         {
             if (Vector3.Distance(self.transform.position, coverPosition) > 0.6f)
             {
-                Debug.Log("Going to Cover");
+                //Debug.Log("Going to Cover");
                 navMeshAgent.destination = coverPosition;
             }
             else
             {
-                Debug.Log("At Cover");
+                //Debug.Log("At Cover");
                 //self.transform.localScale = new Vector3(1,0.75f,1);
                 coverPosition = Vector3.zero;
                 state.StartCoroutine(AtCover(state));
@@ -86,7 +86,7 @@ public class Sc_CoverState : Sc_AIBaseState
             Sc_CoverPoints coverScript = closestCover.transform.GetChild(i).GetComponent<Sc_CoverPoints>();
             if (coverScript.behindCover && !coverScript.beingUsed)
             {
-                Debug.Log(closestCover.transform.GetChild(i));
+                //Debug.Log(closestCover.transform.GetChild(i));
                 coverPosition = closestCover.transform.GetChild(i).transform.position;
                 coverScript.beingUsed = true;
             }
@@ -116,7 +116,7 @@ public class Sc_CoverState : Sc_AIBaseState
 
     IEnumerator AttackingWithGun(Sc_AIStateManager state)
     {
-        Debug.Log("Shooting");
+        //Debug.Log("Shooting");
         //yield return new WaitForSeconds(0.30f);
         Sc_BaseGun gunScript = currentWeapon.GetComponent<Sc_BaseGun>();
         state.StartCoroutine(gunScript.ShotFired());

@@ -7,7 +7,7 @@ public class Sc_Basic_UI : MonoBehaviour{
     public static Sc_Basic_UI Instance { get; private set; }
 
     [SerializeField]
-    [Tooltip("Height power that will control how high the character can jump.")]
+    [Tooltip("Wether the player can do a melee attack or not.")]
     private GameObject canAttack, cantAttack;
 
     public void Awake(){

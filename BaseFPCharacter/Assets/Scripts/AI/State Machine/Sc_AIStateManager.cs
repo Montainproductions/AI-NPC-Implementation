@@ -36,6 +36,9 @@ public class Sc_AIStateManager : MonoBehaviour
     private float visionRange, visionConeAngle, alertedTimer;
     private float distPlayer, angleToPlayer;
 
+    [SerializeField]
+    private GameObject currentStateTxt;
+
     [Header("Patroling")]
     [SerializeField]
     private GameObject[] patrolPoints;
@@ -62,6 +65,8 @@ public class Sc_AIStateManager : MonoBehaviour
         aggressionState.AggressionStartStateInfo(gameObject, player, currentWeapon, cover, coverDistance, directorAI, this, navMeshAgent);
         coverState.CoverStartStateInfo(gameObject, player, currentWeapon, cover, navMeshAgent, visionRange, visionConeAngle);
         currentState.EnterState(this, speed);
+
+        Instantiate(currentStateTxt, Sc_Basic_UI.Instance.transform.position, Quaternion.identity);
     }
 
     // Update is called once per frame

@@ -16,7 +16,7 @@ public class Sc_AttackState : Sc_AIBaseState
     private float visionRange, visionConeAngle, attackRange, alertedTimer;
 
     public override void EnterState(Sc_AIStateManager state, float speed) {
-        Debug.Log("Going to attack");
+        //Debug.Log("Going to attack");
         isDeciding = false;
     }
 
@@ -27,7 +27,7 @@ public class Sc_AttackState : Sc_AIBaseState
 
         float playerDist = Vector3.Distance(playerPos, self.transform.position);
         float diffDistToAttack = playerDist - attackRange;
-        Debug.Log(diffDistToAttack);
+        //Debug.Log(diffDistToAttack);
         if (diffDistToAttack > 0 && !isDeciding)
         {
             isDeciding = true;
@@ -67,17 +67,17 @@ public class Sc_AttackState : Sc_AIBaseState
     IEnumerator GettingCloser(Sc_AIStateManager state, float diffDistToAttack)
     {
         float zDistance = Random.Range(diffDistToAttack + 1, diffDistToAttack + 6);
-        Debug.Log(zDistance);
+        //Debug.Log(zDistance);
         //float yDistance = Random.Range(-diffDistToAttack, diffDistToAttack);
         newPosition = state.transform.position + state.transform.forward * zDistance;
-        Debug.Log(newPosition);
+        //Debug.Log(newPosition);
         isDeciding = false;
         yield return null;
     }
 
     IEnumerator AttackingWithGun(Sc_AIStateManager state)
     {
-        Debug.Log("Shooting");
+        //Debug.Log("Shooting");
         //yield return new WaitForSeconds(0.30f);
         Sc_BaseGun gunScript = currentWeapon.GetComponent<Sc_BaseGun>();
         state.StartCoroutine(gunScript.ShotFired());

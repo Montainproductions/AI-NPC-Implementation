@@ -7,6 +7,8 @@ public class Sc_IdleState : Sc_AIBaseState
 {
     private float idleTimer, visionRange, visionConeAngle;
 
+    Vector3 randomLookDirection;
+
     public override void EnterState(Sc_AIStateManager state, float speed) {
         state.StartCoroutine(IdleTimed(state));
     }
@@ -26,7 +28,15 @@ public class Sc_IdleState : Sc_AIBaseState
 
     IEnumerator IdleTimed(Sc_AIStateManager state)
     {
-        yield return new WaitForSeconds(idleTimer);
+        yield return new WaitForSeconds(idleTimer/3);
+        randomLookDirection.x = Random.Range(0, 360);
+        randomLookDirection.z = Random.Range(0, 360);
+        state.transform.LookAt(randomLookDirection);
+        yield return new WaitForSeconds(idleTimer / 3);
+        randomLookDirection.x = Random.Range(0, 360);
+        randomLookDirection.z = Random.Range(0, 360);
+        state.transform.LookAt(randomLookDirection);
+        yield return new WaitForSeconds(idleTimer / 3);
         state.SwitchState(state.patrolState);
         yield return null;
     }

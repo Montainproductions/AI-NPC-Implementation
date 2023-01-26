@@ -341,7 +341,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: e1b96a4f11a998846b500c24d2410eac, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  dmgPerBullet: 20
+  dmgPerBullet: 10
   bulletSpeed: 75
   fireRate: 6
   effectiveRange: 50
