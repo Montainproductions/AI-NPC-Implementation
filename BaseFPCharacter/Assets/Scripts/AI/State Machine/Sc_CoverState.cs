@@ -11,7 +11,7 @@ public class Sc_CoverState : Sc_AIBaseState
 
     private GameObject[] allCover;
 
-    private float closestDist, coverTimer, visionRange, visionConeAngle;
+    private float closestDist, coverTimer, visionRange, visionConeAngle, decisionTimer;
 
     private NavMeshAgent navMeshAgent;
 
@@ -50,7 +50,7 @@ public class Sc_CoverState : Sc_AIBaseState
 
     }
 
-    public void CoverStartStateInfo(GameObject selfObj, GameObject playerObj, GameObject currentWeaponObj, GameObject[] allCoverObjs, NavMeshAgent navMeshAgent, float visionRange, float visionConeAngle)
+    public void CoverStartStateInfo(GameObject selfObj, GameObject playerObj, GameObject currentWeaponObj, GameObject[] allCoverObjs, NavMeshAgent navMeshAgent, float visionRange, float visionConeAngle, float decisionTimer)
     {
         self = selfObj;
         player = playerObj;
@@ -59,6 +59,7 @@ public class Sc_CoverState : Sc_AIBaseState
         this.navMeshAgent = navMeshAgent;
         this.visionRange = visionRange;
         this.visionConeAngle = visionConeAngle;
+        this.decisionTimer = decisionTimer;
     }
 
     public void CantSeePlayer(Sc_AIStateManager state, float distPlayer, float angleToPlayer)
@@ -124,9 +125,10 @@ public class Sc_CoverState : Sc_AIBaseState
         yield return null;
     }
 
-    IEnumerator NewDecisionToTake(Sc_AIStateManager state)
+    IEnumerator ReDecide(Sc_AIStateManager state)
     {
-        yield return new WaitForSeconds(45);
+        float newDecisionTimer = Random.Range(decisionTimer - 5, decisionTimer + 5);
+        yield return new WaitForSeconds(newDecisionTimer);
         state.SwitchState(state.aggressionState);
         yield return null;
     }
