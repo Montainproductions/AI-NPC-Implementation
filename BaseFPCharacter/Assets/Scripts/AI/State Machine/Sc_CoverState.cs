@@ -21,7 +21,7 @@ public class Sc_CoverState : Sc_AIBaseState
         //Debug.Log("Going to cover Start");
         coverPosition = Vector3.zero;
         state.StartCoroutine(ChoosingCover());
-        state.StartCoroutine(NewDecisionToTake(state));
+        state.StartCoroutine(ReDecide(state));
     }
 
     public override void UpdateState(Sc_AIStateManager state, float distPlayer, float angleToPlayer)

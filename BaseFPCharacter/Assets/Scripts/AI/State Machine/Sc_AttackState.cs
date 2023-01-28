@@ -13,18 +13,21 @@ public class Sc_AttackState : Sc_AIBaseState
 
     private bool isDeciding;
 
-    private float visionRange, visionConeAngle, attackRange, decisionTimer;
+    private float visionRange, visionConeAngle, attackRange, decisionTimer, gunDistance;
 
     private GameObject[] allGunsOnFloor;
-    private GameObject weaponPickUp;
+    private GameObject pickUpWeapon;
+    private Transform weaponPosition;
 
     public override void EnterState(Sc_AIStateManager state, float speed) {
         //Debug.Log("Going to attack");
         isDeciding = false;
 
-        if(currentWeapon == null)
+        newPosition = Vector3.zero;
+
+        if (currentWeapon == null)
         {
-            state.StartCoroutine(LookingForGun());
+            state.StartCoroutine(LookingForGun(state));
         }
         else
         {
@@ -55,11 +58,22 @@ public class Sc_AttackState : Sc_AIBaseState
             navMeshAgent.destination = newPosition;
             //Debug.Log(distFromPlayer);
         }
+        else if(currentWeapon == null && newPosition != Vector3.zero)
+        {
+            navMeshAgent.destination = newPosition;
+            state.transform.LookAt(newPosition);
+            float distToWeapon = Vector3.Distance(state.transform.position, newPosition);
+            if(distToWeapon <= 0.5f)
+            {
+                state.StartCoroutine(PickUpGun());
+                state.StartCoroutine(ReDecide(state));
+            }
+        }
     }
 
     public override void OnCollisionEnter(Sc_AIStateManager state) { }
 
-    public void AttackStartStateInfo(GameObject thisObj, GameObject playerObj, GameObject currentWeaponObj, NavMeshAgent aiNavigationAgent, float visionRange, float visionConeAngle, float decisionTimer)
+    public void AttackStartStateInfo(GameObject thisObj, GameObject playerObj, GameObject currentWeaponObj, NavMeshAgent aiNavigationAgent, float visionRange, float visionConeAngle, float decisionTimer, Transform weaponPosition)
     {
         self = thisObj;
         player = playerObj;
@@ -70,6 +84,7 @@ public class Sc_AttackState : Sc_AIBaseState
         this.visionRange = visionRange;
         this.visionConeAngle = visionConeAngle;
         this.decisionTimer = decisionTimer;
+        this.weaponPosition = weaponPosition;
     }
 
     public void CantSeePlayer(Sc_AIStateManager state, float distPlayer, float angleToPlayer)
@@ -101,12 +116,27 @@ public class Sc_AttackState : Sc_AIBaseState
         yield return null;
     }
 
-    IEnumerator LookingForGun()
+    IEnumerator LookingForGun(Sc_AIStateManager state)
     {
-        for(int i = 0; i < allGunsOnFloor.Length; i++)
+        gunDistance = 0;
+        for (int i = 0; i < allGunsOnFloor.Length; i++)
         {
-
+            float tempDist = Vector3.Distance(allGunsOnFloor[i].transform.position, state.transform.position);
+            if (gunDistance > tempDist)
+            {
+                gunDistance = tempDist;
+                pickUpWeapon = allGunsOnFloor[i];
+            }
         }
+        newPosition = pickUpWeapon.transform.position;
+        yield return null;
+    }
+
+    IEnumerator PickUpGun()
+    {
+        yield return new WaitForSeconds(2.5f);
+        currentWeapon = pickUpWeapon;
+        currentWeapon.transform.position = weaponPosition.position;
         yield return null;
     }
 

@@ -1,5 +1,6 @@
 using System.Collections;
 using System.Collections.Generic;
+using TMPro;
 using UnityEngine;
 using UnityEngine.AI;
 
@@ -33,11 +34,15 @@ public class Sc_AIStateManager : MonoBehaviour
     private GameObject player;
 
     [SerializeField]
-    private float visionRange, visionConeAngle, alertedTimer;
+    private float visionRange, visionConeAngle, alertedTimer, decisionTimer;
     private float distPlayer, angleToPlayer;
 
+    [Header("UI State Text")]
     [SerializeField]
-    private GameObject currentStateTxt;
+    private GameObject stateTxtPrefab;
+    [SerializeField]
+    private Sc_StateTextUI currentTextUI;
+    private TextMeshProUGUI stateText;
 
     [Header("Patroling")]
     [SerializeField]
@@ -49,6 +54,8 @@ public class Sc_AIStateManager : MonoBehaviour
     [Header("Attacking/Chasing")]
     [SerializeField]
     private GameObject currentWeapon;
+    [SerializeField]
+    private Transform weaponPosition;
 
     [Header("Cover")]
     [SerializeField]
@@ -61,12 +68,14 @@ public class Sc_AIStateManager : MonoBehaviour
     {
         currentState = patrolState;
         patrolState.PatrolStartStateInfo(patrolPoints, navMeshAgent, visionRange, visionConeAngle, gameObject);
-        attackState.AttackStartStateInfo(gameObject, player, currentWeapon, navMeshAgent, visionRange, visionConeAngle);
+        attackState.AttackStartStateInfo(gameObject, player, currentWeapon, navMeshAgent, visionRange, visionConeAngle, decisionTimer, weaponPosition);
         aggressionState.AggressionStartStateInfo(gameObject, player, currentWeapon, cover, coverDistance, directorAI, this, navMeshAgent);
-        coverState.CoverStartStateInfo(gameObject, player, currentWeapon, cover, navMeshAgent, visionRange, visionConeAngle);
+        coverState.CoverStartStateInfo(gameObject, player, currentWeapon, cover, navMeshAgent, visionRange, visionConeAngle, decisionTimer);
         currentState.EnterState(this, speed);
 
-        Instantiate(currentStateTxt, Sc_Basic_UI.Instance.transform.position, Quaternion.identity);
+        GameObject stateTextObj = Instantiate(stateTxtPrefab, Sc_Basic_UI.Instance.transform);
+        currentTextUI = stateTextObj.GetComponent<Sc_StateTextUI>();
+        stateText = stateTextObj.GetComponent<TextMeshProUGUI>();
     }
 
     // Update is called once per frame
@@ -76,6 +85,9 @@ public class Sc_AIStateManager : MonoBehaviour
         angleToPlayer = Vector3.Angle(transform.forward, player.transform.position - transform.position);
         //Debug.Log(currentState);
         currentState.UpdateState(this, distPlayer, angleToPlayer);
+
+        currentTextUI.transform.position = Camera.main.WorldToScreenPoint(transform.position + Vector3.up * 3);
+        stateText.SetText(currentState.ToString());
     }
 
     public void SwitchState(Sc_AIBaseState state)

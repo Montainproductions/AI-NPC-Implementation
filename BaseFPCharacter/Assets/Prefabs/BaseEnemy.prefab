@@ -30,7 +30,7 @@ Transform:
   m_ConstrainProportionsScale: 0
   m_Children: []
   m_Father: {fileID: 5355143908986894847}
-  m_RootOrder: 3
+  m_RootOrder: 5
   m_LocalEulerAnglesHint: {x: 90, y: 0, z: 0}
 --- !u!108 &5355143908882180216
 Light:
@@ -126,6 +126,8 @@ Transform:
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children:
+  - {fileID: 8749882468970140204}
+  - {fileID: 9211938983860706177}
   - {fileID: 2369196995601294527}
   - {fileID: 5355143909700577297}
   - {fileID: 5355143909348659386}
@@ -163,12 +165,14 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   speed: 7
   navMeshAgent: {fileID: 5355143908986894846}
-  directorAI: {fileID: 0}
-  player: {fileID: 0}
+  directorAI: {fileID: 2460812123129524718, guid: 9a1b04fd93715f84585c30af5c65b4ea, type: 3}
+  player: {fileID: 6646797674794803052, guid: 81ce49f96577d844ab806a3654e6ae19, type: 3}
   visionRange: 70
   visionConeAngle: 70
   alertedTimer: 5
-  currentStateTxt: {fileID: 1571431829170465119, guid: 4a1f5fc5d19354a4da658a77ec6b2a83, type: 3}
+  decisionTimer: 30
+  stateTxtPrefab: {fileID: 1571431829170465119, guid: 4a1f5fc5d19354a4da658a77ec6b2a83, type: 3}
+  currentTextUI: {fileID: 8927390455960245779, guid: 4a1f5fc5d19354a4da658a77ec6b2a83, type: 3}
   patrolPoints:
   - {fileID: 0}
   - {fileID: 0}
@@ -182,6 +186,7 @@ MonoBehaviour:
   - {fileID: 0}
   decisionValue: 0
   currentWeapon: {fileID: 2369196995601294526}
+  weaponPosition: {fileID: 9211938983860706177}
   cover:
   - {fileID: 0}
   - {fileID: 0}
@@ -261,7 +266,7 @@ Transform:
   m_ConstrainProportionsScale: 0
   m_Children: []
   m_Father: {fileID: 5355143908986894847}
-  m_RootOrder: 2
+  m_RootOrder: 4
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!33 &5355143909348659391
 MeshFilter:
@@ -358,7 +363,7 @@ Transform:
   m_ConstrainProportionsScale: 0
   m_Children: []
   m_Father: {fileID: 5355143908986894847}
-  m_RootOrder: 1
+  m_RootOrder: 3
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!33 &5355143909700577302
 MeshFilter:
@@ -424,6 +429,68 @@ CapsuleCollider:
   m_Height: 2
   m_Direction: 1
   m_Center: {x: 0.000000059604645, y: 0, z: -0.00000008940697}
+--- !u!1 &6434509807700636769
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 8749882468970140204}
+  m_Layer: 0
+  m_Name: TextPosition
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!4 &8749882468970140204
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 6434509807700636769}
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalPosition: {x: 0, y: 1.64, z: 0}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_ConstrainProportionsScale: 0
+  m_Children: []
+  m_Father: {fileID: 5355143908986894847}
+  m_RootOrder: 0
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!1 &8290296705691924517
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 9211938983860706177}
+  m_Layer: 0
+  m_Name: WeaponPos
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!4 &9211938983860706177
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 8290296705691924517}
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalPosition: {x: 0.321, y: 0.37800002, z: 1.14}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_ConstrainProportionsScale: 0
+  m_Children: []
+  m_Father: {fileID: 5355143908986894847}
+  m_RootOrder: 1
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!1001 &5355143908894220542
 PrefabInstance:
   m_ObjectHideFlags: 0
@@ -437,7 +504,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 7687749147566294081, guid: 7133376c2d13887488df58dced69d27c, type: 3}
       propertyPath: m_RootOrder
-      value: 0
+      value: 2
       objectReference: {fileID: 0}
     - target: {fileID: 7687749147566294081, guid: 7133376c2d13887488df58dced69d27c, type: 3}
       propertyPath: m_LocalPosition.x
