@@ -17,8 +17,6 @@ public class Sc_IdleState : Sc_AIBaseState
         state.StartCoroutine(CanSeePlayer(state, distPlayer, angleToPlayer));
     }
 
-    public override void OnCollisionEnter(Sc_AIStateManager state) { }
-
     public void IdleStartStateInfo(float idleTime, float distRange, float visionAngleRange)
     {
         idleTimer = idleTime;
@@ -45,7 +43,7 @@ public class Sc_IdleState : Sc_AIBaseState
     {
         if (distPlayer <= visionRange - 5 && angleToPlayer <= visionConeAngle - 5)
         {
-            state.SwitchState(state.aggressionState);
+            state.SwitchState(state.aggressionDesicionState);
             yield return null;
         }
         yield return null;

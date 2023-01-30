@@ -5,7 +5,7 @@ using UnityEngine.AI;
 
 public class Sc_AINavigationMesh : MonoBehaviour
 {
-    private NavMeshAgent navMeshAgent;
+    /*private NavMeshAgent navMeshAgent;
 
     private Transform movePositionTransfrom;
     private string currentState;
@@ -40,5 +40,5 @@ public class Sc_AINavigationMesh : MonoBehaviour
     {
         yield return new WaitForSeconds(0.75f);
         yield return null;
-    }
+    }*/
 }

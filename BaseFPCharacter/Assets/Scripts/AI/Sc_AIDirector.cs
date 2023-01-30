@@ -38,9 +38,19 @@ public class Sc_AIDirector : MonoBehaviour
         
     }
 
-    public void PlayerFound()
+    public void PlayerFound(GameObject enemyObject)
     {
         playerSeen = !playerSeen;
+
+        for(int i = 0; i < allCurrentEnemy.Length; i++) {
+            if (allCurrentEnemy[i] != enemyObject)
+            {
+                stateManager = allCurrentEnemy[i].GetComponent<Sc_AIStateManager>();
+                stateManager.SwitchState(stateManager.aggressionDesicionState);
+                stateManager = null;
+            }
+        }
+        
     }
 
     public void WantToSpawnMore(float amountToSpawn, int spawnLocation)

@@ -23,7 +23,7 @@ public class Sc_AggressionState : Sc_AIBaseState
     public override void EnterState(Sc_AIStateManager state, float speed)
     {
         state.StartCoroutine(StoppingAI());
-        //Debug.Log(self.name + " Player detected");
+        Debug.Log(self.name + " Player detected");
 
         decisionVal = 0;
         attackRange = baseGunScript.effectiveRange;
@@ -34,11 +34,6 @@ public class Sc_AggressionState : Sc_AIBaseState
     {
         playerPos = player.transform.position;
         state.transform.LookAt(playerPos);
-    }
-
-    public override void OnCollisionEnter(Sc_AIStateManager state)
-    {
-
     }
 
     public void AggressionStartStateInfo(GameObject currentEnemy, GameObject playerObj, GameObject currentWeapon, GameObject[] coverPos, float coverDist, Sc_AIDirector directorAI, Sc_AIStateManager aiManager, NavMeshAgent navMesh)

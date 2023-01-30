@@ -10,13 +10,14 @@ public class Sc_BaseGun : MonoBehaviour {
     public int fireRate, effectiveRange;
 
     [SerializeField]
-    private GameObject spawnBullet, mainHole;
+    private GameObject spawnBullet, barrolHole;
     [SerializeField]
     private AudioSource audioSC;
 
     [SerializeField]
     private int maxAmmo, maxClipAmmo;
-    private int currentAmmoAmount;
+    [HideInInspector]
+    public int currentAmmoAmount;
     private bool shotRecently;
 
     [SerializeField]
@@ -47,7 +48,7 @@ public class Sc_BaseGun : MonoBehaviour {
             for (int i = 0; i < fireRate; i++)
             {
                 currentAmmoAmount--;
-                GameObject newBullet = Instantiate(spawnBullet, mainHole.transform);
+                GameObject newBullet = Instantiate(spawnBullet, barrolHole.transform);
                 newBullet.GetComponent<Sc_Bullet>().SetDamageAmount(dmgPerBullet);
                 newBullet.GetComponent<Rigidbody>().AddRelativeForce(Vector3.forward * bulletSpeed, ForceMode.Impulse);
                 //Debug.Log(currentAmmoAmount);

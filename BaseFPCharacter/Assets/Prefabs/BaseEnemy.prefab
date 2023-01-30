@@ -170,36 +170,16 @@ MonoBehaviour:
   visionRange: 70
   visionConeAngle: 70
   alertedTimer: 5
-  decisionTimer: 30
+  decisionTimer: 20
   stateTxtPrefab: {fileID: 1571431829170465119, guid: 4a1f5fc5d19354a4da658a77ec6b2a83, type: 3}
   currentTextUI: {fileID: 8927390455960245779, guid: 4a1f5fc5d19354a4da658a77ec6b2a83, type: 3}
-  patrolPoints:
-  - {fileID: 0}
-  - {fileID: 0}
-  - {fileID: 0}
-  - {fileID: 0}
-  - {fileID: 0}
-  - {fileID: 0}
-  - {fileID: 0}
-  - {fileID: 0}
-  - {fileID: 0}
-  - {fileID: 0}
+  currentAction: 
+  patrolPoints: []
   decisionValue: 0
   currentWeapon: {fileID: 2369196995601294526}
   weaponPosition: {fileID: 9211938983860706177}
-  cover:
-  - {fileID: 0}
-  - {fileID: 0}
-  - {fileID: 0}
-  - {fileID: 0}
-  - {fileID: 0}
-  - {fileID: 0}
-  - {fileID: 0}
-  - {fileID: 0}
-  - {fileID: 0}
-  - {fileID: 0}
-  - {fileID: 0}
-  coverDistance: 15
+  cover: []
+  coverDistance: 20
 --- !u!114 &5355143908986894845
 MonoBehaviour:
   m_ObjectHideFlags: 0

@@ -6,12 +6,14 @@ using UnityEngine.InputSystem.HID;
 
 public class Sc_CoverState : Sc_AIBaseState
 {
+    private Sc_AIStateManager stateManager;
+
     private GameObject self, player, closestCover, currentWeapon;
     private Vector3 playerPos, coverPosition;
 
     private GameObject[] allCover;
 
-    private float closestDist, coverTimer, visionRange, visionConeAngle, decisionTimer;
+    private float closestDist, visionRange, visionConeAngle, decisionTimer;
 
     private NavMeshAgent navMeshAgent;
 
@@ -33,6 +35,7 @@ public class Sc_CoverState : Sc_AIBaseState
             if (Vector3.Distance(self.transform.position, coverPosition) > 0.6f)
             {
                 //Debug.Log("Going to Cover");
+                stateManager.SetCurrentAction("Going to cover point");
                 navMeshAgent.destination = coverPosition;
             }
             else
@@ -45,12 +48,7 @@ public class Sc_CoverState : Sc_AIBaseState
         }
     }
 
-    public override void OnCollisionEnter(Sc_AIStateManager state)
-    {
-
-    }
-
-    public void CoverStartStateInfo(GameObject selfObj, GameObject playerObj, GameObject currentWeaponObj, GameObject[] allCoverObjs, NavMeshAgent navMeshAgent, float visionRange, float visionConeAngle, float decisionTimer)
+    public void CoverStartStateInfo(GameObject selfObj, GameObject playerObj, GameObject currentWeaponObj, GameObject[] allCoverObjs, NavMeshAgent navMeshAgent, float visionRange, float visionConeAngle, float decisionTimer, Sc_AIStateManager stateManager)
     {
         self = selfObj;
         player = playerObj;
@@ -60,6 +58,7 @@ public class Sc_CoverState : Sc_AIBaseState
         this.visionRange = visionRange;
         this.visionConeAngle = visionConeAngle;
         this.decisionTimer = decisionTimer;
+        this.stateManager = stateManager;
     }
 
     public void CantSeePlayer(Sc_AIStateManager state, float distPlayer, float angleToPlayer)
@@ -71,6 +70,7 @@ public class Sc_CoverState : Sc_AIBaseState
     }
 
     IEnumerator ChoosingCover() {
+        stateManager.SetCurrentAction("Choosing closest cover point");
         for (int i = 0; i < allCover.Length; i++)
         {
             if (Vector3.Distance(allCover[i].transform.position, self.transform.position) <= closestDist)
@@ -103,15 +103,18 @@ public class Sc_CoverState : Sc_AIBaseState
         float attackOrCover = Random.Range(1.0f, 10.0f);
         if (attackOrCover >= 5.0f)
         {
+            stateManager.SetCurrentAction("Taking cover");
             self.transform.localScale = new Vector3(1, 0.75f, 1);
         }
         else
         {
+            stateManager.SetCurrentAction("Shooting from cover");
             self.transform.localScale = new Vector3(1, 1, 1);
             state.StartCoroutine(AttackingWithGun(state));
             self.transform.localScale = new Vector3(1, 0.75f, 1);
         }
-        yield return new WaitForSeconds(coverTimer);
+        yield return new WaitForSeconds(2.5f);
+        state.StartCoroutine(AtCover(state));
         yield return null;
     }
 
@@ -129,7 +132,7 @@ public class Sc_CoverState : Sc_AIBaseState
     {
         float newDecisionTimer = Random.Range(decisionTimer - 5, decisionTimer + 5);
         yield return new WaitForSeconds(newDecisionTimer);
-        state.SwitchState(state.aggressionState);
+        state.SwitchState(state.aggressionDesicionState);
         yield return null;
     }
 }

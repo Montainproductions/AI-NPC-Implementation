@@ -13,9 +13,4 @@ public class Sc_SearchState : Sc_AIBaseState
     public override void UpdateState(Sc_AIStateManager state, float distPlayer, float angleToPlayer)
     {
     }
-
-    public override void OnCollisionEnter(Sc_AIStateManager state)
-    {
-
-    }
 }

@@ -346,12 +346,13 @@ MonoBehaviour:
   fireRate: 6
   effectiveRange: 50
   spawnBullet: {fileID: 619712338987558872, guid: 87c710d6419587a40a1795ff8d4323cc, type: 3}
-  mainHole: {fileID: 7687749147882011698}
+  barrolHole: {fileID: 7687749147882011698}
   audioSC: {fileID: 7687749147882011708}
   maxAmmo: 120
   maxClipAmmo: 30
+  currentAmmoAmount: 0
   reloaded: 0
-  reloadTimer: 9
+  reloadTimer: 8
 --- !u!1 &7687749147882011698
 GameObject:
   m_ObjectHideFlags: 0

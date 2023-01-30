@@ -15,7 +15,7 @@ public class Sc_AIStateManager : MonoBehaviour
     [HideInInspector]
     public Sc_PatrolState patrolState = new Sc_PatrolState();
     [HideInInspector]
-    public Sc_AggressionState aggressionState = new Sc_AggressionState();
+    public Sc_AggressionState aggressionDesicionState = new Sc_AggressionState();
     [HideInInspector]
     public Sc_CoverState coverState = new Sc_CoverState();
     [HideInInspector]
@@ -43,6 +43,7 @@ public class Sc_AIStateManager : MonoBehaviour
     [SerializeField]
     private Sc_StateTextUI currentTextUI;
     private TextMeshProUGUI stateText;
+    public string currentAction;
 
     [Header("Patroling")]
     [SerializeField]
@@ -67,10 +68,10 @@ public class Sc_AIStateManager : MonoBehaviour
     void Start()
     {
         currentState = patrolState;
-        patrolState.PatrolStartStateInfo(patrolPoints, navMeshAgent, visionRange, visionConeAngle, gameObject);
-        attackState.AttackStartStateInfo(gameObject, player, currentWeapon, navMeshAgent, visionRange, visionConeAngle, decisionTimer, weaponPosition);
-        aggressionState.AggressionStartStateInfo(gameObject, player, currentWeapon, cover, coverDistance, directorAI, this, navMeshAgent);
-        coverState.CoverStartStateInfo(gameObject, player, currentWeapon, cover, navMeshAgent, visionRange, visionConeAngle, decisionTimer);
+        patrolState.PatrolStartStateInfo(patrolPoints, navMeshAgent, visionRange, visionConeAngle, this);
+        attackState.AttackStartStateInfo(gameObject, player, currentWeapon, navMeshAgent, visionRange, visionConeAngle, decisionTimer, weaponPosition, this);
+        aggressionDesicionState.AggressionStartStateInfo(gameObject, player, currentWeapon, cover, coverDistance, directorAI, this, navMeshAgent);
+        coverState.CoverStartStateInfo(gameObject, player, currentWeapon, cover, navMeshAgent, visionRange, visionConeAngle, decisionTimer, this);
         currentState.EnterState(this, speed);
 
         GameObject stateTextObj = Instantiate(stateTxtPrefab, Sc_Basic_UI.Instance.transform);
@@ -87,7 +88,7 @@ public class Sc_AIStateManager : MonoBehaviour
         currentState.UpdateState(this, distPlayer, angleToPlayer);
 
         currentTextUI.transform.position = Camera.main.WorldToScreenPoint(transform.position + Vector3.up * 3);
-        stateText.SetText(currentState.ToString());
+        stateText.SetText(currentState.ToString() + " " + currentAction);
     }
 
     public void SwitchState(Sc_AIBaseState state)
@@ -99,5 +100,10 @@ public class Sc_AIStateManager : MonoBehaviour
     public void SetDecisionValue(int value)
     {
         decisionValue = value;
+    }
+
+    public void SetCurrentAction(string action)
+    {
+        currentAction = action;
     }
 }
