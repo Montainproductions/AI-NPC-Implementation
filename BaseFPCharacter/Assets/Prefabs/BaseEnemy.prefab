@@ -103,10 +103,10 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 5355143908986894847}
-  - component: {fileID: 5355143908986894840}
   - component: {fileID: 5355143908986894844}
-  - component: {fileID: 5355143908986894845}
+  - component: {fileID: 5627217062832147697}
   - component: {fileID: 5355143908986894846}
+  - component: {fileID: 3366765922595931412}
   m_Layer: 0
   m_Name: BaseEnemy
   m_TagString: Untagged
@@ -135,22 +135,6 @@ Transform:
   m_Father: {fileID: 0}
   m_RootOrder: 0
   m_LocalEulerAnglesHint: {x: 0, y: 180, z: 0}
---- !u!114 &5355143908986894840
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 5355143908986894841}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 46379d01e2457ac47aff58c2f987be41, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  currentHealth: 0
-  maxHealth: 50
-  healingOverTimeAllowed: 0
-  healingRate: 0
 --- !u!114 &5355143908986894844
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -180,7 +164,7 @@ MonoBehaviour:
   weaponPosition: {fileID: 9211938983860706177}
   cover: []
   coverDistance: 20
---- !u!114 &5355143908986894845
+--- !u!114 &5627217062832147697
 MonoBehaviour:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
@@ -189,9 +173,13 @@ MonoBehaviour:
   m_GameObject: {fileID: 5355143908986894841}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: a08a33bba9032ea40858b2ce088f9557, type: 3}
+  m_Script: {fileID: 11500000, guid: 46379d01e2457ac47aff58c2f987be41, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  currentHealth: 0
+  maxHealth: 50
+  healingOverTimeAllowed: 0
+  healingRate: 0
 --- !u!195 &5355143908986894846
 NavMeshAgent:
   m_ObjectHideFlags: 0
@@ -214,6 +202,20 @@ NavMeshAgent:
   m_BaseOffset: 1
   m_WalkableMask: 4294967295
   m_ObstacleAvoidanceType: 4
+--- !u!136 &3366765922595931412
+CapsuleCollider:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 5355143908986894841}
+  m_Material: {fileID: 0}
+  m_IsTrigger: 0
+  m_Enabled: 1
+  m_Radius: 0.5
+  m_Height: 2
+  m_Direction: 1
+  m_Center: {x: 0, y: 0, z: 0}
 --- !u!1 &5355143909348659387
 GameObject:
   m_ObjectHideFlags: 0
@@ -322,7 +324,6 @@ GameObject:
   - component: {fileID: 5355143909700577297}
   - component: {fileID: 5355143909700577302}
   - component: {fileID: 5355143909700577303}
-  - component: {fileID: 5355143909700577296}
   m_Layer: 3
   m_Name: Cylinder (1)
   m_TagString: Enemy
@@ -395,20 +396,6 @@ MeshRenderer:
   m_SortingLayer: 0
   m_SortingOrder: 0
   m_AdditionalVertexStreams: {fileID: 0}
---- !u!136 &5355143909700577296
-CapsuleCollider:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 5355143909700577298}
-  m_Material: {fileID: 0}
-  m_IsTrigger: 0
-  m_Enabled: 1
-  m_Radius: 0.5000001
-  m_Height: 2
-  m_Direction: 1
-  m_Center: {x: 0.000000059604645, y: 0, z: -0.00000008940697}
 --- !u!1 &6434509807700636769
 GameObject:
   m_ObjectHideFlags: 0

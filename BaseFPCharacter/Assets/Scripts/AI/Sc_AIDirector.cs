@@ -40,7 +40,7 @@ public class Sc_AIDirector : MonoBehaviour
 
     public void PlayerFound(GameObject enemyObject)
     {
-        playerSeen = !playerSeen;
+        playerSeen = true;
 
         for(int i = 0; i < allCurrentEnemy.Length; i++) {
             if (allCurrentEnemy[i] != enemyObject)

@@ -32,7 +32,6 @@ public class Sc_Health : MonoBehaviour{
 
     // Update is called once per frame
     void Update(){
-        if(currentHealth <= 0){Destroy(gameObject);} //If no more Health then tell the game manager to go to end game
 
         if(!healingOverTimeAllowed) return; //If the player isnt allowed to heal automaticly then return
         Healing();
@@ -61,6 +60,6 @@ public class Sc_Health : MonoBehaviour{
     public void TakeDamage(float damage){
         currentHealth -= damage;
         recentlyHit = true;
-        Debug.Log(currentHealth);
+        if (currentHealth <= 0) { Destroy(gameObject); } //If no more Health then tell the game manager to go to end game
     }
 }

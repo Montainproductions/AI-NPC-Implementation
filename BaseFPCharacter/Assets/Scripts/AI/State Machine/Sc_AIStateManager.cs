@@ -40,6 +40,7 @@ public class Sc_AIStateManager : MonoBehaviour
     [Header("UI State Text")]
     [SerializeField]
     private GameObject stateTxtPrefab;
+    private GameObject stateTextObj;
     [SerializeField]
     private Sc_StateTextUI currentTextUI;
     private TextMeshProUGUI stateText;
@@ -74,7 +75,7 @@ public class Sc_AIStateManager : MonoBehaviour
         coverState.CoverStartStateInfo(gameObject, player, currentWeapon, cover, navMeshAgent, visionRange, visionConeAngle, decisionTimer, this);
         currentState.EnterState(this, speed);
 
-        GameObject stateTextObj = Instantiate(stateTxtPrefab, Sc_Basic_UI.Instance.transform);
+        stateTextObj = Instantiate(stateTxtPrefab, Sc_Basic_UI.Instance.transform);
         currentTextUI = stateTextObj.GetComponent<Sc_StateTextUI>();
         stateText = stateTextObj.GetComponent<TextMeshProUGUI>();
     }
@@ -89,6 +90,11 @@ public class Sc_AIStateManager : MonoBehaviour
 
         currentTextUI.transform.position = Camera.main.WorldToScreenPoint(transform.position + Vector3.up * 3);
         stateText.SetText(currentState.ToString() + " " + currentAction);
+    }
+
+    public void OnDestroy()
+    {
+        Destroy(stateTextObj);
     }
 
     public void SwitchState(Sc_AIBaseState state)

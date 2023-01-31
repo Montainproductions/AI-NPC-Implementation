@@ -16,7 +16,7 @@ public class Sc_AttackState : Sc_AIBaseState
 
     private bool isMoving;
 
-    private float visionRange, visionConeAngle, attackRange, decisionTimer, gunDistance;
+    private float visionRange, visionConeAngle, attackRange, decisionTimer, gunDistance, timeDelay;
 
     private GameObject[] allGunsOnFloor;
     private GameObject pickUpWeapon;
@@ -48,7 +48,7 @@ public class Sc_AttackState : Sc_AIBaseState
             float playerDist = Vector3.Distance(playerPos, self.transform.position);
             float diffDistToAttack = playerDist - attackRange;
             //Debug.Log(diffDistToAttack);
-            if (diffDistToAttack > 0 && !isMoving)
+            if (diffDistToAttack >= 0 && !isMoving)
             {
                 isMoving = true;
                 state.StartCoroutine(GettingCloser(state, diffDistToAttack));
@@ -119,10 +119,11 @@ public class Sc_AttackState : Sc_AIBaseState
     {
         stateManager.SetCurrentAction("Shooting player");
         //Debug.Log("Shooting");
-        //yield return new WaitForSeconds(0.30f);
-        Sc_BaseGun gunScript = currentWeapon.GetComponent<Sc_BaseGun>();
+        timeDelay = Random.Range(1.25f, 2.75f);
+        yield return new WaitForSeconds(timeDelay);
         state.StartCoroutine(gunScript.ShotFired());
-        yield return new WaitForSeconds(1.75f);
+        timeDelay = Random.Range(1.25f, 2.75f);
+        yield return new WaitForSeconds(timeDelay);
         yield return null;
     }
 
@@ -140,6 +141,16 @@ public class Sc_AttackState : Sc_AIBaseState
             }
         }
         newPosition = pickUpWeapon.transform.position;
+        yield return null;
+    }
+
+    IEnumerator Reloading(Sc_AIStateManager state)
+    {
+        stateManager.SetCurrentAction("Reloading");
+        //Debug.Log("Shooting");
+        yield return new WaitForSeconds(2.25f);
+        state.StartCoroutine(gunScript.Reloading());
+        yield return new WaitForSeconds(2.75f);
         yield return null;
     }
 
