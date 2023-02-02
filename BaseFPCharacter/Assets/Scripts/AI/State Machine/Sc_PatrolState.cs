@@ -6,7 +6,6 @@ using UnityEngine.AI;
 public class Sc_PatrolState : Sc_AIBaseState
 {
     private Sc_AIStateManager stateManager;
-    private Sc_AIDirector directorAI;
 
     private GameObject[] allPatrolPoints, patrolPoints = new GameObject[5];
     private int currentPos;

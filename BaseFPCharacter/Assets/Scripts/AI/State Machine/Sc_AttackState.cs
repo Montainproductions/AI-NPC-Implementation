@@ -57,10 +57,12 @@ public class Sc_AttackState : Sc_AIBaseState
             {
                 state.StartCoroutine(AttackingWithGun(state));
             }
-            else
+            
+            if (gunScript.currentAmmoAmount < 0)
             {
-
+                state.StartCoroutine(Reloading(state));
             }
+
             if (newPosition != Vector3.zero)
             {
                 navMeshAgent.destination = newPosition;

@@ -68,6 +68,9 @@ public class Sc_AggressionState : Sc_AIBaseState
         //Debug.Log("Obj: " + self.name + " Value: " + decisionVal);
 
         manager.SetDecisionValue(decisionVal);
+
+        directorAI.PlayerFound(state.gameObject);
+        
         state.StartCoroutine(directorAI.AIAttackAddList(self));
     }
 
