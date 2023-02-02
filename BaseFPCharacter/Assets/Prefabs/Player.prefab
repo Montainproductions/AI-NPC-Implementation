@@ -44,7 +44,7 @@ GameObject:
   - component: {fileID: 6646797673753478766}
   m_Layer: 6
   m_Name: Cube
-  m_TagString: Gun
+  m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
@@ -377,6 +377,8 @@ MonoBehaviour:
   maxHealth: 100
   healingOverTimeAllowed: 0
   healingRate: 1
+  printingValues: 0
+  updateHealthUI: 0
 --- !u!1 &6646797675293489075
 GameObject:
   m_ObjectHideFlags: 0
@@ -433,7 +435,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 7687749147566294081, guid: 7133376c2d13887488df58dced69d27c, type: 3}
       propertyPath: m_LocalPosition.z
-      value: 1.459
+      value: 1.281
       objectReference: {fileID: 0}
     - target: {fileID: 7687749147566294081, guid: 7133376c2d13887488df58dced69d27c, type: 3}
       propertyPath: m_LocalRotation.w

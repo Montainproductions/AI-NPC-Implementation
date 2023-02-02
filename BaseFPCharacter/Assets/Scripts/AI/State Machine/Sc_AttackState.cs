@@ -22,7 +22,7 @@ public class Sc_AttackState : Sc_AIBaseState
     private GameObject pickUpWeapon;
     private Transform weaponPosition;
 
-    public override void EnterState(Sc_AIStateManager state, float speed) {
+    public override void EnterState(Sc_AIStateManager state, float speed, bool playerSeen) {
         //Debug.Log("Going to attack");
         isMoving = false;
 

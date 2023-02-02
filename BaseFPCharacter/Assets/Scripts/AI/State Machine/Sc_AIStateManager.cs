@@ -32,6 +32,8 @@ public class Sc_AIStateManager : MonoBehaviour
 
     [SerializeField]
     private GameObject player;
+    [HideInInspector]
+    public bool playerNoticed;
 
     [SerializeField]
     private float visionRange, visionConeAngle, alertedTimer, decisionTimer;
@@ -41,8 +43,6 @@ public class Sc_AIStateManager : MonoBehaviour
     [SerializeField]
     private GameObject stateTxtPrefab;
     private GameObject stateTextObj;
-    [SerializeField]
-    private Sc_StateTextUI currentTextUI;
     private TextMeshProUGUI stateText;
     public string currentAction;
 
@@ -73,10 +73,9 @@ public class Sc_AIStateManager : MonoBehaviour
         attackState.AttackStartStateInfo(gameObject, player, currentWeapon, navMeshAgent, visionRange, visionConeAngle, decisionTimer, weaponPosition, this);
         aggressionDesicionState.AggressionStartStateInfo(gameObject, player, currentWeapon, cover, coverDistance, directorAI, this, navMeshAgent);
         coverState.CoverStartStateInfo(gameObject, player, currentWeapon, cover, navMeshAgent, visionRange, visionConeAngle, decisionTimer, this);
-        currentState.EnterState(this, speed);
+        currentState.EnterState(this, speed, playerNoticed);
 
         stateTextObj = Instantiate(stateTxtPrefab, Sc_Basic_UI.Instance.transform);
-        currentTextUI = stateTextObj.GetComponent<Sc_StateTextUI>();
         stateText = stateTextObj.GetComponent<TextMeshProUGUI>();
     }
 
@@ -88,7 +87,7 @@ public class Sc_AIStateManager : MonoBehaviour
         //Debug.Log(currentState);
         currentState.UpdateState(this, distPlayer, angleToPlayer);
 
-        currentTextUI.transform.position = Camera.main.WorldToScreenPoint(transform.position + Vector3.up * 3);
+        stateTextObj.transform.position = Camera.main.WorldToScreenPoint(transform.position + Vector3.up * 3);
         stateText.SetText(currentState.ToString() + " " + currentAction);
     }
 
@@ -100,7 +99,7 @@ public class Sc_AIStateManager : MonoBehaviour
     public void SwitchState(Sc_AIBaseState state)
     {
         currentState = state;
-        currentState.EnterState(this, speed);
+        currentState.EnterState(this, speed, playerNoticed);
     }
 
     public void SetDecisionValue(int value)

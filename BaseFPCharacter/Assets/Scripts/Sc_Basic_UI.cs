@@ -1,6 +1,7 @@
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using TMPro;
 
 public class Sc_Basic_UI : MonoBehaviour{
     //Singleton
@@ -10,6 +11,10 @@ public class Sc_Basic_UI : MonoBehaviour{
     [Tooltip("Wether the player can do a melee attack or not.")]
     private GameObject canAttack, cantAttack;
 
+    [SerializeField]
+    private GameObject healthInt;
+    private TextMeshProUGUI textHealthUI;
+
     public void Awake(){
         Instance = this;
     }
@@ -17,11 +22,16 @@ public class Sc_Basic_UI : MonoBehaviour{
     // Start is called before the first frame update
     void Start(){
         CanAttackUI();
+        textHealthUI = healthInt.GetComponent<TextMeshProUGUI>();
     }
 
     // Update is called once per frame
     void Update(){
         
+    }
+
+    public void NewHealth(float currentHealth) {
+        textHealthUI.SetText(currentHealth.ToString());
     }
 
     //Activates the green square to signify that the player can melee

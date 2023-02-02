@@ -5,6 +5,8 @@ using UnityEngine.AI;
 
 public class Sc_AggressionState : Sc_AIBaseState
 {
+    private bool playerNoticed;
+
     private GameObject player, self;
     private GameObject[] coverPositions;
 
@@ -20,10 +22,19 @@ public class Sc_AggressionState : Sc_AIBaseState
 
     private int decisionVal;
 
-    public override void EnterState(Sc_AIStateManager state, float speed)
+    public override void EnterState(Sc_AIStateManager state, float speed, bool playerSeen)
     {
+        playerNoticed = playerSeen;
         state.StartCoroutine(StoppingAI());
-        Debug.Log(self.name + " Player detected");
+        if (playerNoticed)
+        {
+            directorAI.PlayerFound(state.gameObject);
+        }
+        else
+        {
+            playerNoticed = true;
+        }
+        //Debug.Log(self.name + " Player detected");
 
         decisionVal = 0;
         attackRange = baseGunScript.effectiveRange;
@@ -68,8 +79,6 @@ public class Sc_AggressionState : Sc_AIBaseState
         //Debug.Log("Obj: " + self.name + " Value: " + decisionVal);
 
         manager.SetDecisionValue(decisionVal);
-
-        directorAI.PlayerFound(state.gameObject);
         
         state.StartCoroutine(directorAI.AIAttackAddList(self));
     }

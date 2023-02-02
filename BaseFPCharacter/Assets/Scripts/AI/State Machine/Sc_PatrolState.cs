@@ -16,7 +16,7 @@ public class Sc_PatrolState : Sc_AIBaseState
 
     private float visionRange, visionConeAngle, alertedTimer, rayCastRange, distPlayer;
 
-    public override void EnterState(Sc_AIStateManager state, float speed) {
+    public override void EnterState(Sc_AIStateManager state, float speed, bool playerNoticed) {
         Debug.Log("Patroling");
         ChooseRandomPatrolPos();
     }
@@ -79,6 +79,7 @@ public class Sc_PatrolState : Sc_AIBaseState
         if (distPlayer <= visionRange - 5 && angleToPlayer <= visionConeAngle - 5)
         {
             //directorAI.PlayerFound(state.gameObject);
+            state.playerNoticed = true;
             state.SwitchState(state.aggressionDesicionState);
         }
     }

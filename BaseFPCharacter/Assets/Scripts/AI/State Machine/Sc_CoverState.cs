@@ -17,7 +17,7 @@ public class Sc_CoverState : Sc_AIBaseState
 
     private NavMeshAgent navMeshAgent;
 
-    public override void EnterState(Sc_AIStateManager state, float speed)
+    public override void EnterState(Sc_AIStateManager state, float speed, bool playerSeen)
     {
         closestDist = Mathf.Infinity;
         //Debug.Log("Going to cover Start");

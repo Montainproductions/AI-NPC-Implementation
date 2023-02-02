@@ -6,6 +6,8 @@ public class Sc_BaseGun : MonoBehaviour {
     [SerializeField]
     private float dmgPerBullet, bulletSpeed;
 
+    [SerializeField]
+    private GameObject player;
 
     public int fireRate, effectiveRange;
 
@@ -49,16 +51,16 @@ public class Sc_BaseGun : MonoBehaviour {
             {
                 currentAmmoAmount--;
                 GameObject newBullet = Instantiate(spawnBullet, barrolHole.transform);
-                newBullet.GetComponent<Sc_Bullet>().SetDamageAmount(dmgPerBullet);
+                newBullet.GetComponent<Sc_Bullet>().SetDamageAmount(player, dmgPerBullet);
                 newBullet.GetComponent<Rigidbody>().AddRelativeForce(Vector3.forward * bulletSpeed, ForceMode.Impulse);
                 //Debug.Log(currentAmmoAmount);
                 audioSC.Play();
-                yield return new WaitForSeconds(0.2f);
+                yield return new WaitForSeconds(0.25f);
             }
-            yield return new WaitForSeconds(1);
+            yield return new WaitForSeconds(1.5f);
             shotRecently= false;
         }
-        else if(shotRecently)
+        else if(currentAmmoAmount > 0 && shotRecently)
         {
             //Play audio clip
             Debug.Log("Recently Shot");

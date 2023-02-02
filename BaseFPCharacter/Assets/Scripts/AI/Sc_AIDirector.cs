@@ -31,20 +31,19 @@ public class Sc_AIDirector : MonoBehaviour
         playerSeen = false;
         StartCoroutine(WhatToDoTimer());
 
-        allEnemies();
     }
 
     // Update is called once per frame
     void Update()
     {
+
     }
 
     public void PlayerFound(GameObject enemyObject)
     {
         playerSeen = true;
         
-        Debug.Log("Activating Enemy");
-        allEnemies();
+        //Debug.Log("Activating Enemy");
 
         for (int i = 0; i < allCurrentEnemy.Length; i++) {
             if (allCurrentEnemy[i] != enemyObject)
@@ -53,16 +52,6 @@ public class Sc_AIDirector : MonoBehaviour
                 stateManager.SwitchState(stateManager.aggressionDesicionState);
                 //stateManager = null;
             }
-        }
-    }
-
-    public void allEnemies()
-    {
-        Debug.Log(allCurrentEnemy.Length);
-        for (int i = 0; i < allCurrentEnemy.Length; i++)
-        {
-            //Debug.Log(i);
-            Debug.Log(allCurrentEnemy[i]);
         }
     }
 

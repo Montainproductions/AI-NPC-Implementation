@@ -5,7 +5,7 @@ using UnityEngine.AI;
 
 public class Sc_SearchState : Sc_AIBaseState
 {
-    public override void EnterState(Sc_AIStateManager state, float speed)
+    public override void EnterState(Sc_AIStateManager state, float speed, bool playerSeen)
     {
         Debug.Log("Searching for Player");
     }

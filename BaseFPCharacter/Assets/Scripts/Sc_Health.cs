@@ -9,19 +9,28 @@ public class Sc_Health : MonoBehaviour{
     [Tooltip("Current health that the character has at any point.")]
     [Range(0,1000)]
     private float currentHealth;
+    
     [SerializeField]
     [Tooltip("Max health character can have at any point in time.")]
     [Range(0, 1000)]
     private float maxHealth;
     private float lastTimeHitTimer; //Timer to know when to start the self healing
+    
     [SerializeField]
     [Tooltip("Can the character heal healingRate HP per second?")]
     private bool healingOverTimeAllowed;
     private bool recentlyHit; //If the character was recently hit most for the healing
+    
     [SerializeField]
     [Tooltip("Rate in which the character will heal over time.")]
     [Range(0, 1000)]
     private int healingRate;
+
+    [Header("Extra info")]
+    [SerializeField]
+    private bool printingValues;
+    [SerializeField]
+    private bool updateHealthUI;
 
     // Start is called before the first frame update
     void Start(){
@@ -33,6 +42,10 @@ public class Sc_Health : MonoBehaviour{
     // Update is called once per frame
     void Update(){
 
+        if (printingValues)
+        {
+            Debug.Log(currentHealth);
+        }
         if(!healingOverTimeAllowed) return; //If the player isnt allowed to heal automaticly then return
         Healing();
     }
@@ -60,6 +73,12 @@ public class Sc_Health : MonoBehaviour{
     public void TakeDamage(float damage){
         currentHealth -= damage;
         recentlyHit = true;
+        
+        if (updateHealthUI)
+        {
+            Sc_Basic_UI.Instance.NewHealth(currentHealth);
+        }
+
         if (currentHealth <= 0) { Destroy(gameObject); } //If no more Health then tell the game manager to go to end game
     }
 }
