@@ -82,6 +82,7 @@ public class Sc_AIStateManager : MonoBehaviour
     // Update is called once per frame
     void Update()
     {
+        //Calculates the distance and angle to the player. Used mostly to determine if the player is in view. Currently planning on changing so that the player is deteced by a game object collider.
         distPlayer = Vector3.Distance(transform.position, player.transform.position);
         angleToPlayer = Vector3.Angle(transform.forward, player.transform.position - transform.position);
         //Debug.Log(currentState);
@@ -96,6 +97,7 @@ public class Sc_AIStateManager : MonoBehaviour
         Destroy(stateTextObj);
     }
 
+    //Switches to the new state and starts the new enter state method for that new state
     public void SwitchState(Sc_AIBaseState state)
     {
         currentState = state;
@@ -107,6 +109,7 @@ public class Sc_AIStateManager : MonoBehaviour
         decisionValue = value;
     }
 
+    //Current action which is used for some UI so that the user can better determine what each individual AI is doing.
     public void SetCurrentAction(string action)
     {
         currentAction = action;

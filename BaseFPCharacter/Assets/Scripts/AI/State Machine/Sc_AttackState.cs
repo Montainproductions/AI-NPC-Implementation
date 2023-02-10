@@ -39,10 +39,10 @@ public class Sc_AttackState : Sc_AIBaseState
     }
 
     public override void UpdateState(Sc_AIStateManager state, float distPlayer, float angleToPlayer) {
+        playerPos = player.transform.position;
         if (currentWeapon != null)
         {
             CantSeePlayer(state, distPlayer, angleToPlayer);
-            playerPos = player.transform.position;
             state.transform.LookAt(playerPos);
 
             float playerDist = Vector3.Distance(playerPos, self.transform.position);
@@ -57,8 +57,7 @@ public class Sc_AttackState : Sc_AIBaseState
             {
                 state.StartCoroutine(AttackingWithGun(state));
             }
-            
-            if (gunScript.currentAmmoAmount < 0)
+            else if (gunScript.currentAmmoAmount <= 0)
             {
                 state.StartCoroutine(Reloading(state));
             }
@@ -117,18 +116,20 @@ public class Sc_AttackState : Sc_AIBaseState
         yield return null;
     }
 
+    //Will shoot to the player with random time delays so that it looks like the AI is shooting at random intervals and taking its time to aim and shoot. 
     IEnumerator AttackingWithGun(Sc_AIStateManager state)
     {
         stateManager.SetCurrentAction("Shooting player");
         //Debug.Log("Shooting");
-        timeDelay = Random.Range(1.25f, 2.75f);
+        timeDelay = Random.Range(2, 3.25f);
         yield return new WaitForSeconds(timeDelay);
         state.StartCoroutine(gunScript.ShotFired());
-        timeDelay = Random.Range(1.25f, 2.75f);
+        timeDelay = Random.Range(1.5f, 2.75f);
         yield return new WaitForSeconds(timeDelay);
         yield return null;
     }
 
+    //If the AI currently dosent have a weapon then the AI will look and grab the closest weapon to them.
     IEnumerator LookingForGun(Sc_AIStateManager state)
     {
         stateManager.SetCurrentAction("Looking for near by gun");
@@ -143,7 +144,7 @@ public class Sc_AttackState : Sc_AIBaseState
             }
         }
         newPosition = pickUpWeapon.transform.position;
-        yield return null;
+        yield return new WaitForSeconds(1.75f);
     }
 
     IEnumerator Reloading(Sc_AIStateManager state)

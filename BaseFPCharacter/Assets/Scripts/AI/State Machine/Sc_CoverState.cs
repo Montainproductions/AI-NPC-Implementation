@@ -4,6 +4,12 @@ using UnityEngine;
 using UnityEngine.AI;
 using UnityEngine.InputSystem.HID;
 
+/// <summary>
+/// The cover state script allows each enemy to decide what is the closest unocupide cover point and then go to there and go to the cover point. 
+/// This works by going through all the cover objects (Main parent object which contains the rectangle main cover and all 4 cover points) to find the closest cover object. 
+/// After finding the closest cover object the AI will check all the 4 cover points that are part of the cover object and run a method that will run a raycast from the cover point to the player and if it hits a cover position then it is considered behind cover and will consider using the cover. 
+/// If at this point there isnt another AI enemy using the cover point then the AI will start going to the cover point.
+/// </summary>
 public class Sc_CoverState : Sc_AIBaseState
 {
     private Sc_AIStateManager stateManager;
@@ -17,6 +23,7 @@ public class Sc_CoverState : Sc_AIBaseState
 
     private NavMeshAgent navMeshAgent;
 
+    //When first entering the state the choosing cover IEnumerator and the redeciding timer.
     public override void EnterState(Sc_AIStateManager state, float speed, bool playerSeen)
     {
         closestDist = Mathf.Infinity;
@@ -26,6 +33,7 @@ public class Sc_CoverState : Sc_AIBaseState
         state.StartCoroutine(ReDecide(state));
     }
 
+    //
     public override void UpdateState(Sc_AIStateManager state, float distPlayer, float angleToPlayer)
     {
         playerPos = player.transform.position;
@@ -48,6 +56,7 @@ public class Sc_CoverState : Sc_AIBaseState
         }
     }
 
+    //Recives important variables that are needed for the entire state to work properly.
     public void CoverStartStateInfo(GameObject selfObj, GameObject playerObj, GameObject currentWeaponObj, GameObject[] allCoverObjs, NavMeshAgent navMeshAgent, float visionRange, float visionConeAngle, float decisionTimer, Sc_AIStateManager stateManager)
     {
         self = selfObj;
@@ -61,6 +70,7 @@ public class Sc_CoverState : Sc_AIBaseState
         this.stateManager = stateManager;
     }
 
+    //If the player leaves the AIs line of site then it will stop trying to go to cover and start to search for the player.
     public void CantSeePlayer(Sc_AIStateManager state, float distPlayer, float angleToPlayer)
     {
         if (distPlayer >= visionRange && angleToPlayer >= visionConeAngle)
@@ -69,13 +79,16 @@ public class Sc_CoverState : Sc_AIBaseState
         }
     }
 
+    //Fine closest cover object and then determines which of the cover points children is behind the cover.
     IEnumerator ChoosingCover() {
         stateManager.SetCurrentAction("Choosing closest cover point");
+        Vector3 selfPos = self.transform.position;
         for (int i = 0; i < allCover.Length; i++)
         {
-            if (Vector3.Distance(allCover[i].transform.position, self.transform.position) <= closestDist)
+            float dist = Vector3.Distance(allCover[i].transform.position, selfPos);
+            if (dist <= closestDist)
             {
-                closestDist = Vector3.Distance(allCover[i].transform.position, self.transform.position);
+                closestDist = dist;
                 closestCover = allCover[i];
             }
         }
@@ -85,7 +98,8 @@ public class Sc_CoverState : Sc_AIBaseState
         for (int i = 1; i <= 4; i++)
         {
             Sc_CoverPoints coverScript = closestCover.transform.GetChild(i).GetComponent<Sc_CoverPoints>();
-            if (coverScript.behindCover && !coverScript.beingUsed)
+            bool behindCover = coverScript.IsBehindCover();
+            if (behindCover && !coverScript.beingUsed)
             {
                 //Debug.Log(closestCover.transform.GetChild(i));
                 coverPosition = closestCover.transform.GetChild(i).transform.position;
