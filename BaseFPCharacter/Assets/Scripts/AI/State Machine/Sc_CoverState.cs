@@ -21,7 +21,7 @@ public class Sc_CoverState : Sc_AIBaseState
 
     private GameObject[] allCover;
 
-    private float closestDist, visionRange, visionConeAngle, decisionTimer;
+    private float closestDist, visionRange, visionConeAngle;
 
     private NavMeshAgent navMeshAgent;
 
@@ -31,20 +31,20 @@ public class Sc_CoverState : Sc_AIBaseState
         closestDist = Mathf.Infinity;
         //Debug.Log("Going to cover Start");
         coverPosition = Vector3.zero;
-        state.StartCoroutine(ChoosingCover());
-        state.StartCoroutine(commonMethodsScript.ReDecide(state));
+        stateManager.StartCoroutine(ChoosingCover());
+        stateManager.StartCoroutine(commonMethodsScript.ReDecide());
     }
 
     //Will check if the AI is near by the cover point. If its not close then contine having the AI go to the cover point, else it will stop the AI and start the atcover Corutine. 
     public override void UpdateState(Sc_AIStateManager state, float distPlayer, float angleToPlayer)
     {
         playerPos = player.transform.position;
-        state.transform.LookAt(playerPos);
+        stateManager.transform.LookAt(playerPos);
 
     }
 
     //Recives important variables that are needed for the entire state to work properly.
-    public void CoverStartStateInfo(GameObject selfObj, GameObject playerObj, GameObject currentWeaponObj, GameObject[] allCoverObjs, NavMeshAgent navMeshAgent, float visionRange, float visionConeAngle, float decisionTimer, Sc_AIStateManager stateManager)
+    public void CoverStartStateInfo(GameObject selfObj, GameObject playerObj, GameObject currentWeaponObj, GameObject[] allCoverObjs, NavMeshAgent navMeshAgent, float visionRange, float visionConeAngle, Sc_AIStateManager stateManager, Sc_CommonMethods commonMethods)
     {
         self = selfObj;
         player = playerObj;
@@ -53,8 +53,8 @@ public class Sc_CoverState : Sc_AIBaseState
         this.navMeshAgent = navMeshAgent;
         this.visionRange = visionRange;
         this.visionConeAngle = visionConeAngle;
-        this.decisionTimer = decisionTimer;
         this.stateManager = stateManager;
+        commonMethodsScript = commonMethods;
     }
 
     //If the player leaves the AIs line of site then it will stop trying to go to cover and start to search for the player.
@@ -62,7 +62,7 @@ public class Sc_CoverState : Sc_AIBaseState
     {
         if (distPlayer >= visionRange && angleToPlayer >= visionConeAngle)
         {
-            state.SwitchState(state.searchState);
+            stateManager.SwitchState(state.searchState);
         }
     }
 

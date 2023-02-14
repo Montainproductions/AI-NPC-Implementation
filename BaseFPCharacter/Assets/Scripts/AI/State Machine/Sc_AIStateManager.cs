@@ -9,6 +9,9 @@ public class Sc_AIStateManager : MonoBehaviour
     [SerializeField]
     private string[] traits;
 
+    [SerializeField]
+    private Sc_CommonMethods commonMethods;
+
     [HideInInspector]
     public Sc_AIBaseState currentState;
     [HideInInspector]
@@ -73,9 +76,9 @@ public class Sc_AIStateManager : MonoBehaviour
     {
         currentState = patrolState;
         patrolState.PatrolStartStateInfo(patrolPoints, navMeshAgent, visionRange, visionConeAngle, this);
-        attackState.AttackStartStateInfo(gameObject, player, currentWeapon, navMeshAgent, visionRange, visionConeAngle, decisionTimer, weaponPosition, this);
+        attackState.AttackStartStateInfo(gameObject, player, currentWeapon, navMeshAgent, visionRange, visionConeAngle, weaponPosition, this, commonMethods);
         aggressionDesicionState.AggressionStartStateInfo(gameObject, player, currentWeapon, cover, coverDistance, directorAI, this, navMeshAgent);
-        coverState.CoverStartStateInfo(gameObject, player, currentWeapon, cover, navMeshAgent, visionRange, visionConeAngle, decisionTimer, this);
+        coverState.CoverStartStateInfo(gameObject, player, currentWeapon, cover, navMeshAgent, visionRange, visionConeAngle, this, commonMethods);
         currentState.EnterState(this, speed, playerNoticed);
 
         stateTextObj = Instantiate(stateTxtPrefab, Sc_Basic_UI.Instance.transform);

@@ -42,10 +42,10 @@ public class Sc_Health : MonoBehaviour{
     // Update is called once per frame
     void Update(){
 
-        if (printingValues)
+        /*if (printingValues)
         {
             Debug.Log(currentHealth);
-        }
+        }*/
         if(!healingOverTimeAllowed) return; //If the player isnt allowed to heal automaticly then return
         Healing();
     }

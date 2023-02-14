@@ -68,7 +68,7 @@ public class Sc_CommonMethods : MonoBehaviour
                 }
                 else if (currentState == "Attack")
                 {
-                    stateManager
+                    stateManager.attackState.isMoving = false;
                 }
             }
         }

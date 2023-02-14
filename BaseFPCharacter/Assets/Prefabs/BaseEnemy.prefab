@@ -105,6 +105,7 @@ GameObject:
   - component: {fileID: 5355143908986894847}
   - component: {fileID: 5355143908986894844}
   - component: {fileID: 5627217062832147697}
+  - component: {fileID: 780441598457401939}
   - component: {fileID: 5355143908986894846}
   - component: {fileID: 3366765922595931412}
   m_Layer: 0
@@ -147,16 +148,17 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 34acd208d9af86846a20656eef7ece85, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  traits: []
   speed: 7
   navMeshAgent: {fileID: 5355143908986894846}
   directorAI: {fileID: 2460812123129524718, guid: 9a1b04fd93715f84585c30af5c65b4ea, type: 3}
   player: {fileID: 6646797674794803052, guid: 81ce49f96577d844ab806a3654e6ae19, type: 3}
+  playerNoticed: 0
   visionRange: 70
   visionConeAngle: 70
   alertedTimer: 5
   decisionTimer: 20
   stateTxtPrefab: {fileID: 1571431829170465119, guid: 4a1f5fc5d19354a4da658a77ec6b2a83, type: 3}
-  currentTextUI: {fileID: 8927390455960245779, guid: 4a1f5fc5d19354a4da658a77ec6b2a83, type: 3}
   currentAction: 
   patrolPoints: []
   decisionValue: 0
@@ -180,6 +182,26 @@ MonoBehaviour:
   maxHealth: 50
   healingOverTimeAllowed: 0
   healingRate: 0
+  printingValues: 0
+  updateHealthUI: 0
+--- !u!114 &780441598457401939
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 5355143908986894841}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: f62f213b258984047b085bd621845d61, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  stateManager: {fileID: 5355143908986894844}
+  navMeshAgent: {fileID: 5355143908986894846}
+  currentState: 
+  self: {fileID: 0}
+  player: {fileID: 0}
+  decisionTimer: 20
 --- !u!195 &5355143908986894846
 NavMeshAgent:
   m_ObjectHideFlags: 0

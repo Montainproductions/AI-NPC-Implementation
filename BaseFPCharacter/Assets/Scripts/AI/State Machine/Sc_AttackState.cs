@@ -20,7 +20,7 @@ public class Sc_AttackState : Sc_AIBaseState
     [HideInInspector]
     public bool isMoving;
 
-    private float visionRange, visionConeAngle, attackRange, decisionTimer, gunDistance, timeDelay, diffDistToAttack;
+    private float visionRange, visionConeAngle, attackRange, gunDistance, timeDelay, diffDistToAttack;
 
     private GameObject[] allGunsOnFloor;
     private GameObject pickUpWeapon;
@@ -37,6 +37,7 @@ public class Sc_AttackState : Sc_AIBaseState
 
     public override void UpdateState(Sc_AIStateManager state, float distPlayer, float angleToPlayer) {
         playerPos = player.transform.position;
+        stateManager.transform.LookAt(playerPos);
         if (currentWeapon != null)
         {
             CantSeePlayer(state, distPlayer, angleToPlayer);
@@ -78,7 +79,7 @@ public class Sc_AttackState : Sc_AIBaseState
         }
     }
 
-    public void AttackStartStateInfo(GameObject thisObj, GameObject playerObj, GameObject currentWeaponObj, NavMeshAgent aiNavigationAgent, float visionRange, float visionConeAngle, float decisionTimer, Transform weaponPosition, Sc_AIStateManager stateManager)
+    public void AttackStartStateInfo(GameObject thisObj, GameObject playerObj, GameObject currentWeaponObj, NavMeshAgent aiNavigationAgent, float visionRange, float visionConeAngle, Transform weaponPosition, Sc_AIStateManager stateManager, Sc_CommonMethods commonMethods)
     {
         self = thisObj;
         player = playerObj;
@@ -88,9 +89,9 @@ public class Sc_AttackState : Sc_AIBaseState
         attackRange = gunScript.effectiveRange;
         this.visionRange = visionRange;
         this.visionConeAngle = visionConeAngle;
-        this.decisionTimer = decisionTimer;
         this.weaponPosition = weaponPosition;
         this.stateManager = stateManager;
+        commonMethodsScript = commonMethods;
     }
 
     public void CantSeePlayer(Sc_AIStateManager state, float distPlayer, float angleToPlayer)

@@ -114,7 +114,7 @@ public class Sc_AIDirector : MonoBehaviour
             //This is meant to help
             else if (stateManager.decisionValue >= valueLimit)
             {
-                if(v >= 2.5f)
+                if(v >= 2.5f) //2.5f
                 {
                     //Debug.Log("Attacking");
                     stateManager.SwitchState(stateManager.attackState);
@@ -128,7 +128,7 @@ public class Sc_AIDirector : MonoBehaviour
             }
             else
             {
-                if (v >= 7.5f)
+                if (v >= 7.5f) //7.5f
                 {
                     //Debug.Log("Attacking part 2");
                     stateManager.SwitchState(stateManager.attackState);
