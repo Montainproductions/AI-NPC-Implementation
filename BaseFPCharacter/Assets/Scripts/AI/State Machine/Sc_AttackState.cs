@@ -8,6 +8,8 @@ public class Sc_AttackState : Sc_AIBaseState
     private Sc_AIStateManager stateManager;
     public string currentAction;
 
+    private Sc_CommonMethods commonMethodsScript;
+
     //Navigation
     private NavMeshAgent navMeshAgent;
 
@@ -15,9 +17,10 @@ public class Sc_AttackState : Sc_AIBaseState
     private Sc_BaseGun gunScript;
     private Vector3 playerPos, newPosition;
 
-    private bool isMoving;
+    [HideInInspector]
+    public bool isMoving;
 
-    private float visionRange, visionConeAngle, attackRange, decisionTimer, gunDistance, timeDelay;
+    private float visionRange, visionConeAngle, attackRange, decisionTimer, gunDistance, timeDelay, diffDistToAttack;
 
     private GameObject[] allGunsOnFloor;
     private GameObject pickUpWeapon;
@@ -29,7 +32,7 @@ public class Sc_AttackState : Sc_AIBaseState
         isMoving = false;
 
         newPosition = Vector3.zero;
-        state.StartCoroutine(ReDecide(state));
+        state.StartCoroutine(commonMethodsScript.ReDecide());
     }
 
     public override void UpdateState(Sc_AIStateManager state, float distPlayer, float angleToPlayer) {
@@ -37,15 +40,15 @@ public class Sc_AttackState : Sc_AIBaseState
         if (currentWeapon != null)
         {
             CantSeePlayer(state, distPlayer, angleToPlayer);
-            state.transform.LookAt(playerPos);
+            //state.transform.LookAt(playerPos);
 
-            float playerDist = Vector3.Distance(playerPos, self.transform.position);
-            float diffDistToAttack = playerDist - attackRange;
+            state.StartCoroutine(PlayerDistance(state));
+
             //Debug.Log(diffDistToAttack);
             if (diffDistToAttack >= 0 && !isMoving)
             {
                 isMoving = true;
-                state.StartCoroutine(GettingCloser(state, diffDistToAttack));
+                state.StartCoroutine(commonMethodsScript.AttackingGettingCloser(diffDistToAttack));
             }
             else if(gunScript.currentAmmoAmount > 0)
             {
@@ -70,7 +73,7 @@ public class Sc_AttackState : Sc_AIBaseState
             if(distToWeapon <= 0.5f)
             {
                 state.StartCoroutine(PickUpGun());
-                state.StartCoroutine(Sc_CommonMethods.Instance.ReDecide(state));
+                state.StartCoroutine(commonMethodsScript.ReDecide());
             }
         }
     }
@@ -96,18 +99,6 @@ public class Sc_AttackState : Sc_AIBaseState
         {
             state.SwitchState(state.searchState);
         }
-    }
-
-    IEnumerator GettingCloser(Sc_AIStateManager state, float diffDistToAttack)
-    {
-        stateManager.SetCurrentAction("Choosing closer position to player");
-        float zDistance = Random.Range(diffDistToAttack + 1, diffDistToAttack + 6);
-        //Debug.Log(zDistance);
-        //float yDistance = Random.Range(-diffDistToAttack, diffDistToAttack);
-        newPosition = state.transform.position + state.transform.forward * zDistance;
-        //Debug.Log(newPosition);
-        isMoving = false;
-        yield return null;
     }
 
     //Will shoot to the player with random time delays so that it looks like the AI is shooting at random intervals and taking its time to aim and shoot. 
@@ -159,6 +150,15 @@ public class Sc_AttackState : Sc_AIBaseState
         yield return new WaitForSeconds(2.5f);
         currentWeapon = pickUpWeapon;
         currentWeapon.transform.position = weaponPosition.position;
+        yield return null;
+    }
+
+    IEnumerator PlayerDistance(Sc_AIStateManager state)
+    {
+        float playerDist = Vector3.Distance(playerPos, self.transform.position);
+        diffDistToAttack = playerDist - attackRange;
+        yield return new WaitForSeconds(1f);
+        state.StartCoroutine(PlayerDistance(state));
         yield return null;
     }
 }

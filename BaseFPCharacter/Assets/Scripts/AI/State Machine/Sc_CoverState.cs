@@ -14,6 +14,8 @@ public class Sc_CoverState : Sc_AIBaseState
 {
     private Sc_AIStateManager stateManager;
 
+    private Sc_CommonMethods commonMethodsScript;
+
     private GameObject self, player, closestCover, currentWeapon;
     private Vector3 playerPos, coverPosition;
 
@@ -30,7 +32,7 @@ public class Sc_CoverState : Sc_AIBaseState
         //Debug.Log("Going to cover Start");
         coverPosition = Vector3.zero;
         state.StartCoroutine(ChoosingCover());
-        state.StartCoroutine(Sc_CommonMethods.Instance.ReDecide(state));
+        state.StartCoroutine(commonMethodsScript.ReDecide(state));
     }
 
     //Will check if the AI is near by the cover point. If its not close then contine having the AI go to the cover point, else it will stop the AI and start the atcover Corutine. 
@@ -38,22 +40,7 @@ public class Sc_CoverState : Sc_AIBaseState
     {
         playerPos = player.transform.position;
         state.transform.LookAt(playerPos);
-        if (coverPosition != Vector3.zero)
-        {
-            if (Vector3.Distance(self.transform.position, coverPosition) > 0.6f)
-            {
-                //Debug.Log("Going to Cover");
-                stateManager.SetCurrentAction("Going to cover point");
-                navMeshAgent.destination = coverPosition;
-            }
-            else
-            {
-                //Debug.Log("At Cover");
-                //self.transform.localScale = new Vector3(1,0.75f,1);
-                coverPosition = Vector3.zero;
-                state.StartCoroutine(AtCover(state));
-            }
-        }
+
     }
 
     //Recives important variables that are needed for the entire state to work properly.
@@ -87,7 +74,7 @@ public class Sc_CoverState : Sc_AIBaseState
         for (int i = 0; i < allCover.Length; i++)
         {
             float dist = Vector3.Distance(allCover[i].transform.position, selfPos);
-            if (dist <= closestDist)
+            if (dist <= closestDist && dist > 0.5f)
             {
                 closestDist = dist;
                 closestCover = allCover[i];
@@ -106,6 +93,7 @@ public class Sc_CoverState : Sc_AIBaseState
                 //Debug.Log(closestCover.transform.GetChild(i));
                 coverPosition = closestCover.transform.GetChild(i).transform.position;
                 coverScript.beingUsed = true;
+                commonMethodsScript.StartMovement(coverPosition, "Cover", false);
             }
         }
 
@@ -114,22 +102,27 @@ public class Sc_CoverState : Sc_AIBaseState
     }
 
     //Once the AI is behind cover
-    IEnumerator AtCover(Sc_AIStateManager state)
+    public IEnumerator AtCover(Sc_AIStateManager state)
     {
         //self.transform.localScale = new Vector3(1, 0.75f, 1);
         float attackOrCover = Random.Range(1.0f, 10.0f);
-        if (attackOrCover >= 5.0f)
+        if (attackOrCover >= 2.5f)
         {
             stateManager.SetCurrentAction("Taking cover");
             self.transform.localScale = new Vector3(1, 0.75f, 1);
         }
-        else
+        else if(attackOrCover < 2.5f && attackOrCover >= 1.0f)
         {
             stateManager.SetCurrentAction("Shooting from cover");
             self.transform.localScale = new Vector3(1, 1, 1);
             state.StartCoroutine(AttackingWithGun(state));
             self.transform.localScale = new Vector3(1, 0.75f, 1);
         }
+        else
+        {
+            ChoosingCover();
+        }
+
         yield return new WaitForSeconds(2.5f);
         state.StartCoroutine(AtCover(state));
         yield return null;
