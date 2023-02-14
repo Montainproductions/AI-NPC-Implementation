@@ -110,6 +110,7 @@ public class Sc_AttackState : Sc_AIBaseState
         timeDelay = Random.Range(2, 3.25f);
         yield return new WaitForSeconds(timeDelay);
         state.StartCoroutine(gunScript.ShotFired());
+        //Debug.Log("Enemy ammo count: " + gunScript.currentAmmoAmount);
         timeDelay = Random.Range(1.5f, 2.75f);
         yield return new WaitForSeconds(timeDelay);
         yield return null;

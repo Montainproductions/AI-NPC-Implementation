@@ -18,9 +18,9 @@ public class Sc_BaseGun : MonoBehaviour {
 
     [SerializeField]
     private int maxAmmo, maxClipAmmo;
-    [HideInInspector]
     public int currentAmmoAmount;
-    private bool shotRecently;
+    [HideInInspector]
+    public bool shotRecently;
 
     [SerializeField]
     private bool reloaded;
@@ -57,7 +57,7 @@ public class Sc_BaseGun : MonoBehaviour {
                 audioSC.Play();
                 yield return new WaitForSeconds(0.25f);
             }
-            yield return new WaitForSeconds(1.5f);
+            yield return new WaitForSeconds(1.0f);
             shotRecently= false;
         }
         else if(currentAmmoAmount > 0 && shotRecently)

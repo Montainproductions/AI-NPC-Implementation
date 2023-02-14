@@ -83,6 +83,8 @@ public class Sc_Attacking : MonoBehaviour{
         {
             //Debug.Log("Attacking");
             StartCoroutine(baseGunScript.ShotFired());
+            Debug.Log("Player ShotRecently: " + currentGun.GetComponent<Sc_BaseGun>().shotRecently);
+            Debug.Log("Player ammo count: " + currentGun.GetComponent<Sc_BaseGun>().currentAmmoAmount);
         }
         yield return null;
     }
