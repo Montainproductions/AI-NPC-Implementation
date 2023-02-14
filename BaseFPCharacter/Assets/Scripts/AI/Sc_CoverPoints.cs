@@ -11,7 +11,7 @@ public class Sc_CoverPoints : MonoBehaviour
     [SerializeField]
     private GameObject player;
 
-    // Bit shift the index of the layer (8) to get a bit mask
+    // Bit shift the index of the layer (7) to get a bit mask
     private int layerMask = 1 << 7;
 
     private RaycastHit hit;

@@ -97,7 +97,7 @@ public class Sc_AggressionState : Sc_AIBaseState
 
         manager.SetDecisionValue(decisionVal);
         
-        state.StartCoroutine(directorAI.AIAttackAddList(self));
+        directorAI.AIAttackAddList(self);
     }
 
     //This method will have the AI stop moving towards any position that it might be going to. This is princippaly so that if the AI is transitioning from the patrol state then it will actually stop moving towards its patrol point and face the player.

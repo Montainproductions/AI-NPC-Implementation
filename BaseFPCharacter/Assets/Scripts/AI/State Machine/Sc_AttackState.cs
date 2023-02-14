@@ -8,6 +8,7 @@ public class Sc_AttackState : Sc_AIBaseState
     private Sc_AIStateManager stateManager;
     public string currentAction;
 
+    //Navigation
     private NavMeshAgent navMeshAgent;
 
     private GameObject self, player, currentWeapon;
@@ -22,20 +23,13 @@ public class Sc_AttackState : Sc_AIBaseState
     private GameObject pickUpWeapon;
     private Transform weaponPosition;
 
+    //When first entering the attack state it will strat a redecide timer so that is will go back to the aggression state
     public override void EnterState(Sc_AIStateManager state, float speed, bool playerSeen) {
         //Debug.Log("Going to attack");
         isMoving = false;
 
         newPosition = Vector3.zero;
-
-        if (currentWeapon == null)
-        {
-            state.StartCoroutine(LookingForGun(state));
-        }
-        else
-        {
-            state.StartCoroutine(ReDecide(state));
-        }
+        state.StartCoroutine(ReDecide(state));
     }
 
     public override void UpdateState(Sc_AIStateManager state, float distPlayer, float angleToPlayer) {
@@ -76,7 +70,7 @@ public class Sc_AttackState : Sc_AIBaseState
             if(distToWeapon <= 0.5f)
             {
                 state.StartCoroutine(PickUpGun());
-                state.StartCoroutine(ReDecide(state));
+                state.StartCoroutine(Sc_CommonMethods.Instance.ReDecide(state));
             }
         }
     }
@@ -147,30 +141,24 @@ public class Sc_AttackState : Sc_AIBaseState
         yield return new WaitForSeconds(1.75f);
     }
 
+    //Will reload the current weapon if out of ammo. There is also wait timer so that it seams like the person is taking time to realize that they are out of ammo.
     IEnumerator Reloading(Sc_AIStateManager state)
     {
         stateManager.SetCurrentAction("Reloading");
         //Debug.Log("Shooting");
-        yield return new WaitForSeconds(2.25f);
+        yield return new WaitForSeconds(3.25f);
         state.StartCoroutine(gunScript.Reloading());
-        yield return new WaitForSeconds(2.75f);
+        yield return new WaitForSeconds(2);
         yield return null;
     }
 
+    //Once the AI can pick up a weapon they will pick it up and attach it to the AI
     IEnumerator PickUpGun()
     {
         stateManager.SetCurrentAction("Picking Up Gun");
         yield return new WaitForSeconds(2.5f);
         currentWeapon = pickUpWeapon;
         currentWeapon.transform.position = weaponPosition.position;
-        yield return null;
-    }
-
-    IEnumerator ReDecide(Sc_AIStateManager state)
-    {
-        float newDecisionTimer = Random.Range(decisionTimer - 5, decisionTimer + 5);
-        yield return new WaitForSeconds(newDecisionTimer);
-        state.SwitchState(state.aggressionDesicionState);
         yield return null;
     }
 }

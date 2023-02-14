@@ -30,10 +30,10 @@ public class Sc_CoverState : Sc_AIBaseState
         //Debug.Log("Going to cover Start");
         coverPosition = Vector3.zero;
         state.StartCoroutine(ChoosingCover());
-        state.StartCoroutine(ReDecide(state));
+        state.StartCoroutine(Sc_CommonMethods.Instance.ReDecide(state));
     }
 
-    //
+    //Will check if the AI is near by the cover point. If its not close then contine having the AI go to the cover point, else it will stop the AI and start the atcover Corutine. 
     public override void UpdateState(Sc_AIStateManager state, float distPlayer, float angleToPlayer)
     {
         playerPos = player.transform.position;
@@ -79,10 +79,11 @@ public class Sc_CoverState : Sc_AIBaseState
         }
     }
 
-    //Fine closest cover object and then determines which of the cover points children is behind the cover.
+    //Find the closest cover object and then determines which of the cover points children is behind the cover.
     IEnumerator ChoosingCover() {
         stateManager.SetCurrentAction("Choosing closest cover point");
         Vector3 selfPos = self.transform.position;
+        //Find closest cover object
         for (int i = 0; i < allCover.Length; i++)
         {
             float dist = Vector3.Distance(allCover[i].transform.position, selfPos);
@@ -95,6 +96,7 @@ public class Sc_CoverState : Sc_AIBaseState
         //Debug.Log(closestCover);
         //int allCoverPos = closestCover.transform.childCount;
 
+        //Choosing a cover point that is behind the cover when comparing to the player
         for (int i = 1; i <= 4; i++)
         {
             Sc_CoverPoints coverScript = closestCover.transform.GetChild(i).GetComponent<Sc_CoverPoints>();
@@ -111,6 +113,7 @@ public class Sc_CoverState : Sc_AIBaseState
         yield return null;
     }
 
+    //Once the AI is behind cover
     IEnumerator AtCover(Sc_AIStateManager state)
     {
         //self.transform.localScale = new Vector3(1, 0.75f, 1);
@@ -139,14 +142,6 @@ public class Sc_CoverState : Sc_AIBaseState
         Sc_BaseGun gunScript = currentWeapon.GetComponent<Sc_BaseGun>();
         state.StartCoroutine(gunScript.ShotFired());
         yield return new WaitForSeconds(1.0f);
-        yield return null;
-    }
-
-    IEnumerator ReDecide(Sc_AIStateManager state)
-    {
-        float newDecisionTimer = Random.Range(decisionTimer - 5, decisionTimer + 5);
-        yield return new WaitForSeconds(newDecisionTimer);
-        state.SwitchState(state.aggressionDesicionState);
         yield return null;
     }
 }

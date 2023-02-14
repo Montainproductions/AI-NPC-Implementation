@@ -3,9 +3,6 @@ using System.Collections.Generic;
 using UnityEngine;
 
 /* The Sc_AIDirector is the main script that grabs all of the current NPCs in the map and will decide how many AI NPCS can do certain tasks. This helps control the NPCs so that there arent to many enemies attack the player at the same time 
- * 
- * 
- * 
  */
 public class Sc_AIDirector : MonoBehaviour
 {
@@ -41,7 +38,7 @@ public class Sc_AIDirector : MonoBehaviour
         //enemyAIDesicionValue = new GameObject[allCurrentEnemy.Length];
 
         playerSeen = false;
-        //
+        //Starts the timer coroutine so that each time it will grab the current set of AIs that have seen the Player and chosses which state they go to.
         StartCoroutine(WhatToDoTimer());
     }
 
@@ -107,11 +104,14 @@ public class Sc_AIDirector : MonoBehaviour
             
             //Debug.Log(v);
             
+            //If too many enemy AIs are attacking the player then the current one will go to the cover state
             if (currentAttacking >= maxAttacking)
             {
                 stateManager.SwitchState(stateManager.coverState);
 
             }
+            //If the current desicion value of the enemy is greater than the average value of all enemies then the enemy will have a 75% chance of going to the attack state or a 25% chance to go to the cover state.
+            //This is meant to help
             else if (stateManager.decisionValue >= valueLimit)
             {
                 if(v >= 2.5f)
@@ -128,7 +128,7 @@ public class Sc_AIDirector : MonoBehaviour
             }
             else
             {
-                if (v >= 6f)
+                if (v >= 7.5f)
                 {
                     //Debug.Log("Attacking part 2");
                     stateManager.SwitchState(stateManager.attackState);
@@ -147,19 +147,21 @@ public class Sc_AIDirector : MonoBehaviour
         yield return null;
     }
 
-    public IEnumerator AIAttackAddList(GameObject enemyObj)
+    //Adds the AI Enemy to the list and recalculates the average decision value of all AI in list
+    public void AIAttackAddList(GameObject enemyObj)
     {
         enemyAIDesicionValue.Add(enemyObj);
         StartCoroutine(AverageDecisionValue());
-        yield return null;
     }
 
-    public IEnumerator AIAttackRemoveList(GameObject enemyObj)
+    //Remove the enemy from the list of enemis that need to decide what to do
+    public void AIAttackRemoveList(GameObject enemyObj)
     {
         enemyAIDesicionValue.Remove(enemyObj);
-        yield return null;
+        StartCoroutine(AverageDecisionValue());
     }
 
+    //Calculates the average of all the decions values for each of the enemies in the enemenyAIDesicionValue list
     IEnumerator AverageDecisionValue()
     {
         for (int i = 0; i < enemyAIDesicionValue.Count; i++)
@@ -171,6 +173,7 @@ public class Sc_AIDirector : MonoBehaviour
         yield return null;
     }
 
+    //Timer for how often to get all the enemies waiting for a desicion to start again
     IEnumerator WhatToDoTimer()
     {
         yield return new WaitForSeconds(2);

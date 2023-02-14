@@ -6,6 +6,9 @@ using UnityEngine.AI;
 
 public class Sc_AIStateManager : MonoBehaviour
 {
+    [SerializeField]
+    private string[] traits;
+
     [HideInInspector]
     public Sc_AIBaseState currentState;
     [HideInInspector]
@@ -88,6 +91,7 @@ public class Sc_AIStateManager : MonoBehaviour
         //Debug.Log(currentState);
         currentState.UpdateState(this, distPlayer, angleToPlayer);
 
+        //Sets the text on top of the AI to show the current state and action that the AI is doing. Helps to show what they are "Thinking"
         stateTextObj.transform.position = Camera.main.WorldToScreenPoint(transform.position + Vector3.up * 3);
         stateText.SetText(currentState.ToString() + " " + currentAction);
     }
