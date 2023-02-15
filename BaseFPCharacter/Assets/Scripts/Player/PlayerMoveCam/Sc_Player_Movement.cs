@@ -43,6 +43,8 @@ public class Sc_Player_Movement : MonoBehaviour{
     private bool canCrouch; //Is the player allowed to crouch
     private bool isCrouching; //Is the character currently crouching
 
+    private bool isHidden;
+
     //HeadBobbing
     //https://sharpcoderblog.com/blog/head-bobbing-effect-in-unity-3d
 
@@ -64,6 +66,9 @@ public class Sc_Player_Movement : MonoBehaviour{
         //Jumping
         groundDistance = 0.1f;
         jumping = false;
+
+        //Hiding
+        isHidden = false;
     }
 
     // Update is called once per frame
@@ -123,6 +128,16 @@ public class Sc_Player_Movement : MonoBehaviour{
             //Debug.Log("Standing up");
             transform.localScale += new Vector3(0, 0.5f, 0); //Increase the size of character to normal size
         }
+    }
+
+    public void IsHidden()
+    {
+        isHidden = !isHidden;
+    }
+
+    public bool IsHiddenReturn()
+    {
+        return isHidden;
     }
 
     //Input action for pressing space

@@ -5,7 +5,7 @@ using UnityEngine;
 public abstract class Sc_AIBaseState
 {
 
-    public abstract void EnterState(Sc_AIStateManager state, float speed, bool playerSeen);
+    public abstract void EnterState(float speed, bool playerSeen);
 
-    public abstract void UpdateState(Sc_AIStateManager state, float distPlayer, float angleToPlayer);
+    public abstract void UpdateState(float distPlayer, float angleToPlayer);
 }

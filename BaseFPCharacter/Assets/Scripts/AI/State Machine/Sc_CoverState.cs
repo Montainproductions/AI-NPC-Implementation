@@ -23,10 +23,8 @@ public class Sc_CoverState : Sc_AIBaseState
 
     private float closestDist, visionRange, visionConeAngle;
 
-    private NavMeshAgent navMeshAgent;
-
     //When first entering the state the choosing cover IEnumerator and the redeciding timer.
-    public override void EnterState(Sc_AIStateManager state, float speed, bool playerSeen)
+    public override void EnterState(float speed, bool playerSeen)
     {
         closestDist = Mathf.Infinity;
         //Debug.Log("Going to cover Start");
@@ -36,7 +34,7 @@ public class Sc_CoverState : Sc_AIBaseState
     }
 
     //Will check if the AI is near by the cover point. If its not close then contine having the AI go to the cover point, else it will stop the AI and start the atcover Corutine. 
-    public override void UpdateState(Sc_AIStateManager state, float distPlayer, float angleToPlayer)
+    public override void UpdateState(float distPlayer, float angleToPlayer)
     {
         playerPos = player.transform.position;
         stateManager.transform.LookAt(playerPos);
@@ -44,13 +42,12 @@ public class Sc_CoverState : Sc_AIBaseState
     }
 
     //Recives important variables that are needed for the entire state to work properly.
-    public void CoverStartStateInfo(GameObject selfObj, GameObject playerObj, GameObject currentWeaponObj, GameObject[] allCoverObjs, NavMeshAgent navMeshAgent, float visionRange, float visionConeAngle, Sc_AIStateManager stateManager, Sc_CommonMethods commonMethods)
+    public void CoverStartStateInfo(GameObject selfObj, GameObject playerObj, GameObject currentWeaponObj, GameObject[] allCoverObjs, float visionRange, float visionConeAngle, Sc_AIStateManager stateManager, Sc_CommonMethods commonMethods)
     {
         self = selfObj;
         player = playerObj;
         currentWeapon = currentWeaponObj;
         allCover = allCoverObjs;
-        this.navMeshAgent = navMeshAgent;
         this.visionRange = visionRange;
         this.visionConeAngle = visionConeAngle;
         this.stateManager = stateManager;
@@ -58,11 +55,12 @@ public class Sc_CoverState : Sc_AIBaseState
     }
 
     //If the player leaves the AIs line of site then it will stop trying to go to cover and start to search for the player.
-    public void CantSeePlayer(Sc_AIStateManager state, float distPlayer, float angleToPlayer)
+    public void CantSeePlayer(float distPlayer, float angleToPlayer)
     {
-        if (distPlayer >= visionRange && angleToPlayer >= visionConeAngle)
+        bool playerInBush = player.GetComponent<Sc_Player_Movement>().IsHiddenReturn();
+        if ((distPlayer >= visionRange && angleToPlayer >= visionConeAngle) || playerInBush)
         {
-            stateManager.SwitchState(state.searchState);
+            stateManager.SwitchState(stateManager.searchState);
         }
     }
 
@@ -102,7 +100,7 @@ public class Sc_CoverState : Sc_AIBaseState
     }
 
     //Once the AI is behind cover
-    public IEnumerator AtCover(Sc_AIStateManager state)
+    public IEnumerator AtCover()
     {
         //self.transform.localScale = new Vector3(1, 0.75f, 1);
         float attackOrCover = Random.Range(1.0f, 10.0f);
@@ -115,7 +113,7 @@ public class Sc_CoverState : Sc_AIBaseState
         {
             stateManager.SetCurrentAction("Shooting from cover");
             self.transform.localScale = new Vector3(1, 1, 1);
-            state.StartCoroutine(AttackingWithGun(state));
+            stateManager.StartCoroutine(AttackingWithGun());
             self.transform.localScale = new Vector3(1, 0.75f, 1);
         }
         else
@@ -124,16 +122,16 @@ public class Sc_CoverState : Sc_AIBaseState
         }
 
         yield return new WaitForSeconds(2.5f);
-        state.StartCoroutine(AtCover(state));
+        stateManager.StartCoroutine(AtCover());
         yield return null;
     }
 
-    IEnumerator AttackingWithGun(Sc_AIStateManager state)
+    IEnumerator AttackingWithGun()
     {
         //Debug.Log("Shooting");
         //yield return new WaitForSeconds(0.30f);
         Sc_BaseGun gunScript = currentWeapon.GetComponent<Sc_BaseGun>();
-        state.StartCoroutine(gunScript.ShotFired());
+        stateManager.StartCoroutine(gunScript.ShotFired());
         yield return new WaitForSeconds(1.0f);
         yield return null;
     }

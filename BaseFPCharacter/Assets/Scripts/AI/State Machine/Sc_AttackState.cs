@@ -27,37 +27,37 @@ public class Sc_AttackState : Sc_AIBaseState
     private Transform weaponPosition;
 
     //When first entering the attack state it will strat a redecide timer so that is will go back to the aggression state
-    public override void EnterState(Sc_AIStateManager state, float speed, bool playerSeen) {
+    public override void EnterState(float speed, bool playerSeen) {
         //Debug.Log("Going to attack");
         isMoving = false;
 
         newPosition = Vector3.zero;
-        state.StartCoroutine(commonMethodsScript.ReDecide());
+        stateManager.StartCoroutine(commonMethodsScript.ReDecide());
     }
 
-    public override void UpdateState(Sc_AIStateManager state, float distPlayer, float angleToPlayer) {
+    public override void UpdateState(float distPlayer, float angleToPlayer) {
         playerPos = player.transform.position;
         stateManager.transform.LookAt(playerPos);
         if (currentWeapon != null)
         {
-            CantSeePlayer(state, distPlayer, angleToPlayer);
+            CantSeePlayer(distPlayer, angleToPlayer);
             //state.transform.LookAt(playerPos);
 
-            state.StartCoroutine(PlayerDistance(state));
+            stateManager.StartCoroutine(PlayerDistance());
 
             //Debug.Log(diffDistToAttack);
             if (diffDistToAttack >= 0 && !isMoving)
             {
                 isMoving = true;
-                state.StartCoroutine(commonMethodsScript.AttackingGettingCloser(diffDistToAttack));
+                stateManager.StartCoroutine(commonMethodsScript.AttackingGettingCloser(diffDistToAttack));
             }
             else if(gunScript.currentAmmoAmount > 0)
             {
-                state.StartCoroutine(AttackingWithGun(state));
+                stateManager.StartCoroutine(AttackingWithGun());
             }
             else if (gunScript.currentAmmoAmount <= 0)
             {
-                state.StartCoroutine(Reloading(state));
+                stateManager.StartCoroutine(Reloading());
             }
 
             if (newPosition != Vector3.zero)
@@ -69,12 +69,12 @@ public class Sc_AttackState : Sc_AIBaseState
         else if(currentWeapon == null && newPosition != Vector3.zero)
         {
             navMeshAgent.destination = newPosition;
-            state.transform.LookAt(newPosition);
-            float distToWeapon = Vector3.Distance(state.transform.position, newPosition);
+            stateManager.transform.LookAt(newPosition);
+            float distToWeapon = Vector3.Distance(stateManager.transform.position, newPosition);
             if(distToWeapon <= 0.5f)
             {
-                state.StartCoroutine(PickUpGun());
-                state.StartCoroutine(commonMethodsScript.ReDecide());
+                stateManager.StartCoroutine(PickUpGun());
+                stateManager.StartCoroutine(commonMethodsScript.ReDecide());
             }
         }
     }
@@ -94,22 +94,23 @@ public class Sc_AttackState : Sc_AIBaseState
         commonMethodsScript = commonMethods;
     }
 
-    public void CantSeePlayer(Sc_AIStateManager state, float distPlayer, float angleToPlayer)
+    public void CantSeePlayer(float distPlayer, float angleToPlayer)
     {
-        if (distPlayer >= visionRange && angleToPlayer >= visionConeAngle)
+        bool playerInBush = player.GetComponent<Sc_Player_Movement>().IsHiddenReturn();
+        if ((distPlayer >= visionRange && angleToPlayer >= visionConeAngle) || playerInBush)
         {
-            state.SwitchState(state.searchState);
+            stateManager.SwitchState(stateManager.searchState);
         }
     }
 
     //Will shoot to the player with random time delays so that it looks like the AI is shooting at random intervals and taking its time to aim and shoot. 
-    IEnumerator AttackingWithGun(Sc_AIStateManager state)
+    IEnumerator AttackingWithGun()
     {
         stateManager.SetCurrentAction("Shooting player");
         //Debug.Log("Shooting");
         timeDelay = Random.Range(2, 3.25f);
         yield return new WaitForSeconds(timeDelay);
-        state.StartCoroutine(gunScript.ShotFired());
+        stateManager.StartCoroutine(gunScript.ShotFired());
         //Debug.Log("Enemy ammo count: " + gunScript.currentAmmoAmount);
         timeDelay = Random.Range(1.5f, 2.75f);
         yield return new WaitForSeconds(timeDelay);
@@ -117,13 +118,13 @@ public class Sc_AttackState : Sc_AIBaseState
     }
 
     //If the AI currently dosent have a weapon then the AI will look and grab the closest weapon to them.
-    IEnumerator LookingForGun(Sc_AIStateManager state)
+    IEnumerator LookingForGun()
     {
         stateManager.SetCurrentAction("Looking for near by gun");
         gunDistance = 0;
         for (int i = 0; i < allGunsOnFloor.Length; i++)
         {
-            float tempDist = Vector3.Distance(allGunsOnFloor[i].transform.position, state.transform.position);
+            float tempDist = Vector3.Distance(allGunsOnFloor[i].transform.position, stateManager.transform.position);
             if (gunDistance > tempDist)
             {
                 gunDistance = tempDist;
@@ -135,12 +136,12 @@ public class Sc_AttackState : Sc_AIBaseState
     }
 
     //Will reload the current weapon if out of ammo. There is also wait timer so that it seams like the person is taking time to realize that they are out of ammo.
-    IEnumerator Reloading(Sc_AIStateManager state)
+    IEnumerator Reloading()
     {
         stateManager.SetCurrentAction("Reloading");
         //Debug.Log("Shooting");
         yield return new WaitForSeconds(3.25f);
-        state.StartCoroutine(gunScript.Reloading());
+        stateManager.StartCoroutine(gunScript.Reloading());
         yield return new WaitForSeconds(2);
         yield return null;
     }
@@ -155,12 +156,12 @@ public class Sc_AttackState : Sc_AIBaseState
         yield return null;
     }
 
-    IEnumerator PlayerDistance(Sc_AIStateManager state)
+    IEnumerator PlayerDistance()
     {
         float playerDist = Vector3.Distance(playerPos, self.transform.position);
         diffDistToAttack = playerDist - attackRange;
         yield return new WaitForSeconds(1f);
-        state.StartCoroutine(PlayerDistance(state));
+        stateManager.StartCoroutine(PlayerDistance());
         yield return null;
     }
 }

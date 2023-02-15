@@ -56,6 +56,9 @@ public class Sc_AIStateManager : MonoBehaviour
     [SerializeField]
     private GameObject[] patrolPoints;
 
+    [SerializeField]
+    private bool canSeeEnemy;
+
     [HideInInspector]
     public int decisionValue = 0;
 
@@ -78,8 +81,9 @@ public class Sc_AIStateManager : MonoBehaviour
         patrolState.PatrolStartStateInfo(patrolPoints, navMeshAgent, visionRange, visionConeAngle, this);
         attackState.AttackStartStateInfo(gameObject, player, currentWeapon, navMeshAgent, visionRange, visionConeAngle, weaponPosition, this, commonMethods);
         aggressionDesicionState.AggressionStartStateInfo(gameObject, player, currentWeapon, cover, coverDistance, directorAI, this, navMeshAgent);
-        coverState.CoverStartStateInfo(gameObject, player, currentWeapon, cover, navMeshAgent, visionRange, visionConeAngle, this, commonMethods);
-        currentState.EnterState(this, speed, playerNoticed);
+        coverState.CoverStartStateInfo(gameObject, player, currentWeapon, cover, visionRange, visionConeAngle, this, commonMethods);
+        searchState.SearchStartStateInfo(gameObject, player);
+        currentState.EnterState(speed, playerNoticed);
 
         stateTextObj = Instantiate(stateTxtPrefab, Sc_Basic_UI.Instance.transform);
         stateText = stateTextObj.GetComponent<TextMeshProUGUI>();
@@ -92,12 +96,14 @@ public class Sc_AIStateManager : MonoBehaviour
         distPlayer = Vector3.Distance(transform.position, player.transform.position);
         angleToPlayer = Vector3.Angle(transform.forward, player.transform.position - transform.position);
         //Debug.Log(currentState);
-        currentState.UpdateState(this, distPlayer, angleToPlayer);
+        currentState.UpdateState(distPlayer, angleToPlayer);
 
         //Sets the text on top of the AI to show the current state and action that the AI is doing. Helps to show what they are "Thinking"
         stateTextObj.transform.position = Camera.main.WorldToScreenPoint(transform.position + Vector3.up * 3);
         stateText.SetText(currentState.ToString() + " " + currentAction);
     }
+
+    
 
     public void OnDestroy()
     {
@@ -108,7 +114,7 @@ public class Sc_AIStateManager : MonoBehaviour
     public void SwitchState(Sc_AIBaseState state)
     {
         currentState = state;
-        currentState.EnterState(this, speed, playerNoticed);
+        currentState.EnterState(speed, playerNoticed);
     }
 
     public void SetDecisionValue(int value)
