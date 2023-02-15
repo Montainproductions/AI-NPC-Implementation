@@ -5,45 +5,51 @@ using UnityEngine;
 
 public class Sc_IdleState : Sc_AIBaseState
 {
+    private Sc_AIStateManager stateManager;
+    private Sc_Player_Movement playerMovementScript;
+
     private float idleTimer, visionRange, visionConeAngle;
 
     Vector3 randomLookDirection;
 
-    public override void EnterState(Sc_AIStateManager state, float speed, bool playerSeen) {
-        state.StartCoroutine(IdleTimed(state));
+    public override void EnterState(float speed, bool playerSeen) {
+        stateManager.StartCoroutine(IdleTimed());
     }
 
-    public override void UpdateState(Sc_AIStateManager state, float distPlayer, float angleToPlayer) {
-        state.StartCoroutine(CanSeePlayer(state, distPlayer, angleToPlayer));
+    public override void UpdateState(float distPlayer, float angleToPlayer) {
+        stateManager.StartCoroutine(CanSeePlayer(distPlayer, angleToPlayer));
     }
 
-    public void IdleStartStateInfo(float idleTime, float distRange, float visionAngleRange)
+    public void IdleStartStateInfo(Sc_AIStateManager stateManager, Sc_Player_Movement playerMovementScript, float idleTime, float distRange, float visionAngleRange)
     {
+        this.stateManager = stateManager;
+        this.playerMovementScript = playerMovementScript;
         idleTimer = idleTime;
         visionRange = distRange;
         visionConeAngle = visionAngleRange;
     }
 
-    IEnumerator IdleTimed(Sc_AIStateManager state)
+    IEnumerator IdleTimed()
     {
-        yield return new WaitForSeconds(idleTimer/3);
-        randomLookDirection.x = Random.Range(0, 360);
-        randomLookDirection.z = Random.Range(0, 360);
-        state.transform.LookAt(randomLookDirection);
         yield return new WaitForSeconds(idleTimer / 3);
         randomLookDirection.x = Random.Range(0, 360);
         randomLookDirection.z = Random.Range(0, 360);
-        state.transform.LookAt(randomLookDirection);
+        stateManager.transform.LookAt(randomLookDirection);
         yield return new WaitForSeconds(idleTimer / 3);
-        state.SwitchState(state.patrolState);
+        randomLookDirection.x = Random.Range(0, 360);
+        randomLookDirection.z = Random.Range(0, 360);
+        stateManager.transform.LookAt(randomLookDirection);
+        yield return new WaitForSeconds(idleTimer / 3);
+        stateManager.SwitchState(stateManager.patrolState);
         yield return null;
     }
 
-    IEnumerator CanSeePlayer(Sc_AIStateManager state, float distPlayer, float angleToPlayer)
+    IEnumerator CanSeePlayer(float distPlayer, float angleToPlayer)
     {
-        if (distPlayer <= visionRange - 5 && angleToPlayer <= visionConeAngle - 5)
+        bool playerHidden = playerMovementScript.IsHiddenReturn();
+        if ((distPlayer <= visionRange - 5 && angleToPlayer <= visionConeAngle - 5) || !playerHidden)
         {
-            state.SwitchState(state.aggressionDesicionState);
+            stateManager.SwitchState(stateManager.aggressionDesicionState);
             yield return null;
         }
         yield return null;

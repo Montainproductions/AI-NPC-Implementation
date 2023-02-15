@@ -6,16 +6,21 @@ using UnityEngine.AI;
 public class Sc_SearchState : Sc_AIBaseState
 {
     private Sc_AIStateManager stateManager;
+    private Sc_Player_Movement playerMovementScript;
 
-    private GameObject self, player;
+    private GameObject self, player, chosenSearchPath;
+    private GameObject[] searchPathOptions;
+
     private NavMeshAgent navMeshAgent;
 
-    private Vector3 playerLastLocation;
+    private float visionRange, visionConeAngle;
 
+    private Vector3 playerLastLocation;
     public override void EnterState(float speed, bool playerSeen)
     {
         Debug.Log("Searching for Player");
         playerLastLocation = player.transform.position;
+        stateManager.StartCoroutine(ChooseSearchPath());
     }
 
     public override void UpdateState(float distPlayer, float angleToPlayer)
@@ -23,11 +28,31 @@ public class Sc_SearchState : Sc_AIBaseState
 
     }
 
-    public void SearchStartStateInfo(GameObject self, GameObject player, Sc_AIStateManager stateManager, NavMeshAgent navMeshAgent)
+    public void SearchStartStateInfo(Sc_AIStateManager stateManager, Sc_Player_Movement playerMovementScript, GameObject self, GameObject player, GameObject[] searchPathOptions, NavMeshAgent navMeshAgent, float visionRange, float visionConeAngle)
     {
+        this.stateManager = stateManager;
+        this.playerMovementScript = playerMovementScript;
         this.self = self;
         this.player = player;
-        this.stateManager = stateManager;
+        this.searchPathOptions = searchPathOptions;
         this.navMeshAgent = navMeshAgent;
+        this.visionRange = visionRange;
+        this.visionConeAngle = visionConeAngle;
+    }
+
+    IEnumerator ChooseSearchPath()
+    {
+        yield return null;
+    }
+
+    public void CanSeePlayer(float distPlayer, float angleToPlayer)
+    {
+        bool playerHidden = playerMovementScript.IsHiddenReturn();
+        if ((distPlayer <= visionRange - 5 && angleToPlayer <= visionConeAngle - 5) && !playerHidden)
+        {
+            //directorAI.PlayerFound(state.gameObject);
+            stateManager.playerNoticed = true;
+            stateManager.SwitchState(stateManager.aggressionDesicionState);
+        }
     }
 }

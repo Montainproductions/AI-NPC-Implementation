@@ -9,6 +9,8 @@ public class Sc_AIStateManager : MonoBehaviour
     [SerializeField]
     private string[] traits;
 
+
+
     [SerializeField]
     private Sc_CommonMethods commonMethods;
 
@@ -42,7 +44,7 @@ public class Sc_AIStateManager : MonoBehaviour
     public bool playerNoticed;
 
     [SerializeField]
-    private float visionRange, visionConeAngle, alertedTimer, decisionTimer;
+    private float visionRange, visionConeAngle, alertedTimer, decisionTimer, idleTimer;
     private float distPlayer, angleToPlayer;
 
     [Header("UI State Text")]
@@ -74,15 +76,20 @@ public class Sc_AIStateManager : MonoBehaviour
     [SerializeField]
     private float coverDistance;
 
+    [Header("Searching")]
+    [SerializeField]
+    private GameObject[] searchFormats;
+
     // Start is called before the first frame update
     void Start()
     {
         currentState = patrolState;
-        patrolState.PatrolStartStateInfo(patrolPoints, navMeshAgent, visionRange, visionConeAngle, this);
-        attackState.AttackStartStateInfo(gameObject, player, currentWeapon, navMeshAgent, visionRange, visionConeAngle, weaponPosition, this, commonMethods);
-        aggressionDesicionState.AggressionStartStateInfo(gameObject, player, currentWeapon, cover, coverDistance, directorAI, this, navMeshAgent);
-        coverState.CoverStartStateInfo(gameObject, player, currentWeapon, cover, visionRange, visionConeAngle, this, commonMethods);
-        searchState.SearchStartStateInfo(gameObject, player);
+        patrolState.PatrolStartStateInfo(this, player.GetComponent<Sc_Player_Movement>(), patrolPoints, navMeshAgent, visionRange, visionConeAngle);
+        attackState.AttackStartStateInfo(this, commonMethods, player.GetComponent<Sc_Player_Movement>(), gameObject, player, currentWeapon, navMeshAgent, visionRange, visionConeAngle, weaponPosition);
+        aggressionDesicionState.AggressionStartStateInfo(this, directorAI, gameObject, player, currentWeapon, cover, navMeshAgent, coverDistance);
+        coverState.CoverStartStateInfo(this, commonMethods, player.GetComponent<Sc_Player_Movement>(), gameObject, player, currentWeapon, cover, visionRange, visionConeAngle);
+        searchState.SearchStartStateInfo(this, player.GetComponent<Sc_Player_Movement>(), gameObject, player, searchFormats, navMeshAgent, visionRange, visionConeAngle);
+        idleState.IdleStartStateInfo(this, player.GetComponent<Sc_Player_Movement>(), idleTimer, visionRange, visionConeAngle);
         currentState.EnterState(speed, playerNoticed);
 
         stateTextObj = Instantiate(stateTxtPrefab, Sc_Basic_UI.Instance.transform);

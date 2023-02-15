@@ -6,6 +6,7 @@ using UnityEngine.AI;
 public class Sc_PatrolState : Sc_AIBaseState
 {
     private Sc_AIStateManager stateManager;
+    private Sc_Player_Movement playerMovementScript;
 
     private GameObject[] allPatrolPoints, patrolPoints = new GameObject[5];
     private int currentPos;
@@ -14,15 +15,15 @@ public class Sc_PatrolState : Sc_AIBaseState
 
     private Transform movePositionTransfrom;
 
-    private float visionRange, visionConeAngle, alertedTimer, rayCastRange, distPlayer;
+    private float visionRange, visionConeAngle;
 
-    public override void EnterState(Sc_AIStateManager state, float speed, bool playerNoticed) {
+    public override void EnterState(float speed, bool playerNoticed) {
         Debug.Log("Patroling");
         ChooseRandomPatrolPos();
     }
 
-    public override void UpdateState(Sc_AIStateManager state, float distPlayer, float angleToPlayer) {
-        CanSeePlayer(state, distPlayer, angleToPlayer);
+    public override void UpdateState(float distPlayer, float angleToPlayer) {
+        CanSeePlayer(distPlayer, angleToPlayer);
 
         //Debug.Log(self.name + " Desination: " + navMeshAgent.destination);
 
@@ -38,13 +39,14 @@ public class Sc_PatrolState : Sc_AIBaseState
     }
 
 
-    public void PatrolStartStateInfo(GameObject[] patrolPoints, NavMeshAgent aiNavigationAgent, float distRange, float visionAngleRange, Sc_AIStateManager stateManager)
+    public void PatrolStartStateInfo(Sc_AIStateManager stateManager, Sc_Player_Movement playerMovementScript, GameObject[] allPatrolPoints, NavMeshAgent navMeshAgent, float distRange, float visionAngleRange)
     {
-        allPatrolPoints = patrolPoints;
-        navMeshAgent = aiNavigationAgent;
+        this.stateManager = stateManager;
+        this.playerMovementScript = playerMovementScript;
+        this.allPatrolPoints = allPatrolPoints;
+        this.navMeshAgent = navMeshAgent;
         visionRange = distRange;
         visionConeAngle = visionAngleRange;
-        this.stateManager = stateManager;
     }
 
     public void ChooseRandomPatrolPos()
@@ -74,13 +76,14 @@ public class Sc_PatrolState : Sc_AIBaseState
         movePositionTransfrom = patrolPoints[currentPos].transform;
     }
 
-    public void CanSeePlayer(Sc_AIStateManager state, float distPlayer, float angleToPlayer)
+    public void CanSeePlayer(float distPlayer, float angleToPlayer)
     {
-        if (distPlayer <= visionRange - 5 && angleToPlayer <= visionConeAngle - 5)
+        bool playerHidden = playerMovementScript.IsHiddenReturn();
+        if ((distPlayer <= visionRange - 5 && angleToPlayer <= visionConeAngle - 5) || !playerHidden)
         {
             //directorAI.PlayerFound(state.gameObject);
-            state.playerNoticed = true;
-            state.SwitchState(state.aggressionDesicionState);
+            stateManager.playerNoticed = true;
+            stateManager.SwitchState(stateManager.aggressionDesicionState);
         }
     }
 }

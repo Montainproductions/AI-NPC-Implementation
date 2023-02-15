@@ -41,7 +41,8 @@ public class Sc_Player_Movement : MonoBehaviour{
     [SerializeField]
     [Tooltip("Is crouching allowed?")]
     private bool canCrouch; //Is the player allowed to crouch
-    private bool isCrouching; //Is the character currently crouching
+    [HideInInspector]
+    public bool isCrouching; //Is the character currently crouching
 
     private bool isHidden;
 

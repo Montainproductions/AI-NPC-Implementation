@@ -13,7 +13,7 @@ using UnityEngine.InputSystem.HID;
 public class Sc_CoverState : Sc_AIBaseState
 {
     private Sc_AIStateManager stateManager;
-
+    private Sc_Player_Movement playerMovementScript;
     private Sc_CommonMethods commonMethodsScript;
 
     private GameObject self, player, closestCover, currentWeapon;
@@ -42,26 +42,17 @@ public class Sc_CoverState : Sc_AIBaseState
     }
 
     //Recives important variables that are needed for the entire state to work properly.
-    public void CoverStartStateInfo(GameObject selfObj, GameObject playerObj, GameObject currentWeaponObj, GameObject[] allCoverObjs, float visionRange, float visionConeAngle, Sc_AIStateManager stateManager, Sc_CommonMethods commonMethods)
+    public void CoverStartStateInfo(Sc_AIStateManager stateManager, Sc_CommonMethods commonMethodsScript, Sc_Player_Movement playerMovementScript, GameObject self, GameObject player, GameObject currentWeapon, GameObject[] allCover, float visionRange, float visionConeAngle)
     {
-        self = selfObj;
-        player = playerObj;
-        currentWeapon = currentWeaponObj;
-        allCover = allCoverObjs;
+        this.stateManager = stateManager;
+        this.commonMethodsScript = commonMethodsScript;
+        this.playerMovementScript = playerMovementScript;
+        this.self = self;
+        this.player = player;
+        this.currentWeapon = currentWeapon;
+        this.allCover = allCover;
         this.visionRange = visionRange;
         this.visionConeAngle = visionConeAngle;
-        this.stateManager = stateManager;
-        commonMethodsScript = commonMethods;
-    }
-
-    //If the player leaves the AIs line of site then it will stop trying to go to cover and start to search for the player.
-    public void CantSeePlayer(float distPlayer, float angleToPlayer)
-    {
-        bool playerInBush = player.GetComponent<Sc_Player_Movement>().IsHiddenReturn();
-        if ((distPlayer >= visionRange && angleToPlayer >= visionConeAngle) || playerInBush)
-        {
-            stateManager.SwitchState(stateManager.searchState);
-        }
     }
 
     //Find the closest cover object and then determines which of the cover points children is behind the cover.
@@ -134,5 +125,15 @@ public class Sc_CoverState : Sc_AIBaseState
         stateManager.StartCoroutine(gunScript.ShotFired());
         yield return new WaitForSeconds(1.0f);
         yield return null;
+    }
+
+    //If the player leaves the AIs line of site then it will stop trying to go to cover and start to search for the player.
+    public void CantSeePlayer(float distPlayer, float angleToPlayer)
+    {
+        bool playerHidden = playerMovementScript.IsHiddenReturn();
+        if ((distPlayer >= visionRange && angleToPlayer >= visionConeAngle) || playerHidden)
+        {
+            stateManager.SwitchState(stateManager.searchState);
+        }
     }
 }

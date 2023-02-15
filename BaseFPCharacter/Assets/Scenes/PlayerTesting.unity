@@ -1225,7 +1225,6 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   canAttack: {fileID: 1573968103}
   cantAttack: {fileID: 1256897554}
-  healthInt: {fileID: 220573453}
 --- !u!1 &383949627
 GameObject:
   m_ObjectHideFlags: 0
@@ -3184,8 +3183,8 @@ Transform:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 1317197360}
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: 1.16, y: 1.5, z: -65.3}
-  m_LocalScale: {x: 3, y: 3, z: 3}
+  m_LocalPosition: {x: 1.16, y: 0.5, z: -65.3}
+  m_LocalScale: {x: 3, y: 1, z: 3}
   m_ConstrainProportionsScale: 0
   m_Children: []
   m_Father: {fileID: 0}
