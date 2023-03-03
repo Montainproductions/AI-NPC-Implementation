@@ -120,10 +120,10 @@ public class Sc_CoverState : Sc_AIBaseState
     IEnumerator AttackingWithGun()
     {
         //Debug.Log("Shooting");
-        //yield return new WaitForSeconds(0.30f);
+        yield return new WaitForSeconds(2.75f);
         Sc_BaseGun gunScript = currentWeapon.GetComponent<Sc_BaseGun>();
         stateManager.StartCoroutine(gunScript.ShotFired());
-        yield return new WaitForSeconds(1.0f);
+        yield return new WaitForSeconds(1.25f);
         yield return null;
     }
 
