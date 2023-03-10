@@ -149,6 +149,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   traits: []
+  commonMethods: {fileID: 780441598457401939}
   speed: 7
   navMeshAgent: {fileID: 5355143908986894846}
   directorAI: {fileID: 2460812123129524718, guid: 9a1b04fd93715f84585c30af5c65b4ea, type: 3}
@@ -158,14 +159,17 @@ MonoBehaviour:
   visionConeAngle: 70
   alertedTimer: 5
   decisionTimer: 20
+  idleTimer: 0
   stateTxtPrefab: {fileID: 1571431829170465119, guid: 4a1f5fc5d19354a4da658a77ec6b2a83, type: 3}
   currentAction: 
   patrolPoints: []
+  canSeeEnemy: 0
   decisionValue: 0
   currentWeapon: {fileID: 2369196995601294526}
   weaponPosition: {fileID: 9211938983860706177}
   cover: []
   coverDistance: 20
+  searchFormats: []
 --- !u!114 &5627217062832147697
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -199,7 +203,7 @@ MonoBehaviour:
   stateManager: {fileID: 5355143908986894844}
   navMeshAgent: {fileID: 5355143908986894846}
   currentState: 
-  self: {fileID: 0}
+  self: {fileID: 5355143908986894841}
   player: {fileID: 0}
   decisionTimer: 20
 --- !u!195 &5355143908986894846

@@ -4,10 +4,13 @@ using UnityEngine;
 
 public class Sc_BaseGun : MonoBehaviour {
     [SerializeField]
-    private float dmgPerBullet, bulletSpeed;
+    private bool playerGun;
 
     [SerializeField]
-    private GameObject player;
+    private GameObject playerBox;
+
+    [SerializeField]
+    private float dmgPerBullet, bulletSpeed;
 
     public int fireRate, effectiveRange;
 
@@ -51,11 +54,18 @@ public class Sc_BaseGun : MonoBehaviour {
             {
                 currentAmmoAmount--;
                 GameObject newBullet = Instantiate(spawnBullet, barrolHole.transform);
-                newBullet.GetComponent<Sc_Bullet>().SetDamageAmount(player, dmgPerBullet);
+                if (playerGun) {
+                    newBullet.GetComponent<Sc_Bullet>().SetDamageAmount(playerBox, playerGun, dmgPerBullet);
+                }
+                else
+                {
+                    newBullet.GetComponent<Sc_Bullet>().SetDamageAmount(dmgPerBullet);
+                }
                 newBullet.GetComponent<Rigidbody>().AddRelativeForce(Vector3.forward * bulletSpeed, ForceMode.Impulse);
                 //Debug.Log(currentAmmoAmount);
                 audioSC.Play();
                 yield return new WaitForSeconds(0.25f);
+                Debug.Log("Player ammo count: " + currentAmmoAmount);
             }
             yield return new WaitForSeconds(1.0f);
             shotRecently= false;
