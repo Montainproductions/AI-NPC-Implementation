@@ -49,7 +49,7 @@ public class Sc_AIDirector : MonoBehaviour
     }
 
     //If the player was found by an enemy it will aleart all other enemies in the map. I might slightly change this in the future so that its in a radius of the enemy so that it dosent feel over welming that all enemies seem to instantly know where the player is after being spotted.
-    public void PlayerFound(GameObject enemyObject)
+    public IEnumerator PlayerFound(GameObject enemyObject)
     {
         playerSeen = true;
         
@@ -63,6 +63,7 @@ public class Sc_AIDirector : MonoBehaviour
                 //stateManager = null;
             }
         }
+        yield return null;
     }
 
     //This will decide how many more enemies to spawn if there is less enemies then the limit

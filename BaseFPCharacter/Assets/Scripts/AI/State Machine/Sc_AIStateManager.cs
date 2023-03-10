@@ -6,10 +6,10 @@ using UnityEngine.AI;
 
 public class Sc_AIStateManager : MonoBehaviour
 {
-    [SerializeField]
-    private string[] traits;
-
-
+    public string behaviour;
+    public float agressionValueChange, approchPlayerChange;
+    public float accuracy;
+    public AudioClip[] audioclips = new AudioClip[33];
 
     [SerializeField]
     private Sc_CommonMethods commonMethods;
@@ -94,6 +94,28 @@ public class Sc_AIStateManager : MonoBehaviour
 
         stateTextObj = Instantiate(stateTxtPrefab, Sc_Basic_UI.Instance.transform);
         stateText = stateTextObj.GetComponent<TextMeshProUGUI>();
+
+        //Setting up agression trait
+        if (behaviour == "Agression")
+        {
+            agressionValueChange = 3;
+            approchPlayerChange = 2;
+        }
+        else if (behaviour == "Bold") //Setting up bold trait
+        {
+            agressionValueChange = 1.5f;
+            approchPlayerChange = 0.5f;
+        }
+        else if (behaviour == "Cautious") //Setting up cautious trait
+        {
+            agressionValueChange = -1.5f;
+            approchPlayerChange = -0.5f;
+        }
+        else if (behaviour == "Scared") //Setting up scared trait
+        {
+            agressionValueChange = -3;
+            approchPlayerChange = -2;
+        }
     }
 
     // Update is called once per frame
