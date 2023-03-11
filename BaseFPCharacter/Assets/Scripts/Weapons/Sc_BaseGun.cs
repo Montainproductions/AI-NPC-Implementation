@@ -7,12 +7,15 @@ public class Sc_BaseGun : MonoBehaviour {
     private bool playerGun;
 
     [SerializeField]
-    private GameObject playerBox;
+    private GameObject player, playerBox;
 
     [SerializeField]
     private float dmgPerBullet, bulletSpeed;
 
-    public int fireRate, effectiveRange;
+    [SerializeField]
+    private int fireRate, effectiveRange;
+    [SerializeField]
+    private float timeBetweenShots, timeBetweenFireRates;
 
     [SerializeField]
     private GameObject spawnBullet, barrolHole;
@@ -20,8 +23,7 @@ public class Sc_BaseGun : MonoBehaviour {
     private AudioSource audioSC;
 
     [SerializeField]
-    private int maxAmmo, maxClipAmmo;
-    public int currentAmmoAmount;
+    private int maxAmmo, currentMaxAmmo, maxClipAmmo, currentAmmoAmount;
     [HideInInspector]
     public bool shotRecently;
 
@@ -33,7 +35,8 @@ public class Sc_BaseGun : MonoBehaviour {
     // Start is called before the first frame update
     void Start()
     {
-        maxAmmo -= maxClipAmmo;
+        currentMaxAmmo = maxAmmo;
+        currentMaxAmmo -= maxClipAmmo;
         currentAmmoAmount = maxClipAmmo;
         shotRecently = false;
     }
@@ -41,7 +44,10 @@ public class Sc_BaseGun : MonoBehaviour {
     // Update is called once per frame
     void Update()
     {
-
+        if (playerGun)
+        {
+            Sc_Basic_UI.Instance.SetCurrentAmmo(currentAmmoAmount, currentMaxAmmo);
+        }
     }
 
     //A Coroutine that runs whenever the player or the AI trys shoots the current gun.
@@ -54,21 +60,21 @@ public class Sc_BaseGun : MonoBehaviour {
             {
                 currentAmmoAmount--;
                 GameObject newBullet = Instantiate(spawnBullet, barrolHole.transform);
-                if (playerGun) {
-                    newBullet.GetComponent<Sc_Bullet>().SetDamageAmount(playerBox, playerGun, dmgPerBullet);
+                if (!playerGun) {
+                    newBullet.GetComponent<Sc_Bullet>().SetDamageAmount(player, false, dmgPerBullet);
                 }
                 else
                 {
-                    newBullet.GetComponent<Sc_Bullet>().SetDamageAmount(dmgPerBullet);
+                    newBullet.GetComponent<Sc_Bullet>().SetDamageAmount(playerBox, playerGun, dmgPerBullet);
                 }
                 newBullet.GetComponent<Rigidbody>().AddRelativeForce(Vector3.forward * bulletSpeed, ForceMode.Impulse);
                 //Debug.Log(currentAmmoAmount);
                 audioSC.Play();
-                yield return new WaitForSeconds(0.25f);
-                Debug.Log("Player ammo count: " + currentAmmoAmount);
+                yield return new WaitForSeconds(timeBetweenShots);
+                //Debug.Log("Player ammo count: " + currentAmmoAmount);
             }
-            yield return new WaitForSeconds(1.0f);
-            shotRecently= false;
+            yield return new WaitForSeconds(timeBetweenFireRates);
+            shotRecently = false;
         }
         else if(currentAmmoAmount > 0 && shotRecently)
         {
@@ -91,9 +97,15 @@ public class Sc_BaseGun : MonoBehaviour {
         reloaded = true;
         yield return new WaitForSeconds(reloadTimer);
         currentAmmoAmount = maxClipAmmo;
-        maxAmmo -= maxClipAmmo;
+        currentMaxAmmo -= maxClipAmmo;
         reloaded = false;
         //Debug.Log("Reloaded");
         yield return null;
     }
+
+    public int ReturnFireRate() { return fireRate; }
+
+    public int ReturnCurrentAmmo() { return currentAmmoAmount; }
+
+    public int ReturnEffectiveRange() { return effectiveRange; }
 }

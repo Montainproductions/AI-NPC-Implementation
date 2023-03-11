@@ -46,8 +46,8 @@ public class Sc_IdleState : Sc_AIBaseState
 
     IEnumerator CanSeePlayer(float distPlayer, float angleToPlayer)
     {
-        bool playerHidden = playerMovementScript.IsHiddenReturn();
-        if ((distPlayer <= visionRange - 5 && angleToPlayer <= visionConeAngle - 5) || !playerHidden)
+        bool playerHidden = playerMovementScript.ReturnIsHidden();
+        if ((distPlayer <= visionRange - 5 && angleToPlayer <= visionConeAngle - 5) && !playerHidden)
         {
             stateManager.SwitchState(stateManager.aggressionDesicionState);
             yield return null;

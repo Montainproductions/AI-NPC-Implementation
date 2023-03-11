@@ -52,11 +52,11 @@ public class Sc_AttackState : Sc_AIBaseState
                 isMoving = true;
                 stateManager.StartCoroutine(commonMethodsScript.AttackingGettingCloser(diffDistToAttack));
             }
-            else if(gunScript.currentAmmoAmount > 0)
+            else if(gunScript.ReturnCurrentAmmo() > 0)
             {
                 stateManager.StartCoroutine(AttackingWithGun());
             }
-            else if (gunScript.currentAmmoAmount <= 0)
+            else if (gunScript.ReturnCurrentAmmo() <= 0)
             {
                 stateManager.StartCoroutine(Reloading());
             }
@@ -80,7 +80,7 @@ public class Sc_AttackState : Sc_AIBaseState
         }
     }
 
-    public void AttackStartStateInfo(Sc_AIStateManager stateManager, Sc_CommonMethods commonMethodsScript, Sc_Player_Movement playerMovementScript, GameObject self, GameObject player, GameObject currentWeapon, NavMeshAgent navMeshAgent, float visionRange, float visionConeAngle, Transform weaponPosition)
+    public void AttackStartStateInfo(Sc_AIStateManager stateManager, Sc_CommonMethods commonMethodsScript, Sc_Player_Movement playerMovementScript, GameObject self, GameObject player, GameObject currentWeapon, NavMeshAgent navMeshAgent, float visionRange, float visionConeAngle)
     {
         this.stateManager = stateManager;
         this.commonMethodsScript = commonMethodsScript;
@@ -89,17 +89,16 @@ public class Sc_AttackState : Sc_AIBaseState
         this.player = player;
         this.currentWeapon = currentWeapon;
         gunScript = currentWeapon.GetComponent<Sc_BaseGun>();
-        attackRange = gunScript.effectiveRange;
+        attackRange = gunScript.ReturnEffectiveRange();
         this.navMeshAgent = navMeshAgent;
         this.visionRange = visionRange;
         this.visionConeAngle = visionConeAngle;
-        this.weaponPosition = weaponPosition;
     }
 
     public void CantSeePlayer(float distPlayer, float angleToPlayer)
     {
-        bool playerHidden = playerMovementScript.IsHiddenReturn();
-        if ((distPlayer <= visionRange - 5 && angleToPlayer <= visionConeAngle - 5) || !playerHidden)
+        bool playerHidden = playerMovementScript.ReturnIsHidden();
+        if (distPlayer > visionRange || angleToPlayer > visionConeAngle || playerHidden)
         {
             stateManager.SwitchState(stateManager.searchState);
         }

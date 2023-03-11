@@ -260,7 +260,7 @@ GameObject:
   - component: {fileID: 7687749147566294081}
   - component: {fileID: 7687749147566294082}
   m_Layer: 6
-  m_Name: Assult Rifle
+  m_Name: SemiAuto Assult Rifle
   m_TagString: Gun
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -299,17 +299,22 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: e1b96a4f11a998846b500c24d2410eac, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  dmgPerBullet: 15
+  playerGun: 0
+  playerBox: {fileID: 0}
+  dmgPerBullet: 20
   bulletSpeed: 75
-  player: {fileID: 0}
   fireRate: 6
   effectiveRange: 50
+  timeBetweenShots: 0.25
+  timeBetweenFireRates: 0.5
   spawnBullet: {fileID: 619712338987558872, guid: 87c710d6419587a40a1795ff8d4323cc, type: 3}
   barrolHole: {fileID: 7687749147882011698}
   audioSC: {fileID: 7687749147882011708}
   maxAmmo: 150
+  currentMaxAmmo: 0
   maxClipAmmo: 30
   currentAmmoAmount: 0
+  shotRecently: 0
   reloaded: 0
   reloadTimer: 8
 --- !u!1 &7687749147882011698

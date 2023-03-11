@@ -54,12 +54,17 @@ public class Sc_Attacking : MonoBehaviour{
 
     // Update is called once per frame
     void Update(){
-        if (attackForPlayer) { PlayerAttackBox(); }
+        if (attackForPlayer) {
+            if (Input.GetMouseButton(0)) {
+                StartCoroutine(Attacking());
+            }
+            PlayerAttackBox();
+        }
     }
 
     //Checks if the enemy is hiting the collidor and then deal damage
     public void OnTriggerStay(Collider collision){
-        if ((collision.tag == "Enemy")){
+        if (collision.tag == "Enemy"){
             if (canMeleeAttack){
                 collision.GetComponent<Sc_Health>().TakeDamage(meleeDamage);
             }
@@ -84,7 +89,7 @@ public class Sc_Attacking : MonoBehaviour{
         }
         else if (canShootAttack && !baseGunScript.shotRecently)
         {
-            //Debug.Log("Attacking");
+            Debug.Log("Attacking");
             StartCoroutine(baseGunScript.ShotFired());
         }
         yield return null;
@@ -92,9 +97,10 @@ public class Sc_Attacking : MonoBehaviour{
 
     //If the attack button is pressed (Left mouse button currently) then flip some values to allow for damage to take place
     private void Attacking_performed(InputAction.CallbackContext context){
+        //Debug.Log(context.ReadValue<float>());
         if(!context.performed && attackForPlayer) return;
-
-        StartCoroutine(Attacking());
+        
+        //StartCoroutine(Attacking());
     }
 
     private void Reload_preformed(InputAction.CallbackContext context)

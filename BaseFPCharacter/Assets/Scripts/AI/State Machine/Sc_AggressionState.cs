@@ -51,7 +51,7 @@ public class Sc_AggressionState : Sc_AIBaseState
         //Debug.Log(self.name + " Player detected");
 
         decisionVal = 0;
-        attackRange = baseGunScript.effectiveRange;
+        attackRange = baseGunScript.ReturnEffectiveRange();
         WhenToAttack();
     }
 

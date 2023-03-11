@@ -13,7 +13,11 @@ public class Sc_Basic_UI : MonoBehaviour{
 
     [SerializeField]
     private GameObject healthInt;
-    private TextMeshProUGUI textHealthUI;
+    private TextMeshProUGUI healthTextUI;
+
+    [SerializeField]
+    private GameObject currentAmmo;
+    private TextMeshProUGUI ammoTextUI;
 
     public void Awake(){
         Instance = this;
@@ -22,7 +26,8 @@ public class Sc_Basic_UI : MonoBehaviour{
     // Start is called before the first frame update
     void Start(){
         CanAttackUI();
-        textHealthUI = healthInt.GetComponent<TextMeshProUGUI>();
+        healthTextUI = healthInt.GetComponent<TextMeshProUGUI>();
+        ammoTextUI = currentAmmo.GetComponent<TextMeshProUGUI>();
     }
 
     // Update is called once per frame
@@ -31,7 +36,13 @@ public class Sc_Basic_UI : MonoBehaviour{
     }
 
     public void NewHealth(float currentHealth) {
-        textHealthUI.SetText(currentHealth.ToString());
+        healthTextUI.SetText(currentHealth.ToString());
+    }
+
+    public void SetCurrentAmmo(float currentAmmo, float maxCurrentAmmo)
+    {
+        //Debug.Log(currentAmmo + maxCurrentAmmo);
+        ammoTextUI.SetText(currentAmmo.ToString() + "/" + maxCurrentAmmo.ToString());
     }
 
     //Activates the green square to signify that the player can melee

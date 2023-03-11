@@ -41,8 +41,7 @@ public class Sc_Player_Movement : MonoBehaviour{
     [SerializeField]
     [Tooltip("Is crouching allowed?")]
     private bool canCrouch; //Is the player allowed to crouch
-    [HideInInspector]
-    public bool isCrouching; //Is the character currently crouching
+    private bool isCrouching; //Is the character currently crouching
 
     private bool isHidden;
 
@@ -133,12 +132,22 @@ public class Sc_Player_Movement : MonoBehaviour{
 
     public void IsHidden()
     {
-        isHidden = !isHidden;
+        isHidden = true;
     }
 
-    public bool IsHiddenReturn()
+    public void NotHidden()
+    {
+        isHidden = false;
+    }
+
+    public bool ReturnIsHidden()
     {
         return isHidden;
+    }
+
+    public bool ReturnIsCrouching()
+    {
+        return isCrouching;
     }
 
     //Input action for pressing space

@@ -18,7 +18,7 @@ public class Sc_SearchState : Sc_AIBaseState
     private Vector3 playerLastLocation;
     public override void EnterState(float speed, bool playerSeen)
     {
-        Debug.Log("Searching for Player");
+        //Debug.Log("Searching for Player");
         playerLastLocation = player.transform.position;
         stateManager.StartCoroutine(ChooseSearchPath());
     }
@@ -47,7 +47,7 @@ public class Sc_SearchState : Sc_AIBaseState
 
     public void CanSeePlayer(float distPlayer, float angleToPlayer)
     {
-        bool playerHidden = playerMovementScript.IsHiddenReturn();
+        bool playerHidden = playerMovementScript.ReturnIsHidden();
         if ((distPlayer <= visionRange - 5 && angleToPlayer <= visionConeAngle - 5) && !playerHidden)
         {
             //directorAI.PlayerFound(state.gameObject);

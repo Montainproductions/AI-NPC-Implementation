@@ -44,7 +44,7 @@ public class Sc_AIStateManager : MonoBehaviour
     public bool playerNoticed;
 
     [SerializeField]
-    private float visionRange, visionConeAngle, alertedTimer, decisionTimer, idleTimer;
+    private float visionRange, visionConeAngle, audioRange, alertedTimer, decisionTimer, idleTimer;
     private float distPlayer, angleToPlayer;
 
     [Header("UI State Text")]
@@ -58,7 +58,7 @@ public class Sc_AIStateManager : MonoBehaviour
     [SerializeField]
     private GameObject[] patrolPoints;
 
-    [SerializeField]
+    //[SerializeField]
     private bool canSeeEnemy;
 
     [HideInInspector]
@@ -67,8 +67,6 @@ public class Sc_AIStateManager : MonoBehaviour
     [Header("Attacking/Chasing")]
     [SerializeField]
     private GameObject currentWeapon;
-    [SerializeField]
-    private Transform weaponPosition;
 
     [Header("Cover")]
     [SerializeField]
@@ -84,8 +82,8 @@ public class Sc_AIStateManager : MonoBehaviour
     void Start()
     {
         currentState = patrolState;
-        patrolState.PatrolStartStateInfo(this, player.GetComponent<Sc_Player_Movement>(), patrolPoints, navMeshAgent, visionRange, visionConeAngle);
-        attackState.AttackStartStateInfo(this, commonMethods, player.GetComponent<Sc_Player_Movement>(), gameObject, player, currentWeapon, navMeshAgent, visionRange, visionConeAngle, weaponPosition);
+        patrolState.PatrolStartStateInfo(commonMethods, this, player.GetComponent<Sc_Player_Movement>(), patrolPoints, visionRange, visionConeAngle);
+        attackState.AttackStartStateInfo(this, commonMethods, player.GetComponent<Sc_Player_Movement>(), gameObject, player, currentWeapon, navMeshAgent, visionRange, visionConeAngle);
         aggressionDesicionState.AggressionStartStateInfo(this, directorAI, gameObject, player, currentWeapon, cover, navMeshAgent, coverDistance);
         coverState.CoverStartStateInfo(this, commonMethods, player.GetComponent<Sc_Player_Movement>(), gameObject, player, currentWeapon, cover, visionRange, visionConeAngle);
         searchState.SearchStartStateInfo(this, player.GetComponent<Sc_Player_Movement>(), gameObject, player, searchFormats, navMeshAgent, visionRange, visionConeAngle);

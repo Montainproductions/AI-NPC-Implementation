@@ -2,6 +2,7 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.AI;
+using static UnityEngine.GraphicsBuffer;
 
 //A set of methods that multiple states use. Helps so that there arent duplicates of methods in diffrent states when one in a central location works best.
 //Mostly for movement and the redeciding timer.
@@ -21,6 +22,7 @@ public class Sc_CommonMethods : MonoBehaviour
     private GameObject self, player;
 
     private Vector3 walkingPosition;
+    private Vector3 direction;
 
     [SerializeField]
     private float decisionTimer;
@@ -41,20 +43,18 @@ public class Sc_CommonMethods : MonoBehaviour
     // Update is called once per frame
     void Update()
     {
-        if(walkingPosition != Vector3.zero) {
-            if (Vector3.Distance(self.transform.position, walkingPosition) > 0.4f)
+        if (walkingPosition != Vector3.zero) {
+            //Debug.Log(Vector3.Distance(self.transform.position, walkingPosition));
+            if (Vector3.Distance(self.transform.position, walkingPosition) > 1.1f)
             {
-                //Debug.Log("Going to Cover");
+                //Debug.Log("Moving");
                 stateManager.SetCurrentAction("Going to " + currentState + " point");
-                if (!lookingAtPlayer)
-                {
-                    stateManager.transform.LookAt(walkingPosition);
-                }
-                else
-                {
-                    Vector3 playerPos = player.transform.position;
-                    stateManager.transform.LookAt(playerPos);
-                }
+                
+                direction = (walkingPosition - transform.position).normalized;
+                //Creates Quaternion version of the vector3 direction
+                Quaternion lookRotation = Quaternion.LookRotation(direction);
+                //Rotate Enemy over time according to speed until we are in the required rotation
+                transform.rotation = Quaternion.Slerp(transform.rotation, lookRotation, Time.deltaTime * 0.25f);
                 navMeshAgent.destination = walkingPosition;
             }
             else
@@ -69,6 +69,11 @@ public class Sc_CommonMethods : MonoBehaviour
                 else if (currentState == "Attack")
                 {
                     stateManager.attackState.isMoving = false;
+                }
+                else if (currentState == "Patrolling")
+                {
+                    StopMovement();
+                    stateManager.patrolState.Patroling();
                 }
             }
         }

@@ -3,35 +3,39 @@ using System.Collections.Generic;
 using UnityEngine;
 
 public class Sc_Bullet : MonoBehaviour{
-    private GameObject playersBox;
+    private GameObject player;
 
     private bool playerGun;
 
     private float dmgFromBullet;
 
     //Will set the damage of the bullet for when it impacts an object with health
-    public void SetDamageAmount(float damage){
+    public void SetDamageAmount(bool playerGun, float damage){
+        this.playerGun = playerGun;
         dmgFromBullet = damage;
     }
 
     //Will set the damage of the bullet for when it impacts an object with health
-    public void SetDamageAmount(GameObject playersBox, bool playerbullets, float damage)
+    public void SetDamageAmount(GameObject player, bool playerGun, float damage)
     {
-        this.playersBox = playersBox;
-        playerGun = playerbullets;
+        this.player = player;
+        this.playerGun = playerGun;
         dmgFromBullet = damage;
     }
 
     public void OnTriggerEnter(Collider other){
         //Debug.Log(other.gameObject);
         //Damages an enemy if it has health
-        if (other.gameObject == playersBox && playerGun) { return; }
-        else if (other.gameObject.GetComponent<Sc_Health>())
-        {
+        if (other.gameObject.tag == "Enemy" && playerGun) {
             other.gameObject.GetComponent<Sc_Health>().TakeDamage(dmgFromBullet);
         }
-        if (other.tag != "Gun") //Will destroy the bullet when it hits something that isnt the gun itself
+        else if (other.gameObject.tag == "Player" && !playerGun)
         {
+            player.GetComponent<Sc_Health>().TakeDamage(dmgFromBullet);
+        }
+        if (other.tag == "Player" && !playerGun) //Will destroy the bullet when it hits something that isnt the gun itself
+        {
+            Debug.Log("Destroyed");
             Destroy(gameObject);
         }
     }

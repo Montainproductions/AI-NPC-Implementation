@@ -4,12 +4,12 @@ using UnityEngine;
 
 public class Sc_Foiliage : MonoBehaviour
 {
-    private GameObject Player;
+    [SerializeField]
     private Sc_Player_Movement playerMovementScript;
 
-    private void OnTriggerEnter(Collider other)
+    private void OnTriggerStay(Collider other)
     {
-        if(other.gameObject.tag == "Player")
+        if(other.gameObject.tag == "Player" && playerMovementScript.ReturnIsCrouching())
         {
             playerMovementScript.IsHidden();
         }

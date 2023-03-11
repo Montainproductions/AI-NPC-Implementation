@@ -130,8 +130,8 @@ public class Sc_CoverState : Sc_AIBaseState
     //If the player leaves the AIs line of site then it will stop trying to go to cover and start to search for the player.
     public void CantSeePlayer(float distPlayer, float angleToPlayer)
     {
-        bool playerHidden = playerMovementScript.IsHiddenReturn();
-        if ((distPlayer >= visionRange && angleToPlayer >= visionConeAngle) || playerHidden)
+        bool playerHidden = playerMovementScript.ReturnIsHidden();
+        if (distPlayer > visionRange || angleToPlayer > visionConeAngle || playerHidden)
         {
             stateManager.SwitchState(stateManager.searchState);
         }
