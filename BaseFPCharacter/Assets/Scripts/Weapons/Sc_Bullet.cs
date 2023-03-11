@@ -35,7 +35,9 @@ public class Sc_Bullet : MonoBehaviour{
         }
         if (other.tag == "Player" && !playerGun) //Will destroy the bullet when it hits something that isnt the gun itself
         {
-            Debug.Log("Destroyed");
+            Destroy(gameObject);
+        }else if(other.tag != "Player" && playerGun)
+        {
             Destroy(gameObject);
         }
     }

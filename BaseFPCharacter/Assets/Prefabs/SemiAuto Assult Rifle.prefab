@@ -300,6 +300,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   playerGun: 0
+  player: {fileID: 0}
   playerBox: {fileID: 0}
   dmgPerBullet: 20
   bulletSpeed: 75
@@ -316,7 +317,7 @@ MonoBehaviour:
   currentAmmoAmount: 0
   shotRecently: 0
   reloaded: 0
-  reloadTimer: 8
+  reloadTimer: 4
 --- !u!1 &7687749147882011698
 GameObject:
   m_ObjectHideFlags: 0

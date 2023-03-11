@@ -37,6 +37,7 @@ public class Sc_Health : MonoBehaviour{
         currentHealth = maxHealth;
         lastTimeHitTimer = 0;
         recentlyHit = false;
+        StartCoroutine(HealingOverTime());
     }
 
     // Update is called once per frame
@@ -46,7 +47,7 @@ public class Sc_Health : MonoBehaviour{
             Sc_Basic_UI.Instance.NewHealth(currentHealth);
         }
         if (!healingOverTimeAllowed) return; //If the player isnt allowed to heal automaticly then return
-        Healing();
+        //Healing();
     }
 
     //Heal over time at a certain amount of hp per second
@@ -66,6 +67,27 @@ public class Sc_Health : MonoBehaviour{
             lastTimeHitTimer = 0;
             currentHealth += healingRate * Time.deltaTime;
         }
+    }
+
+    IEnumerator HealingOverTime()
+    {
+        if (currentHealth >= maxHealth)
+        {
+            currentHealth = maxHealth;
+            yield return null;
+        }
+        if (recentlyHit)
+        {
+            yield return new WaitForSeconds(4);
+            recentlyHit = false;
+        }
+        else
+        {
+            //Debug.Log("Healing");
+            currentHealth += healingRate;
+        }
+        StartCoroutine(HealingOverTime());
+        yield return null;
     }
 
     //Take damage will reduce the amount of health the player currently has

@@ -53,7 +53,7 @@ public class Sc_BaseGun : MonoBehaviour {
     //A Coroutine that runs whenever the player or the AI trys shoots the current gun.
     public IEnumerator ShotFired()
     {
-        if (currentAmmoAmount > 0 && !shotRecently)
+        if (currentAmmoAmount > 0 && !shotRecently && !reloaded)
         {
             shotRecently = true;
             for (int i = 0; i < fireRate; i++)
@@ -107,5 +107,9 @@ public class Sc_BaseGun : MonoBehaviour {
 
     public int ReturnCurrentAmmo() { return currentAmmoAmount; }
 
+    public int ReturnMaxClipAmmo() { return maxClipAmmo; }
+
     public int ReturnEffectiveRange() { return effectiveRange; }
+
+    public float ReturnReloadTimer() { return reloadTimer; }
 }
