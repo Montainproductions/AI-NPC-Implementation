@@ -108,6 +108,8 @@ public class Sc_AttackState : Sc_AIBaseState
     IEnumerator AttackingWithGun()
     {
         stateManager.SetCurrentAction("Shooting player");
+        stateManager.SetIsAttacking(true);
+        stateManager.SetIsWalking(false);
         //Debug.Log("Shooting");
         timeDelay = Random.Range(2, 3.25f);
         yield return new WaitForSeconds(timeDelay);
@@ -115,6 +117,7 @@ public class Sc_AttackState : Sc_AIBaseState
         //Debug.Log("Enemy ammo count: " + gunScript.currentAmmoAmount);
         timeDelay = Random.Range(1.5f, 2.75f);
         yield return new WaitForSeconds(timeDelay);
+        stateManager.SetIsAttacking(false);
         yield return null;
     }
 

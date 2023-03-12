@@ -27,7 +27,7 @@ public class Sc_QuickSort : MonoBehaviour
     {
 
         // pivot
-        int pivot = arrayObjects[highEnd].GetComponent<Sc_AIStateManager>().decisionValue;
+        int pivot = arrayObjects[highEnd].GetComponent<Sc_AIStateManager>().ReturnDecisionValue();
 
         // Index of smaller element and
         // indicates the right position
@@ -39,7 +39,7 @@ public class Sc_QuickSort : MonoBehaviour
 
             // If current element is smaller
             // than the pivot
-            if (arrayObjects[j].GetComponent<Sc_AIStateManager>().decisionValue < pivot)
+            if (arrayObjects[j].GetComponent<Sc_AIStateManager>().ReturnDecisionValue() < pivot)
             {
 
                 // Increment index of

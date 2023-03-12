@@ -113,7 +113,7 @@ public class Sc_AIDirector : MonoBehaviour
             }
             //If the current desicion value of the enemy is greater than the average value of all enemies then the enemy will have a 75% chance of going to the attack state or a 25% chance to go to the cover state.
             //This is meant to help
-            else if (stateManager.decisionValue >= valueLimit)
+            else if (stateManager.ReturnDecisionValue() >= valueLimit)
             {
                 if(v >= 2.5f) //2.5f
                 {
@@ -168,7 +168,7 @@ public class Sc_AIDirector : MonoBehaviour
         for (int i = 0; i < enemyAIDesicionValue.Count; i++)
         {
             stateManager = enemyAIDesicionValue[i].GetComponent<Sc_AIStateManager>();
-            average += stateManager.decisionValue;
+            average += stateManager.ReturnDecisionValue();
         }
         average = average / enemyAIDesicionValue.Count;
         yield return null;

@@ -398,6 +398,11 @@ GameObject:
   m_CorrespondingSourceObject: {fileID: 4776626649667430321, guid: 14f5ead13a4e5c3428d79d59ae603373, type: 3}
   m_PrefabInstance: {fileID: 1663377665}
   m_PrefabAsset: {fileID: 0}
+--- !u!1 &162846038 stripped
+GameObject:
+  m_CorrespondingSourceObject: {fileID: 4800562019042892381, guid: 321288f039be29840b9076a8a23566c6, type: 3}
+  m_PrefabInstance: {fileID: 260877467}
+  m_PrefabAsset: {fileID: 0}
 --- !u!1 &165474361
 GameObject:
   m_ObjectHideFlags: 0
@@ -771,9 +776,17 @@ PrefabInstance:
       propertyPath: m_Layer
       value: 8
       objectReference: {fileID: 0}
+    - target: {fileID: 2518665856785081913, guid: 321288f039be29840b9076a8a23566c6, type: 3}
+      propertyPath: m_Avatar
+      value: 
+      objectReference: {fileID: 9000000, guid: fcb334eb247ae3e488abb081c847cf09, type: 3}
     - target: {fileID: 3366765922595931412, guid: 321288f039be29840b9076a8a23566c6, type: 3}
       propertyPath: m_IsTrigger
       value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 4800562019042892381, guid: 321288f039be29840b9076a8a23566c6, type: 3}
+      propertyPath: m_Name
+      value: ShootingHole(ForGun)
       objectReference: {fileID: 0}
     - target: {fileID: 5355143908882180218, guid: 321288f039be29840b9076a8a23566c6, type: 3}
       propertyPath: m_Layer
@@ -807,6 +820,10 @@ PrefabInstance:
       propertyPath: commonMethods
       value: 
       objectReference: {fileID: 260877473}
+    - target: {fileID: 5355143908986894844, guid: 321288f039be29840b9076a8a23566c6, type: 3}
+      propertyPath: currentWeapon
+      value: 
+      objectReference: {fileID: 162846038}
     - target: {fileID: 5355143908986894844, guid: 321288f039be29840b9076a8a23566c6, type: 3}
       propertyPath: cover.Array.size
       value: 14
@@ -971,6 +988,18 @@ PrefabInstance:
       propertyPath: m_Layer
       value: 8
       objectReference: {fileID: 0}
+    - target: {fileID: 6730979551477548640, guid: 321288f039be29840b9076a8a23566c6, type: 3}
+      propertyPath: player
+      value: 
+      objectReference: {fileID: 884952683}
+    - target: {fileID: 6730979551477548640, guid: 321288f039be29840b9076a8a23566c6, type: 3}
+      propertyPath: currentMaxAmmo
+      value: 150
+      objectReference: {fileID: 0}
+    - target: {fileID: 8145374628918743130, guid: 321288f039be29840b9076a8a23566c6, type: 3}
+      propertyPath: player
+      value: 
+      objectReference: {fileID: 884952683}
     - target: {fileID: 8290296705691924517, guid: 321288f039be29840b9076a8a23566c6, type: 3}
       propertyPath: m_Layer
       value: 8
@@ -1636,6 +1665,14 @@ PrefabInstance:
       propertyPath: player
       value: 
       objectReference: {fileID: 884952683}
+    - target: {fileID: 2518665856785081913, guid: 321288f039be29840b9076a8a23566c6, type: 3}
+      propertyPath: m_Avatar
+      value: 
+      objectReference: {fileID: 9000000, guid: fcb334eb247ae3e488abb081c847cf09, type: 3}
+    - target: {fileID: 2518665856785081913, guid: 321288f039be29840b9076a8a23566c6, type: 3}
+      propertyPath: m_ApplyRootMotion
+      value: 0
+      objectReference: {fileID: 0}
     - target: {fileID: 5355143908986894841, guid: 321288f039be29840b9076a8a23566c6, type: 3}
       propertyPath: m_Name
       value: BaseEnemy (2)
@@ -2335,6 +2372,10 @@ PrefabInstance:
       propertyPath: player
       value: 
       objectReference: {fileID: 884952683}
+    - target: {fileID: 2518665856785081913, guid: 321288f039be29840b9076a8a23566c6, type: 3}
+      propertyPath: m_Avatar
+      value: 
+      objectReference: {fileID: 9000000, guid: fcb334eb247ae3e488abb081c847cf09, type: 3}
     - target: {fileID: 5355143908986894841, guid: 321288f039be29840b9076a8a23566c6, type: 3}
       propertyPath: m_Name
       value: BaseEnemy (3)
@@ -3618,6 +3659,10 @@ PrefabInstance:
       propertyPath: player
       value: 
       objectReference: {fileID: 884952683}
+    - target: {fileID: 2518665856785081913, guid: 321288f039be29840b9076a8a23566c6, type: 3}
+      propertyPath: m_Avatar
+      value: 
+      objectReference: {fileID: 9000000, guid: d265e5e60128d9b4a9ab0c8c4ac8e796, type: 2}
     - target: {fileID: 5355143908986894841, guid: 321288f039be29840b9076a8a23566c6, type: 3}
       propertyPath: m_Name
       value: BaseEnemy (5)
@@ -4353,6 +4398,10 @@ PrefabInstance:
       propertyPath: dmgPerBullet
       value: 20
       objectReference: {fileID: 0}
+    - target: {fileID: 2518665856785081913, guid: 321288f039be29840b9076a8a23566c6, type: 3}
+      propertyPath: m_Avatar
+      value: 
+      objectReference: {fileID: 9000000, guid: fcb334eb247ae3e488abb081c847cf09, type: 3}
     - target: {fileID: 5355143908986894841, guid: 321288f039be29840b9076a8a23566c6, type: 3}
       propertyPath: m_Name
       value: BaseEnemy (1)
@@ -4704,6 +4753,10 @@ PrefabInstance:
       propertyPath: player
       value: 
       objectReference: {fileID: 884952683}
+    - target: {fileID: 2518665856785081913, guid: 321288f039be29840b9076a8a23566c6, type: 3}
+      propertyPath: m_Avatar
+      value: 
+      objectReference: {fileID: 9000000, guid: fcb334eb247ae3e488abb081c847cf09, type: 3}
     - target: {fileID: 5355143908986894841, guid: 321288f039be29840b9076a8a23566c6, type: 3}
       propertyPath: m_Name
       value: BaseEnemy (4)

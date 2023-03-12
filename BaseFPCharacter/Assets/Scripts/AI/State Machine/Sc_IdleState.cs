@@ -31,6 +31,7 @@ public class Sc_IdleState : Sc_AIBaseState
 
     IEnumerator IdleTimed()
     {
+        stateManager.SetIsIdling(true);
         yield return new WaitForSeconds(idleTimer / 3);
         randomLookDirection.x = Random.Range(0, 360);
         randomLookDirection.z = Random.Range(0, 360);
@@ -41,6 +42,7 @@ public class Sc_IdleState : Sc_AIBaseState
         stateManager.transform.LookAt(randomLookDirection);
         yield return new WaitForSeconds(idleTimer / 3);
         stateManager.SwitchState(stateManager.patrolState);
+        stateManager.SetIsIdling(false);
         yield return null;
     }
 

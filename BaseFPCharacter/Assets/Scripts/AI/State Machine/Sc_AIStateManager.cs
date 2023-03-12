@@ -61,8 +61,7 @@ public class Sc_AIStateManager : MonoBehaviour
     //[SerializeField]
     private bool canSeeEnemy;
 
-    [HideInInspector]
-    public int decisionValue = 0;
+    private int decisionValue = 0;
 
     [Header("Attacking/Chasing")]
     [SerializeField]
@@ -78,6 +77,9 @@ public class Sc_AIStateManager : MonoBehaviour
     [SerializeField]
     private GameObject[] searchFormats;
 
+    //Animation information
+    private bool isAttacking, isIdling, isWalking;
+
     // Start is called before the first frame update
     void Start()
     {
@@ -92,6 +94,10 @@ public class Sc_AIStateManager : MonoBehaviour
 
         stateTextObj = Instantiate(stateTxtPrefab, Sc_Basic_UI.Instance.transform);
         stateText = stateTextObj.GetComponent<TextMeshProUGUI>();
+
+        SetIsIdling(false);
+        SetIsAttacking(false);
+        SetIsWalking(true);
 
         //Setting up agression trait
         if (behaviour == "Agression")
@@ -125,6 +131,7 @@ public class Sc_AIStateManager : MonoBehaviour
         //Debug.Log(currentState);
         currentState.UpdateState(distPlayer, angleToPlayer);
 
+
         //Sets the text on top of the AI to show the current state and action that the AI is doing. Helps to show what they are "Thinking"
         stateTextObj.transform.position = Camera.main.WorldToScreenPoint(transform.position + Vector3.up * 3);
         stateText.SetText(currentState.ToString() + " " + currentAction);
@@ -149,9 +156,44 @@ public class Sc_AIStateManager : MonoBehaviour
         decisionValue = value;
     }
 
+    public int ReturnDecisionValue()
+    {
+        return decisionValue;
+    }
+
     //Current action which is used for some UI so that the user can better determine what each individual AI is doing.
     public void SetCurrentAction(string action)
     {
         currentAction = action;
+    }
+
+    public void SetIsAttacking(bool isAttacking)
+    {
+        this.isAttacking = isAttacking;
+    }
+
+    public bool ReturnIsAttacking()
+    {
+        return isAttacking;
+    }
+
+    public void SetIsIdling(bool isIdling)
+    {
+        this.isIdling = isIdling;
+    }
+
+    public bool ReturnIsIdling()
+    {
+        return isIdling;
+    }
+
+    public void SetIsWalking(bool isWalking)
+    {
+        this.isWalking = isWalking;
+    }
+
+    public bool ReturnIsWalking()
+    {
+        return isWalking;
     }
 }
