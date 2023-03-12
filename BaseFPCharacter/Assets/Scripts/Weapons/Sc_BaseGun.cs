@@ -4,7 +4,7 @@ using UnityEngine;
 
 public class Sc_BaseGun : MonoBehaviour {
     [SerializeField]
-    private bool playerGun;
+    private bool isPlayerGun;
 
     [SerializeField]
     private GameObject player, playerBox;
@@ -39,15 +39,16 @@ public class Sc_BaseGun : MonoBehaviour {
         currentMaxAmmo -= maxClipAmmo;
         currentAmmoAmount = maxClipAmmo;
         shotRecently = false;
+
+        if (isPlayerGun)
+        {
+            Sc_Basic_UI.Instance.SetCurrentAmmo(currentAmmoAmount, currentMaxAmmo);
+        }
     }
 
     // Update is called once per frame
     void Update()
     {
-        if (playerGun)
-        {
-            Sc_Basic_UI.Instance.SetCurrentAmmo(currentAmmoAmount, currentMaxAmmo);
-        }
     }
 
     //A Coroutine that runs whenever the player or the AI trys shoots the current gun.
@@ -60,12 +61,12 @@ public class Sc_BaseGun : MonoBehaviour {
             {
                 currentAmmoAmount--;
                 GameObject newBullet = Instantiate(spawnBullet, barrolHole.transform);
-                if (!playerGun) {
-                    newBullet.GetComponent<Sc_Bullet>().SetDamageAmount(player, false, dmgPerBullet);
+                if (!isPlayerGun) {
+                    newBullet.GetComponent<Sc_Bullet>().SetDamageAmount(player, isPlayerGun, dmgPerBullet);
                 }
                 else
                 {
-                    newBullet.GetComponent<Sc_Bullet>().SetDamageAmount(playerBox, playerGun, dmgPerBullet);
+                    newBullet.GetComponent<Sc_Bullet>().SetDamageAmount(playerBox, isPlayerGun, dmgPerBullet);
                 }
                 newBullet.GetComponent<Rigidbody>().AddRelativeForce(Vector3.forward * bulletSpeed, ForceMode.Impulse);
                 //Debug.Log(currentAmmoAmount);

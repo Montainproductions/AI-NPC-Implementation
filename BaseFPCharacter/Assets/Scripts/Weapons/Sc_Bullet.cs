@@ -26,7 +26,9 @@ public class Sc_Bullet : MonoBehaviour{
     public void OnTriggerEnter(Collider other){
         //Debug.Log(other.gameObject);
         //Damages an enemy if it has health
-        if (other.gameObject.tag == "Enemy" && playerGun) {
+
+        if (other.gameObject.tag == "Enemy") {
+            Debug.Log("Enemy taking damage: " + other.gameObject);
             other.gameObject.GetComponent<Sc_Health>().TakeDamage(dmgFromBullet);
         }
         else if (other.gameObject.tag == "Player" && !playerGun)
@@ -34,9 +36,6 @@ public class Sc_Bullet : MonoBehaviour{
             player.GetComponent<Sc_Health>().TakeDamage(dmgFromBullet);
         }
         if (other.tag == "Player" && !playerGun) //Will destroy the bullet when it hits something that isnt the gun itself
-        {
-            Destroy(gameObject);
-        }else if(other.tag != "Player" && playerGun)
         {
             Destroy(gameObject);
         }

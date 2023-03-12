@@ -4,7 +4,6 @@ using UnityEngine;
 using UnityEngine.InputSystem;
 
 public class Sc_Attacking : MonoBehaviour{
-    //Is player info
     //The player input system
     private PlayerInputActions playerInputActions;
     [SerializeField]
