@@ -47,6 +47,7 @@ public class Sc_AIDirector : MonoBehaviour
         playerSeen = false;
         //Starts the timer coroutine so that each time it will grab the current set of AIs that have seen the Player and chosses which state they go to.
         StartCoroutine(WhatToDoTimer());
+        Debug.Log("Active? " + gameObject.activeInHierarchy);
         StartCoroutine(AIManagerScripts());
     }
 
@@ -60,11 +61,11 @@ public class Sc_AIDirector : MonoBehaviour
     public IEnumerator PlayerFound(GameObject enemyObject)
     {
         playerSeen = true;
-        
-        //Debug.Log("Activating Enemy");
 
         for (int i = 0; i < allCurrentEnemy.Length; i++) {
-            if (allCurrentEnemy[i] != enemyObject && (Vector3.Distance(allCurrentEnemy[i].transform.position, enemyObject.transform.position)) < 60)
+            Debug.Log(allCurrentEnemy[i]);
+            Debug.Log(enemyObject);
+            if (allCurrentEnemy[i] != enemyObject && (Vector3.Distance(allCurrentEnemy[i].transform.position, enemyObject.transform.position)) < audioRange)
             {
                 yield return new WaitForSeconds(1.25f);
                 stateManager = allCurrentEnemy[i].GetComponent<Sc_AIStateManager>();
@@ -210,6 +211,8 @@ public class Sc_AIDirector : MonoBehaviour
     {
         for (int i = 0; i < allCurrentEnemy.Length; i++)
         {
+            Debug.Log(allCurrentEnemy[i]);
+            Debug.Log("Active? " + gameObject.activeInHierarchy);
             allAIManagerScript[i] = allCurrentEnemy[i].GetComponent<Sc_AIStateManager>();
         }
         yield return null;

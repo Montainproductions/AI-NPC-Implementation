@@ -19,7 +19,7 @@ public class Sc_CommonMethods : MonoBehaviour
     private string currentState;
 
     [SerializeField]
-    private GameObject self, player;
+    private GameObject self;
 
     private Vector3 walkingPosition;
     private Vector3 direction;
