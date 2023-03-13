@@ -47,7 +47,6 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   isPlayerGun: 0
   player: {fileID: 0}
-  playerBox: {fileID: 0}
   dmgPerBullet: 20
   bulletSpeed: 75
   fireRate: 6
@@ -351,12 +350,12 @@ MonoBehaviour:
   directorAI: {fileID: 2460812123129524718, guid: 9a1b04fd93715f84585c30af5c65b4ea, type: 3}
   player: {fileID: 6646797674794803052, guid: 81ce49f96577d844ab806a3654e6ae19, type: 3}
   playerNoticed: 0
-  visionRange: 70
+  visionRange: 80
   visionConeAngle: 70
-  audioRange: 60
-  alertedTimer: 5
+  audioRange: 70
+  alertedTimer: 30
   decisionTimer: 20
-  idleTimer: 0
+  idleTimer: 30
   stateTxtPrefab: {fileID: 1571431829170465119, guid: 4a1f5fc5d19354a4da658a77ec6b2a83, type: 3}
   currentAction: 
   patrolPoints: []

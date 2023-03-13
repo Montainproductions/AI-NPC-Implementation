@@ -7,7 +7,7 @@ public class Sc_BaseGun : MonoBehaviour {
     private bool isPlayerGun;
 
     [SerializeField]
-    private GameObject player, playerBox;
+    private GameObject player;
 
     [SerializeField]
     private float dmgPerBullet, bulletSpeed;
@@ -31,6 +31,9 @@ public class Sc_BaseGun : MonoBehaviour {
     private bool reloaded;
     [SerializeField]
     private float reloadTimer;
+
+    [SerializeField]
+    private Sc_AIDirector aiDirector;
 
     // Start is called before the first frame update
     void Start()
@@ -60,16 +63,16 @@ public class Sc_BaseGun : MonoBehaviour {
             {
                 currentAmmoAmount--;
                 GameObject newBullet = Instantiate(spawnBullet, barrolHole.transform);
-                if (!isPlayerGun) {
+                
                     newBullet.GetComponent<Sc_Bullet>().SetDamageAmount(player, isPlayerGun, dmgPerBullet);
-                }
-                else
-                {
-                    newBullet.GetComponent<Sc_Bullet>().SetDamageAmount(playerBox, isPlayerGun, dmgPerBullet);
-                }
+                
                 newBullet.GetComponent<Rigidbody>().AddRelativeForce(Vector3.forward * bulletSpeed, ForceMode.Impulse);
                 //Debug.Log(currentAmmoAmount);
                 audioSC.Play();
+                if (isPlayerGun)
+                {
+                    StartCoroutine(aiDirector.ShotFired(gameObject.transform.position));
+                }
                 yield return new WaitForSeconds(timeBetweenShots);
                 //Debug.Log("Player ammo count: " + currentAmmoAmount);
             }

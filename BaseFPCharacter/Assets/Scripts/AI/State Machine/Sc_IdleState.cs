@@ -8,7 +8,7 @@ public class Sc_IdleState : Sc_AIBaseState
     private Sc_AIStateManager stateManager;
     private Sc_Player_Movement playerMovementScript;
 
-    private float idleTimer, visionRange, visionConeAngle;
+    private float idleTimer, visionRange, visionConeAngle, audioRange;
 
     Vector3 randomLookDirection;
 
@@ -17,16 +17,36 @@ public class Sc_IdleState : Sc_AIBaseState
     }
 
     public override void UpdateState(float distPlayer, float angleToPlayer) {
-        stateManager.StartCoroutine(CanSeePlayer(distPlayer, angleToPlayer));
+        CanSeePlayer(distPlayer, angleToPlayer);
     }
 
-    public void IdleStartStateInfo(Sc_AIStateManager stateManager, Sc_Player_Movement playerMovementScript, float idleTime, float distRange, float visionAngleRange)
+    public void IdleStartStateInfo(Sc_AIStateManager stateManager, Sc_Player_Movement playerMovementScript, float idleTime, float distRange, float visionAngleRange, float audioDist)
     {
         this.stateManager = stateManager;
         this.playerMovementScript = playerMovementScript;
         idleTimer = idleTime;
         visionRange = distRange;
         visionConeAngle = visionAngleRange;
+        audioRange = audioDist;
+    }
+
+    public void CanSeePlayer(float distPlayer, float angleToPlayer)
+    {
+        bool playerHidden = playerMovementScript.ReturnIsHidden();
+        if ((distPlayer <= visionRange - 5 && angleToPlayer <= visionConeAngle - 5) && !playerHidden)
+        {
+            stateManager.playerNoticed = true;
+            stateManager.SwitchState(stateManager.aggressionDesicionState);
+        }
+    }
+
+    public void HeardGunShots(float distPlayer)
+    {
+        if(distPlayer <= audioRange)
+        {
+
+        }
+
     }
 
     IEnumerator IdleTimed()
@@ -43,17 +63,6 @@ public class Sc_IdleState : Sc_AIBaseState
         yield return new WaitForSeconds(idleTimer / 3);
         stateManager.SwitchState(stateManager.patrolState);
         stateManager.SetIsIdling(false);
-        yield return null;
-    }
-
-    IEnumerator CanSeePlayer(float distPlayer, float angleToPlayer)
-    {
-        bool playerHidden = playerMovementScript.ReturnIsHidden();
-        if ((distPlayer <= visionRange - 5 && angleToPlayer <= visionConeAngle - 5) && !playerHidden)
-        {
-            stateManager.SwitchState(stateManager.aggressionDesicionState);
-            yield return null;
-        }
         yield return null;
     }
 }

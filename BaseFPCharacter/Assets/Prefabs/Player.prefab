@@ -342,7 +342,6 @@ MonoBehaviour:
     serializedVersion: 2
     m_Bits: 8
   canCrouch: 1
-  isCrouching: 0
 --- !u!114 &6646797674794803061
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -483,6 +482,10 @@ PrefabInstance:
       propertyPath: playerGun
       value: 1
       objectReference: {fileID: 0}
+    - target: {fileID: 7687749147566294082, guid: 7133376c2d13887488df58dced69d27c, type: 3}
+      propertyPath: aiDirector
+      value: 
+      objectReference: {fileID: 2460812123129524718, guid: 9a1b04fd93715f84585c30af5c65b4ea, type: 3}
     - target: {fileID: 7687749147566294082, guid: 7133376c2d13887488df58dced69d27c, type: 3}
       propertyPath: effectiveRange
       value: 50

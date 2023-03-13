@@ -19,6 +19,7 @@ public class Sc_Bullet : MonoBehaviour{
     public void SetDamageAmount(GameObject player, bool playerGun, float damage)
     {
         this.player = player;
+        Debug.Log(player);
         this.playerGun = playerGun;
         dmgFromBullet = damage;
     }
@@ -27,7 +28,7 @@ public class Sc_Bullet : MonoBehaviour{
         //Debug.Log(other.gameObject);
         //Damages an enemy if it has health
 
-        if (other.gameObject.tag == "Enemy") {
+        if (other.gameObject.tag == "Enemy" && playerGun) {
             Debug.Log("Enemy taking damage: " + other.gameObject);
             other.gameObject.GetComponent<Sc_Health>().TakeDamage(dmgFromBullet);
         }

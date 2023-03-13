@@ -84,16 +84,16 @@ public class Sc_AIStateManager : MonoBehaviour
     void Start()
     {
         currentState = patrolState;
-        patrolState.PatrolStartStateInfo(commonMethods, this, player.GetComponent<Sc_Player_Movement>(), patrolPoints, visionRange, visionConeAngle);
+        patrolState.PatrolStartStateInfo(this, commonMethods, player.GetComponent<Sc_Player_Movement>(), patrolPoints, visionRange, visionConeAngle, audioRange);
         attackState.AttackStartStateInfo(this, commonMethods, player.GetComponent<Sc_Player_Movement>(), gameObject, player, currentWeapon, navMeshAgent, visionRange, visionConeAngle);
         aggressionDesicionState.AggressionStartStateInfo(this, directorAI, gameObject, player, currentWeapon, cover, navMeshAgent, coverDistance);
         coverState.CoverStartStateInfo(this, commonMethods, player.GetComponent<Sc_Player_Movement>(), gameObject, player, currentWeapon, cover, visionRange, visionConeAngle);
         searchState.SearchStartStateInfo(this, player.GetComponent<Sc_Player_Movement>(), gameObject, player, searchFormats, navMeshAgent, visionRange, visionConeAngle);
-        idleState.IdleStartStateInfo(this, player.GetComponent<Sc_Player_Movement>(), idleTimer, visionRange, visionConeAngle);
+        idleState.IdleStartStateInfo(this, player.GetComponent<Sc_Player_Movement>(), idleTimer, visionRange, visionConeAngle, audioRange);
         currentState.EnterState(speed, playerNoticed);
 
-        stateTextObj = Instantiate(stateTxtPrefab, Sc_Basic_UI.Instance.transform);
-        stateText = stateTextObj.GetComponent<TextMeshProUGUI>();
+        //stateTextObj = Instantiate(stateTxtPrefab, Sc_Basic_UI.Instance.transform);
+        //stateText = stateTextObj.GetComponent<TextMeshProUGUI>();
 
         SetIsIdling(false);
         SetIsAttacking(false);
@@ -133,8 +133,8 @@ public class Sc_AIStateManager : MonoBehaviour
 
 
         //Sets the text on top of the AI to show the current state and action that the AI is doing. Helps to show what they are "Thinking"
-        stateTextObj.transform.position = Camera.main.WorldToScreenPoint(transform.position + Vector3.up * 3);
-        stateText.SetText(currentState.ToString() + " " + currentAction);
+        //stateTextObj.transform.position = Camera.main.WorldToScreenPoint(transform.position + Vector3.up * 3);
+        //stateText.SetText(currentState.ToString() + " " + currentAction);
     }
 
     

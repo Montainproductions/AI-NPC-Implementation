@@ -38,7 +38,7 @@ public class Sc_PatrolState : Sc_AIBaseState
     }
 
 
-    public void PatrolStartStateInfo(Sc_CommonMethods aiCommonMethods, Sc_AIStateManager stateManager, Sc_Player_Movement playerMovementScript, GameObject[] allPatrolPoints, float distRange, float visionAngleRange)
+    public void PatrolStartStateInfo(Sc_AIStateManager stateManager, Sc_CommonMethods aiCommonMethods, Sc_Player_Movement playerMovementScript, GameObject[] allPatrolPoints, float distRange, float visionAngleRange, float audioDist)
     {
         this.aiCommonMethods = aiCommonMethods;
         this.stateManager = stateManager;

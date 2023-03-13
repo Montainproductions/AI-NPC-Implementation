@@ -1,11 +1,14 @@
 using System.Collections;
 using System.Collections.Generic;
+using Unity.IO.LowLevel.Unsafe;
 using UnityEngine;
 
 /* The Sc_AIDirector is the main script that grabs all of the current NPCs in the map and will decide how many AI NPCS can do certain tasks. This helps control the NPCs so that there arent to many enemies attack the player at the same time 
  */
 public class Sc_AIDirector : MonoBehaviour
 {
+    public Sc_AIDirector Instance { get; set; }
+
     //Grabs the quick sort algorithem script
     [SerializeField]
     private Sc_QuickSort quickSort;
@@ -13,6 +16,7 @@ public class Sc_AIDirector : MonoBehaviour
     //All current enemis in the map
     [SerializeField]
     private GameObject[] allCurrentEnemy, spawnLocations;
+    private Sc_AIStateManager[] allAIManagerScript;
     //List of current enemy Decision values.
     //It is a list instead of an array since not all enemies will have to decide what to do when it sees the player at the same time.
     public static List<GameObject> enemyAIDesicionValue = new List<GameObject>();
@@ -32,6 +36,9 @@ public class Sc_AIDirector : MonoBehaviour
 
     private bool playerSeen;
 
+    [SerializeField]
+    private float audioRange;
+
     // Start is called before the first frame update
     void Start()
     {
@@ -40,6 +47,7 @@ public class Sc_AIDirector : MonoBehaviour
         playerSeen = false;
         //Starts the timer coroutine so that each time it will grab the current set of AIs that have seen the Player and chosses which state they go to.
         StartCoroutine(WhatToDoTimer());
+        StartCoroutine(AIManagerScripts());
     }
 
     // Update is called once per frame
@@ -56,8 +64,9 @@ public class Sc_AIDirector : MonoBehaviour
         //Debug.Log("Activating Enemy");
 
         for (int i = 0; i < allCurrentEnemy.Length; i++) {
-            if (allCurrentEnemy[i] != enemyObject)
+            if (allCurrentEnemy[i] != enemyObject && (Vector3.Distance(allCurrentEnemy[i].transform.position, enemyObject.transform.position)) < 60)
             {
+                yield return new WaitForSeconds(1.25f);
                 stateManager = allCurrentEnemy[i].GetComponent<Sc_AIStateManager>();
                 stateManager.SwitchState(stateManager.aggressionDesicionState);
                 //stateManager = null;
@@ -180,6 +189,29 @@ public class Sc_AIDirector : MonoBehaviour
         yield return new WaitForSeconds(2);
         StartCoroutine(WhatToDo(average));
         StartCoroutine(WhatToDoTimer());
+        yield return null;
+    }
+
+    public IEnumerator ShotFired(Vector3 positionOfShot)
+    {
+        for(int i = 0; i < allCurrentEnemy.Length; i++)
+        {
+            if (Vector3.Distance(allCurrentEnemy[i].transform.position, positionOfShot) < audioRange && (allAIManagerScript[i].currentState == allAIManagerScript[i].idleState || allAIManagerScript[i].currentState == allAIManagerScript[i].idleState))
+            {
+                Debug.Log("Player Heard");
+                allAIManagerScript[i].playerNoticed = true;
+                allAIManagerScript[i].SwitchState(stateManager.aggressionDesicionState);
+            }
+        }
+        yield return null;
+    }
+
+    IEnumerator AIManagerScripts()
+    {
+        for (int i = 0; i < allCurrentEnemy.Length; i++)
+        {
+            allAIManagerScript[i] = allCurrentEnemy[i].GetComponent<Sc_AIStateManager>();
+        }
         yield return null;
     }
 }
