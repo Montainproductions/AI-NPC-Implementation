@@ -39,16 +39,15 @@ public class Sc_BaseGun : MonoBehaviour {
         currentMaxAmmo -= maxClipAmmo;
         currentAmmoAmount = maxClipAmmo;
         shotRecently = false;
-
-        if (isPlayerGun)
-        {
-            Sc_Basic_UI.Instance.SetCurrentAmmo(currentAmmoAmount, currentMaxAmmo);
-        }
     }
 
     // Update is called once per frame
     void Update()
     {
+        if (isPlayerGun)
+        {
+            Sc_Basic_UI.Instance.SetCurrentAmmo(currentAmmoAmount, currentMaxAmmo);
+        }
     }
 
     //A Coroutine that runs whenever the player or the AI trys shoots the current gun.
