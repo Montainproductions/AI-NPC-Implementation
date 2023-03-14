@@ -2,6 +2,7 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.AI;
+using UnityEngine.InputSystem.HID;
 
 public class Sc_PatrolState : Sc_AIBaseState
 {
@@ -15,6 +16,11 @@ public class Sc_PatrolState : Sc_AIBaseState
     private Vector3 movePositionTransfrom;
 
     private float visionRange, visionConeAngle;
+
+    // Bit shift the index of the layer (7) to get a bit mask
+    private int layerMask = 1 << 6;
+
+    private RaycastHit hit;
 
     public override void EnterState(float speed, bool playerNoticed) {
         //Debug.Log("Patroling");
@@ -78,8 +84,13 @@ public class Sc_PatrolState : Sc_AIBaseState
 
     public void CanSeePlayer(float distPlayer, float angleToPlayer)
     {
+        Vector3 direction = playerMovementScript.transform.position - stateManager.transform.position;
+        bool seePlayer = Physics.Raycast(stateManager.transform.position, direction, out hit, visionRange - 5, layerMask);
+
         bool playerHidden = playerMovementScript.ReturnIsHidden();
-        if ((distPlayer <= visionRange - 5 && angleToPlayer <= visionConeAngle - 5) && !playerHidden)
+
+        Debug.Log(seePlayer);
+        if ((distPlayer <= visionRange - 5 && angleToPlayer <= visionConeAngle - 5) && !playerHidden && seePlayer)
         {
             //directorAI.PlayerFound(state.gameObject);
             stateManager.playerNoticed = true;

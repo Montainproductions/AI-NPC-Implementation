@@ -55,6 +55,8 @@ public class Sc_Player_Movement : MonoBehaviour{
 
         playerInputActions = new PlayerInputActions();
         playerInputActions.Player.Enable();
+        playerInputActions.Player.Sprint.performed += Sprint_performed;
+        playerInputActions.Player.Sprint.canceled += Sprint_performed;
         playerInputActions.Player.Jump.performed += Jump_Performed;
         playerInputActions.Player.Crouch.performed += Crouch_performed;
         playerInputActions.Player.Crouch.canceled += Crouch_performed;
@@ -150,6 +152,24 @@ public class Sc_Player_Movement : MonoBehaviour{
     public bool ReturnIsCrouching()
     {
         return isCrouching;
+    }
+
+    private void Sprint_performed(InputAction.CallbackContext context)
+    {
+        if (context.performed)
+        {
+            maxSpeed = maxSpeed * 1.3f;
+            acceleration = acceleration * 1.2f;
+            Sc_HeadBobbing.Instance.SetBobbingAmount(0.13f);
+            Sc_HeadBobbing.Instance.SetBobbingSpeed(13);
+        }
+        else if (context.canceled)
+        {
+            maxSpeed = maxSpeed / 1.3f;
+            acceleration = acceleration / 1.2f;
+            Sc_HeadBobbing.Instance.SetBobbingAmount(0.08f);
+            Sc_HeadBobbing.Instance.SetBobbingSpeed(11);
+        }
     }
 
     //Input action for pressing space

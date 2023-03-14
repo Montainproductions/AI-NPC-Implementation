@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using TMPro;
 using UnityEngine;
 using UnityEngine.AI;
+using UnityEngine.InputSystem.HID;
 
 public class Sc_AIStateManager : MonoBehaviour
 {
@@ -130,7 +131,6 @@ public class Sc_AIStateManager : MonoBehaviour
         angleToPlayer = Vector3.Angle(transform.forward, player.transform.position - transform.position);
         //Debug.Log(currentState);
         currentState.UpdateState(distPlayer, angleToPlayer);
-
 
         //Sets the text on top of the AI to show the current state and action that the AI is doing. Helps to show what they are "Thinking"
         //stateTextObj.transform.position = Camera.main.WorldToScreenPoint(transform.position + Vector3.up * 3);

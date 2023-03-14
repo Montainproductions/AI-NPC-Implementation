@@ -357,9 +357,9 @@ MonoBehaviour:
   currentHealth: 0
   maxHealth: 100
   healingOverTimeAllowed: 0
-  healingRate: 1
+  healingRate: 2
   printingValues: 0
-  updateHealthUI: 0
+  updateHealthUI: 1
 --- !u!114 &1793502380870240587
 MonoBehaviour:
   m_ObjectHideFlags: 0
