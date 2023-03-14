@@ -7,7 +7,7 @@ using UnityEngine.InputSystem;
 public class Sc_PressingF : MonoBehaviour
 {
     private PlayerInputActions playerInputActions;
-    private bool inArea;
+    private bool inArea, taskDone;
 
     public void Awake()
     {
@@ -20,12 +20,12 @@ public class Sc_PressingF : MonoBehaviour
     void Start()
     {
         inArea = false;
+        taskDone = false;
     }
 
-    // Update is called once per frame
-    void Update()
+    public bool ReturnTaskDone()
     {
-        
+        return taskDone;
     }
 
     public void OnTriggerEnter(Collider other)
@@ -42,7 +42,7 @@ public class Sc_PressingF : MonoBehaviour
     {
         if(inArea && context.performed)
         {
-
+            taskDone = true;
         }
     }
 }
