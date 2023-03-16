@@ -44,10 +44,12 @@ public class Sc_AIDirector : MonoBehaviour
     {
         //enemyAIDesicionValue = new GameObject[allCurrentEnemy.Length];
 
+        allAIManagerScript = new Sc_AIStateManager[allCurrentEnemy.Length];
+
         playerSeen = false;
         //Starts the timer coroutine so that each time it will grab the current set of AIs that have seen the Player and chosses which state they go to.
         StartCoroutine(WhatToDoTimer());
-        Debug.Log("Active? " + gameObject.activeInHierarchy);
+        //Debug.Log("Active? " + gameObject.activeInHierarchy);
         StartCoroutine(AIManagerScripts());
     }
 
@@ -55,25 +57,6 @@ public class Sc_AIDirector : MonoBehaviour
     void Update()
     {
 
-    }
-
-    //If the player was found by an enemy it will aleart all other enemies in the map. I might slightly change this in the future so that its in a radius of the enemy so that it dosent feel over welming that all enemies seem to instantly know where the player is after being spotted.
-    public IEnumerator PlayerFound(GameObject enemyObject)
-    {
-        playerSeen = true;
-
-        for (int i = 0; i < allCurrentEnemy.Length; i++) {
-            Debug.Log(allCurrentEnemy[i]);
-            Debug.Log(enemyObject);
-            if (allCurrentEnemy[i] != enemyObject && (Vector3.Distance(allCurrentEnemy[i].transform.position, enemyObject.transform.position)) < audioRange)
-            {
-                yield return new WaitForSeconds(1.25f);
-                stateManager = allCurrentEnemy[i].GetComponent<Sc_AIStateManager>();
-                stateManager.SwitchState(stateManager.aggressionDesicionState);
-                //stateManager = null;
-            }
-        }
-        yield return null;
     }
 
     //This will decide how many more enemies to spawn if there is less enemies then the limit
@@ -87,6 +70,48 @@ public class Sc_AIDirector : MonoBehaviour
         {
             SpawnEnemy(amountToSpawn, spawnLocation);
         }
+    }
+
+    //If the player was found by an enemy it will aleart all other enemies in the map. I might slightly change this in the future so that its in a radius of the enemy so that it dosent feel over welming that all enemies seem to instantly know where the player is after being spotted.
+    public IEnumerator PlayerFound(GameObject enemyObject)
+    {
+        playerSeen = true;
+
+        for (int i = 0; i < allCurrentEnemy.Length; i++) {
+            //Debug.Log(allCurrentEnemy[i]);
+            //Debug.Log(enemyObject);
+            if (allCurrentEnemy[i] != enemyObject && (Vector3.Distance(allCurrentEnemy[i].transform.position, enemyObject.transform.position)) < audioRange)
+            {
+                yield return new WaitForSeconds(1.25f);
+                stateManager = allCurrentEnemy[i].GetComponent<Sc_AIStateManager>();
+                stateManager.SwitchState(stateManager.aggressionDesicionState);
+                //stateManager = null;
+            }
+        }
+        yield return null;
+    }
+
+    //Adds the AI Enemy to the list and recalculates the average decision value of all AI in list
+    public void AIAttackAddList(GameObject enemyObj)
+    {
+        enemyAIDesicionValue.Add(enemyObj);
+        StartCoroutine(AverageDecisionValue());
+    }
+
+    //Remove the enemy from the list of enemis that need to decide what to do
+    public void AIAttackRemoveList(GameObject enemyObj)
+    {
+        enemyAIDesicionValue.Remove(enemyObj);
+        StartCoroutine(AverageDecisionValue());
+    }
+
+    IEnumerator AIManagerScripts()
+    {
+        for (int i = 0; i < allCurrentEnemy.Length; i++)
+        {
+            allAIManagerScript[i] = allCurrentEnemy[i].GetComponent<Sc_AIStateManager>();
+        }
+        yield return null;
     }
 
     //Will instantiate the required amount of enemies.
@@ -158,20 +183,6 @@ public class Sc_AIDirector : MonoBehaviour
         yield return null;
     }
 
-    //Adds the AI Enemy to the list and recalculates the average decision value of all AI in list
-    public void AIAttackAddList(GameObject enemyObj)
-    {
-        enemyAIDesicionValue.Add(enemyObj);
-        StartCoroutine(AverageDecisionValue());
-    }
-
-    //Remove the enemy from the list of enemis that need to decide what to do
-    public void AIAttackRemoveList(GameObject enemyObj)
-    {
-        enemyAIDesicionValue.Remove(enemyObj);
-        StartCoroutine(AverageDecisionValue());
-    }
-
     //Calculates the average of all the decions values for each of the enemies in the enemenyAIDesicionValue list
     IEnumerator AverageDecisionValue()
     {
@@ -197,23 +208,13 @@ public class Sc_AIDirector : MonoBehaviour
     {
         for(int i = 0; i < allCurrentEnemy.Length; i++)
         {
-            if (Vector3.Distance(allCurrentEnemy[i].transform.position, positionOfShot) < audioRange && (allAIManagerScript[i].currentState == allAIManagerScript[i].idleState || allAIManagerScript[i].currentState == allAIManagerScript[i].idleState))
+            //Debug.Log(allCurrentEnemy[i]);
+            if (Vector3.Distance(allCurrentEnemy[i].transform.position, positionOfShot) < audioRange && (allAIManagerScript[i].currentState == allAIManagerScript[i].idleState || allAIManagerScript[i].currentState == allAIManagerScript[i].patrolState))
             {
                 Debug.Log("Player Heard");
                 allAIManagerScript[i].playerNoticed = true;
-                allAIManagerScript[i].SwitchState(stateManager.aggressionDesicionState);
+                allAIManagerScript[i].SwitchState(stateManager.searchState);
             }
-        }
-        yield return null;
-    }
-
-    IEnumerator AIManagerScripts()
-    {
-        for (int i = 0; i < allCurrentEnemy.Length; i++)
-        {
-            Debug.Log(allCurrentEnemy[i]);
-            Debug.Log("Active? " + gameObject.activeInHierarchy);
-            allAIManagerScript[i] = allCurrentEnemy[i].GetComponent<Sc_AIStateManager>();
         }
         yield return null;
     }

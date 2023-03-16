@@ -50,8 +50,10 @@ public class Sc_AIStateManager : MonoBehaviour
 
     [Header("UI State Text")]
     [SerializeField]
-    private GameObject stateTxtPrefab;
-    private GameObject stateTextObj;
+    private bool showActions;
+    [SerializeField]
+    private GameObject actionUIText;
+    [SerializeField]
     private TextMeshProUGUI stateText;
     public string currentAction;
 
@@ -81,6 +83,11 @@ public class Sc_AIStateManager : MonoBehaviour
     //Animation information
     private bool isAttacking, isIdling, isWalking;
 
+    // Bit shift the index of the layer (6) to get a bit mask
+    private int layerMask = 1 << 9;
+
+    private RaycastHit hit;
+
     // Start is called before the first frame update
     void Start()
     {
@@ -93,12 +100,14 @@ public class Sc_AIStateManager : MonoBehaviour
         idleState.IdleStartStateInfo(this, player.GetComponent<Sc_Player_Movement>(), idleTimer, visionRange, visionConeAngle, audioRange);
         currentState.EnterState(speed, playerNoticed);
 
-        //stateTextObj = Instantiate(stateTxtPrefab, Sc_Basic_UI.Instance.transform);
         //stateText = stateTextObj.GetComponent<TextMeshProUGUI>();
 
         SetIsIdling(false);
         SetIsAttacking(false);
         SetIsWalking(true);
+
+        actionUIText.SetActive(showActions);
+        
 
         //Setting up agression trait
         if (behaviour == "Agression")
@@ -130,18 +139,25 @@ public class Sc_AIStateManager : MonoBehaviour
         distPlayer = Vector3.Distance(transform.position, player.transform.position);
         angleToPlayer = Vector3.Angle(transform.forward, player.transform.position - transform.position);
         //Debug.Log(currentState);
-        currentState.UpdateState(distPlayer, angleToPlayer);
 
-        //Sets the text on top of the AI to show the current state and action that the AI is doing. Helps to show what they are "Thinking"
-        //stateTextObj.transform.position = Camera.main.WorldToScreenPoint(transform.position + Vector3.up * 3);
-        //stateText.SetText(currentState.ToString() + " " + currentAction);
-    }
+        Vector3 direction = player.transform.position - transform.position;
+        bool playerBehindWall = Physics.Raycast(transform.position, direction, out hit, visionRange - 5, layerMask);
+        if (playerBehindWall)
+        {
+            Debug.DrawRay(transform.position, direction, Color.red);
+        }
+        else
+        {
+            Debug.DrawRay(transform.position, direction, Color.green);
+        }
 
-    
+        currentState.UpdateState(distPlayer, angleToPlayer, playerBehindWall);
 
-    public void OnDestroy()
-    {
-        Destroy(stateTextObj);
+        if (showActions)
+        {
+            //Sets the text on top of the AI to show the current state and action that the AI is doing. Helps to show what they are "Thinking"
+            stateText.SetText(currentState.ToString() + " " + currentAction);
+        }
     }
 
     //Switches to the new state and starts the new enter state method for that new state

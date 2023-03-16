@@ -17,18 +17,15 @@ public class Sc_PatrolState : Sc_AIBaseState
 
     private float visionRange, visionConeAngle;
 
-    // Bit shift the index of the layer (7) to get a bit mask
-    private int layerMask = 1 << 6;
-
-    private RaycastHit hit;
+    private bool playerBhindObjects;
 
     public override void EnterState(float speed, bool playerNoticed) {
         //Debug.Log("Patroling");
         ChooseRandomPatrolPos();
     }
 
-    public override void UpdateState(float distPlayer, float angleToPlayer) {
-        CanSeePlayer(distPlayer, angleToPlayer);
+    public override void UpdateState(float distPlayer, float angleToPlayer, bool playerBehindWall) {
+        CanSeePlayer(distPlayer, angleToPlayer, playerBehindWall);
 
         //Debug.Log(self.name + " Desination: " + navMeshAgent.destination);
 
@@ -82,15 +79,13 @@ public class Sc_PatrolState : Sc_AIBaseState
         aiCommonMethods.StartMovement(movePositionTransfrom, "Patrolling", false);
     }
 
-    public void CanSeePlayer(float distPlayer, float angleToPlayer)
+    public void CanSeePlayer(float distPlayer, float angleToPlayer, bool playerBehindWall)
     {
-        Vector3 direction = playerMovementScript.transform.position - stateManager.transform.position;
-        bool seePlayer = Physics.Raycast(stateManager.transform.position, direction, out hit, visionRange - 5, layerMask);
 
         bool playerHidden = playerMovementScript.ReturnIsHidden();
 
-        Debug.Log(seePlayer);
-        if ((distPlayer <= visionRange - 5 && angleToPlayer <= visionConeAngle - 5) && !playerHidden && seePlayer)
+
+        if ((distPlayer <= visionRange - 5 && angleToPlayer <= visionConeAngle - 5) && !playerHidden && !playerBehindWall)
         {
             //directorAI.PlayerFound(state.gameObject);
             stateManager.playerNoticed = true;

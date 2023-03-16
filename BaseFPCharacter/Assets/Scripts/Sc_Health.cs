@@ -69,6 +69,19 @@ public class Sc_Health : MonoBehaviour{
         }
     }
 
+    //Take damage will reduce the amount of health the player currently has
+    public void TakeDamage(float damage){
+        currentHealth -= damage;
+        recentlyHit = true;
+        
+        if (updateHealthUI)
+        {
+            Sc_Basic_UI.Instance.NewHealth(currentHealth);
+        }
+
+        if (currentHealth <= 0) { Destroy(gameObject); } //If no more Health then tell the game manager to go to end game
+    }
+
     IEnumerator HealingOverTime()
     {
         if (currentHealth >= maxHealth)
@@ -86,20 +99,15 @@ public class Sc_Health : MonoBehaviour{
             //Debug.Log("Healing");
             currentHealth += healingRate;
         }
-        StartCoroutine(HealingOverTime());
         yield return null;
     }
 
-    //Take damage will reduce the amount of health the player currently has
-    public void TakeDamage(float damage){
-        currentHealth -= damage;
-        recentlyHit = true;
-        
-        if (updateHealthUI)
-        {
-            Sc_Basic_UI.Instance.NewHealth(currentHealth);
-        }
-
-        if (currentHealth <= 0) { Destroy(gameObject); } //If no more Health then tell the game manager to go to end game
+    public float CurrentHealthValue()
+    {
+        return currentHealth;
+    }
+    public float MaxHealthValue()
+    {
+        return maxHealth;
     }
 }

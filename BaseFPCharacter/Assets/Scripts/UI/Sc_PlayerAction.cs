@@ -9,6 +9,9 @@ public class Sc_PlayerAction : MonoBehaviour
 {
     private PlayerInputActions playerInputActions;
 
+    [SerializeField]
+    private GameObject pressFText;
+
     private bool canActivate, actionButtonPressed;
 
     private float turnOnTimer;
@@ -17,12 +20,11 @@ public class Sc_PlayerAction : MonoBehaviour
     private float maxTimer;
 
     [SerializeField]
-    private GameObject  circleProgress;
+    private GameObject circleProgress;
     //[SerializeField]
     //private TextMeshProUGUI ProgressIndicator;
     [SerializeField]
     private Image LoadingBar;
-    private float percentDone;
 
     public void Awake()
     {
@@ -35,8 +37,9 @@ public class Sc_PlayerAction : MonoBehaviour
     // Start is called before the first frame update
     void Start()
     {
-        //circleProgress.SetActive(false);
         canActivate = false;
+        circleProgress.SetActive(canActivate);
+        pressFText.SetActive(canActivate);
     }
 
     // Update is called once per frame
@@ -54,7 +57,14 @@ public class Sc_PlayerAction : MonoBehaviour
             {
                 circleProgress.SetActive(false);
                 turnOnTimer = 0;
-                Destroy(gameObject);
+                if (gameObject.tag == "LevelChange")
+                {
+                    Sc_GameManager.Instance.ChangeLevel(2);
+                }
+                else
+                {
+                    Destroy(gameObject);
+                }
             }
         }
     }
@@ -64,7 +74,6 @@ public class Sc_PlayerAction : MonoBehaviour
         if (turnOnTimer < maxTimer)
         {
             turnOnTimer += Time.deltaTime;
-            percentDone = turnOnTimer / maxTimer;
         }
 
         LoadingBar.fillAmount = turnOnTimer / maxTimer;
@@ -75,6 +84,7 @@ public class Sc_PlayerAction : MonoBehaviour
         if (other.gameObject.tag == "Player")
         {
             canActivate = true;
+            pressFText.SetActive(canActivate);
         }
     }
 
@@ -83,6 +93,7 @@ public class Sc_PlayerAction : MonoBehaviour
         if (other.gameObject.tag == "Player")
         {
             canActivate = false;
+            pressFText.SetActive(canActivate);
         }
     }
 

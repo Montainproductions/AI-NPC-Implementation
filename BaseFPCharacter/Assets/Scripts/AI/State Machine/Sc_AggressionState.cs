@@ -56,7 +56,7 @@ public class Sc_AggressionState : Sc_AIBaseState
     }
 
     //Continuasly updates the players current position and to have the enemy look at the player position
-    public override void UpdateState(float distPlayer, float angleToPlayer)
+    public override void UpdateState(float distPlayer, float angleToPlayer, bool playerBehindWall)
     {
         playerPos = player.transform.position;
         stateManager.transform.LookAt(playerPos);

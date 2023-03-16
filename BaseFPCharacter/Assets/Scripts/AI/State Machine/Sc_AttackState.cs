@@ -36,12 +36,12 @@ public class Sc_AttackState : Sc_AIBaseState
         stateManager.StartCoroutine(commonMethodsScript.ReDecide());
     }
 
-    public override void UpdateState(float distPlayer, float angleToPlayer) {
+    public override void UpdateState(float distPlayer, float angleToPlayer, bool playerBehindWall) {
         playerPos = player.transform.position;
         stateManager.transform.LookAt(playerPos);
         if (currentWeapon != null)
         {
-            CantSeePlayer(distPlayer, angleToPlayer);
+            CantSeePlayer(distPlayer, angleToPlayer, playerBehindWall);
             //state.transform.LookAt(playerPos);
 
             stateManager.StartCoroutine(PlayerDistance());
@@ -95,10 +95,10 @@ public class Sc_AttackState : Sc_AIBaseState
         this.visionConeAngle = visionConeAngle;
     }
 
-    public void CantSeePlayer(float distPlayer, float angleToPlayer)
+    public void CantSeePlayer(float distPlayer, float angleToPlayer, bool playerBehindWall)
     {
         bool playerHidden = playerMovementScript.ReturnIsHidden();
-        if (distPlayer > visionRange || angleToPlayer > visionConeAngle || playerHidden)
+        if (distPlayer > visionRange || angleToPlayer > visionConeAngle || playerHidden || playerBehindWall)
         {
             stateManager.SwitchState(stateManager.searchState);
         }
@@ -111,11 +111,11 @@ public class Sc_AttackState : Sc_AIBaseState
         stateManager.SetIsAttacking(true);
         stateManager.SetIsWalking(false);
         //Debug.Log("Shooting");
-        timeDelay = Random.Range(2, 3.25f);
+        timeDelay = Random.Range(5, 8.25f);
         yield return new WaitForSeconds(timeDelay);
         stateManager.StartCoroutine(gunScript.ShotFired());
         //Debug.Log("Enemy ammo count: " + gunScript.currentAmmoAmount);
-        timeDelay = Random.Range(1.5f, 2.75f);
+        timeDelay = Random.Range(3.5f, 5.75f);
         yield return new WaitForSeconds(timeDelay);
         stateManager.SetIsAttacking(false);
         yield return null;

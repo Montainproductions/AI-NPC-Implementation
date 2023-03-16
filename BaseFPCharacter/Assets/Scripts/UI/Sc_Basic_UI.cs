@@ -8,6 +8,11 @@ public class Sc_Basic_UI : MonoBehaviour{
     public static Sc_Basic_UI Instance { get; private set; }
 
     [SerializeField]
+    private bool inMenu;
+    [SerializeField]
+    private GameObject mainMenu, mainGame;
+
+    [SerializeField]
     [Tooltip("Wether the player can do a melee attack or not.")]
     private GameObject canAttack, cantAttack;
 
@@ -25,9 +30,19 @@ public class Sc_Basic_UI : MonoBehaviour{
 
     // Start is called before the first frame update
     void Start(){
-        CanAttackUI();
-        healthTextUI = healthInt.GetComponent<TextMeshProUGUI>();
-        ammoTextUI = currentAmmo.GetComponent<TextMeshProUGUI>();
+        if (!inMenu)
+        {
+            mainGame.SetActive(true);
+            mainMenu.SetActive(false);
+            CanAttackUI();
+            healthTextUI = healthInt.GetComponent<TextMeshProUGUI>();
+            ammoTextUI = currentAmmo.GetComponent<TextMeshProUGUI>();
+        }
+        else
+        {
+            mainGame.SetActive(false);
+            mainMenu.SetActive(true);
+        }
     }
 
     // Update is called once per frame

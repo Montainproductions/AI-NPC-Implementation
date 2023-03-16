@@ -9,6 +9,11 @@ public class Sc_Bullet : MonoBehaviour{
 
     private float dmgFromBullet;
 
+    public void Start()
+    {
+        StartCoroutine(BulletAlive());
+    }
+
     //Will set the damage of the bullet for when it impacts an object with health
     public void SetDamageAmount(bool playerGun, float damage){
         this.playerGun = playerGun;
@@ -19,9 +24,16 @@ public class Sc_Bullet : MonoBehaviour{
     public void SetDamageAmount(GameObject player, bool playerGun, float damage)
     {
         this.player = player;
-        Debug.Log(player);
+        //Debug.Log(player);
         this.playerGun = playerGun;
         dmgFromBullet = damage;
+    }
+
+    IEnumerator BulletAlive()
+    {
+        yield return new WaitForSeconds(0.7f);
+        Destroy(gameObject);
+        yield return null;
     }
 
     public void OnTriggerEnter(Collider other){

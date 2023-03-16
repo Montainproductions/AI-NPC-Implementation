@@ -16,8 +16,8 @@ public class Sc_IdleState : Sc_AIBaseState
         stateManager.StartCoroutine(IdleTimed());
     }
 
-    public override void UpdateState(float distPlayer, float angleToPlayer) {
-        CanSeePlayer(distPlayer, angleToPlayer);
+    public override void UpdateState(float distPlayer, float angleToPlayer, bool playerBehindWall) {
+        CanSeePlayer(distPlayer, angleToPlayer, playerBehindWall);
     }
 
     public void IdleStartStateInfo(Sc_AIStateManager stateManager, Sc_Player_Movement playerMovementScript, float idleTime, float distRange, float visionAngleRange, float audioDist)
@@ -30,10 +30,10 @@ public class Sc_IdleState : Sc_AIBaseState
         audioRange = audioDist;
     }
 
-    public void CanSeePlayer(float distPlayer, float angleToPlayer)
+    public void CanSeePlayer(float distPlayer, float angleToPlayer, bool playerBehindWall)
     {
         bool playerHidden = playerMovementScript.ReturnIsHidden();
-        if ((distPlayer <= visionRange - 5 && angleToPlayer <= visionConeAngle - 5) && !playerHidden)
+        if ((distPlayer <= visionRange - 5 && angleToPlayer <= visionConeAngle - 5) && !playerHidden && !playerBehindWall)
         {
             stateManager.playerNoticed = true;
             stateManager.SwitchState(stateManager.aggressionDesicionState);

@@ -34,11 +34,11 @@ public class Sc_CoverState : Sc_AIBaseState
     }
 
     //Will check if the AI is near by the cover point. If its not close then contine having the AI go to the cover point, else it will stop the AI and start the atcover Corutine. 
-    public override void UpdateState(float distPlayer, float angleToPlayer)
+    public override void UpdateState(float distPlayer, float angleToPlayer, bool playerBehindWall)
     {
         playerPos = player.transform.position;
         stateManager.transform.LookAt(playerPos);
-
+        CantSeePlayer(distPlayer, angleToPlayer, playerBehindWall);
     }
 
     //Recives important variables that are needed for the entire state to work properly.
@@ -53,6 +53,16 @@ public class Sc_CoverState : Sc_AIBaseState
         this.allCover = allCover;
         this.visionRange = visionRange;
         this.visionConeAngle = visionConeAngle;
+    }
+
+    //If the player leaves the AIs line of site then it will stop trying to go to cover and start to search for the player.
+    public void CantSeePlayer(float distPlayer, float angleToPlayer, bool playerBehindWall)
+    {
+        bool playerHidden = playerMovementScript.ReturnIsHidden();
+        if (distPlayer > visionRange || angleToPlayer > visionConeAngle || playerHidden || playerBehindWall)
+        {
+            stateManager.SwitchState(stateManager.searchState);
+        }
     }
 
     //Find the closest cover object and then determines which of the cover points children is behind the cover.
@@ -73,7 +83,7 @@ public class Sc_CoverState : Sc_AIBaseState
         //int allCoverPos = closestCover.transform.childCount;
 
         //Choosing a cover point that is behind the cover when comparing to the player
-        for (int i = 1; i <= 4; i++)
+        for (int i = 0; i < 4; i++)
         {
             Sc_CoverPoints coverScript = closestCover.transform.GetChild(i).GetComponent<Sc_CoverPoints>();
             bool behindCover = coverScript.IsBehindCover();
@@ -127,15 +137,5 @@ public class Sc_CoverState : Sc_AIBaseState
         yield return new WaitForSeconds(1.25f);
         stateManager.SetIsAttacking(false);
         yield return null;
-    }
-
-    //If the player leaves the AIs line of site then it will stop trying to go to cover and start to search for the player.
-    public void CantSeePlayer(float distPlayer, float angleToPlayer)
-    {
-        bool playerHidden = playerMovementScript.ReturnIsHidden();
-        if (distPlayer > visionRange || angleToPlayer > visionConeAngle || playerHidden)
-        {
-            stateManager.SwitchState(stateManager.searchState);
-        }
     }
 }

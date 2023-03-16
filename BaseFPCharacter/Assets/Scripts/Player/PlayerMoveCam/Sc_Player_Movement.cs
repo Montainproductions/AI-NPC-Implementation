@@ -2,7 +2,6 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.InputSystem;
-using UnityEngine.SceneManagement;
 
 public class Sc_Player_Movement : MonoBehaviour{
     //The player input system
@@ -60,7 +59,6 @@ public class Sc_Player_Movement : MonoBehaviour{
         playerInputActions.Player.Jump.performed += Jump_Performed;
         playerInputActions.Player.Crouch.performed += Crouch_performed;
         playerInputActions.Player.Crouch.canceled += Crouch_performed;
-        playerInputActions.Player.Restart.performed += gameRestarted_performed;
 
         rb = GetComponent<Rigidbody>();
     }
@@ -187,14 +185,6 @@ public class Sc_Player_Movement : MonoBehaviour{
         }else if(context.canceled){ //Stop crouching
             //Debug.Log("Standing up");
             isCrouching = false;
-        }
-    }
-
-    private void gameRestarted_performed(InputAction.CallbackContext context)
-    {
-        if (context.performed)
-        {
-            SceneManager.LoadScene(0);
         }
     }
 }

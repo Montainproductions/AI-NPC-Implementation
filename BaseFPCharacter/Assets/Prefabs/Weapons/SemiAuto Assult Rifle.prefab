@@ -299,11 +299,10 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: e1b96a4f11a998846b500c24d2410eac, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  playerGun: 0
+  isPlayerGun: 0
   player: {fileID: 0}
-  playerBox: {fileID: 0}
   dmgPerBullet: 20
-  bulletSpeed: 75
+  bulletSpeed: 95
   fireRate: 6
   effectiveRange: 50
   timeBetweenShots: 0.25
@@ -318,6 +317,7 @@ MonoBehaviour:
   shotRecently: 0
   reloaded: 0
   reloadTimer: 4
+  aiDirector: {fileID: 0}
 --- !u!1 &7687749147882011698
 GameObject:
   m_ObjectHideFlags: 0

@@ -23,7 +23,7 @@ public class Sc_SearchState : Sc_AIBaseState
         stateManager.StartCoroutine(ChooseSearchPath());
     }
 
-    public override void UpdateState(float distPlayer, float angleToPlayer)
+    public override void UpdateState(float distPlayer, float angleToPlayer, bool playerBehindWall)
     {
 
     }
@@ -40,19 +40,19 @@ public class Sc_SearchState : Sc_AIBaseState
         this.visionConeAngle = visionConeAngle;
     }
 
-    IEnumerator ChooseSearchPath()
-    {
-        yield return null;
-    }
-
-    public void CanSeePlayer(float distPlayer, float angleToPlayer)
+    public void CanSeePlayer(float distPlayer, float angleToPlayer, bool playerBehindWall)
     {
         bool playerHidden = playerMovementScript.ReturnIsHidden();
-        if ((distPlayer <= visionRange - 5 && angleToPlayer <= visionConeAngle - 5) && !playerHidden)
+        if ((distPlayer <= visionRange - 5 && angleToPlayer <= visionConeAngle - 5) && !playerHidden && !playerBehindWall)
         {
             //directorAI.PlayerFound(state.gameObject);
             stateManager.playerNoticed = true;
             stateManager.SwitchState(stateManager.aggressionDesicionState);
         }
+    }
+
+    IEnumerator ChooseSearchPath()
+    {
+        yield return null;
     }
 }

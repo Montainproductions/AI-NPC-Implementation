@@ -18,14 +18,10 @@ public class Sc_Tutorial : MonoBehaviour
     private GameObject[] boxShot;
     private int boxesShotCount;
 
-    [SerializeField]
-    private GameObject humveeCar;
-    private Sc_PressingF carActivation;
 
     public void Awake()
     {
         Instance = this;
-        carActivation = humveeCar.GetComponent<Sc_PressingF>();
     }
 
     // Start is called before the first frame update
@@ -41,10 +37,6 @@ public class Sc_Tutorial : MonoBehaviour
         if (boxTrigger.ReturnPlayerActivation())
         {
             ShootingRangeStart();
-        }
-        if (carActivation.ReturnTaskDone())
-        {
-            SceneManager.LoadScene(2);
         }
     }
 
