@@ -4,10 +4,11 @@ using UnityEngine;
 using UnityEngine.InputSystem;
 
 public class Sc_Player_Movement : MonoBehaviour{
-    //The player input system
-    private PlayerInputActions playerInputActions;
     //Sets up the singleton so that the player can be called by some other scripts without needing to create a new variable for it.
     public static Sc_Player_Movement Instance { get; private set; }
+
+    //The player input system
+    private PlayerInputActions playerInputActions;
 
     //Main movement variables
     [SerializeField]

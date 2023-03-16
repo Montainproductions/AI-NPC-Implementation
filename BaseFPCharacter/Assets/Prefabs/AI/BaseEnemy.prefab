@@ -257,6 +257,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   isPlayerGun: 0
+  inTutorialArea: 0
   player: {fileID: 0}
   dmgPerBullet: 20
   bulletSpeed: 75
@@ -667,7 +668,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   currentHealth: 0
-  maxHealth: 65
+  maxHealth: 55
   healingOverTimeAllowed: 0
   healingRate: 0
   printingValues: 0

@@ -28,19 +28,24 @@ public class Sc_Player_Camera : MonoBehaviour{
     }
 
     // Start is called before the first frame update
-    void Start(){inUI = false;}
+    void Start(){
+        inUI = false;
+        Cursor.lockState = CursorLockMode.Locked;
+    }
 
     // Update is called once per frame
     void Update(){
-        //Will lock or unlock the mouse if the player is in a pause menu or not
-        if(inUI){Cursor.lockState = CursorLockMode.None;}
-        else{Cursor.lockState = CursorLockMode.Locked;}
-
         //The camera so that the player can look around with the mouse
         Camera();
     }
 
-    public void UIMouse(){inUI = !inUI;}
+    public void UIMouse(){
+        inUI = !inUI;
+
+        //Will lock or unlock the mouse if the player is in a pause menu or not
+        if (inUI) { Cursor.lockState = CursorLockMode.None; }
+        else { Cursor.lockState = CursorLockMode.Locked; }
+    }
 
     //Method in charge of knowing how the mouse moves and also moves the camera respectivly
     public void Camera(){

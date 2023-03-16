@@ -41,7 +41,6 @@ public class Sc_Bullet : MonoBehaviour{
         //Damages an enemy if it has health
 
         if (other.gameObject.tag == "Enemy" && playerGun) {
-            Debug.Log("Enemy taking damage: " + other.gameObject);
             other.gameObject.GetComponent<Sc_Health>().TakeDamage(dmgFromBullet);
         }
         else if (other.gameObject.tag == "Player" && !playerGun)

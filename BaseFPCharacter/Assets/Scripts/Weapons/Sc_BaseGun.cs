@@ -4,7 +4,7 @@ using UnityEngine;
 
 public class Sc_BaseGun : MonoBehaviour {
     [SerializeField]
-    private bool isPlayerGun;
+    private bool isPlayerGun, inTutorialArea;
 
     [SerializeField]
     private GameObject player;
@@ -56,7 +56,7 @@ public class Sc_BaseGun : MonoBehaviour {
     //A Coroutine that runs whenever the player or the AI trys shoots the current gun.
     public IEnumerator ShotFired()
     {
-        if (currentAmmoAmount > 0 && !shotRecently && !reloaded)
+        if (currentAmmoAmount > 0 && !shotRecently && !reloaded && !inTutorialArea)
         {
             shotRecently = true;
             for (int i = 0; i < fireRate; i++)

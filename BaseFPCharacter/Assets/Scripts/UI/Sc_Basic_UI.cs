@@ -1,16 +1,21 @@
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.InputSystem;
 using TMPro;
 
 public class Sc_Basic_UI : MonoBehaviour{
     //Singleton
     public static Sc_Basic_UI Instance { get; private set; }
 
+    //The player input system
+    private PlayerInputActions playerInputActions;
+
     [SerializeField]
     private bool inMenu;
     [SerializeField]
-    private GameObject mainMenu, mainGame;
+    private GameObject mainMenu, mainGame, pausedMenu;
+    private bool pauseActive;
 
     [SerializeField]
     [Tooltip("Wether the player can do a melee attack or not.")]
@@ -26,22 +31,28 @@ public class Sc_Basic_UI : MonoBehaviour{
 
     public void Awake(){
         Instance = this;
+
+        playerInputActions = new PlayerInputActions();
+        playerInputActions.Player.Enable();
+        playerInputActions.Player.Escape.performed += Escape_performed;
     }
 
     // Start is called before the first frame update
     void Start(){
+        pauseActive = false;
+        pausedMenu.SetActive(pauseActive);
         if (!inMenu)
         {
-            mainGame.SetActive(true);
             mainMenu.SetActive(false);
+            mainGame.SetActive(true);
             CanAttackUI();
             healthTextUI = healthInt.GetComponent<TextMeshProUGUI>();
             ammoTextUI = currentAmmo.GetComponent<TextMeshProUGUI>();
         }
         else
         {
-            mainGame.SetActive(false);
             mainMenu.SetActive(true);
+            mainGame.SetActive(false);
         }
     }
 
@@ -72,5 +83,15 @@ public class Sc_Basic_UI : MonoBehaviour{
         //Debug.Log("Cant attack");
         canAttack.SetActive(false);
         cantAttack.SetActive(true);
+    }
+
+    private void Escape_performed(InputAction.CallbackContext context)
+    {
+        if (!inMenu && context.performed)
+        {
+            pauseActive = !pauseActive;
+            //Sc_Player_Camera.Instance.UIMouse();
+            pausedMenu.SetActive(pauseActive);
+        }
     }
 }

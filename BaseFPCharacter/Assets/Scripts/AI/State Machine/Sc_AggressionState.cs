@@ -92,7 +92,7 @@ public class Sc_AggressionState : Sc_AIBaseState
         }
         foreach(GameObject i in coverPositions)
         {
-            float distFromCover = Vector3.Distance(self.transform.position, i.transform.position);
+            float distFromCover = Vector3.Distance(stateManager.transform.position, i.transform.position);
             if(distFromCover < coverDistance)
             {
                 decisionVal--;
@@ -111,8 +111,9 @@ public class Sc_AggressionState : Sc_AIBaseState
         yield return new WaitForSeconds(0.45f);
         navMeshAgent.isStopped = true;
         navMeshAgent.ResetPath();
-        navMeshAgent.SetDestination(self.transform.position);
-        //Debug.Log(navMeshAgent.destination);
+        navMeshAgent.SetDestination(stateManager.transform.position);
+        Debug.Log(stateManager.name);
+        Debug.Log(navMeshAgent.destination);
         yield return null;
     }
 }

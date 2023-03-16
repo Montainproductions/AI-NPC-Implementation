@@ -153,7 +153,8 @@ public class Sc_AIDirector : MonoBehaviour
                 if(v >= 2.5f) //2.5f
                 {
                     //Debug.Log("Attacking");
-                    stateManager.SwitchState(stateManager.attackState);
+                    //stateManager.SwitchState(stateManager.attackState);
+                    stateManager.SwitchState(stateManager.coverState);
                     currentAttacking++;
                 }
                 else
@@ -167,7 +168,8 @@ public class Sc_AIDirector : MonoBehaviour
                 if (v >= 7.5f) //7.5f
                 {
                     //Debug.Log("Attacking part 2");
-                    stateManager.SwitchState(stateManager.attackState);
+                    //stateManager.SwitchState(stateManager.attackState);
+                    stateManager.SwitchState(stateManager.coverState);
                     currentAttacking++;
                 }
                 else
@@ -211,7 +213,7 @@ public class Sc_AIDirector : MonoBehaviour
             //Debug.Log(allCurrentEnemy[i]);
             if (Vector3.Distance(allCurrentEnemy[i].transform.position, positionOfShot) < audioRange && (allAIManagerScript[i].currentState == allAIManagerScript[i].idleState || allAIManagerScript[i].currentState == allAIManagerScript[i].patrolState))
             {
-                Debug.Log("Player Heard");
+                //Debug.Log("Player Heard");
                 allAIManagerScript[i].playerNoticed = true;
                 allAIManagerScript[i].SwitchState(stateManager.searchState);
             }

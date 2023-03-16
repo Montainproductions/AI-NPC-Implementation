@@ -3464,6 +3464,34 @@ PrefabInstance:
       propertyPath: inMenu
       value: 0
       objectReference: {fileID: 0}
+    - target: {fileID: 1663460903601836391, guid: 81ce49f96577d844ab806a3654e6ae19, type: 3}
+      propertyPath: pausedMenu
+      value: 
+      objectReference: {fileID: 709189102}
+    - target: {fileID: 2036479640880542293, guid: 81ce49f96577d844ab806a3654e6ae19, type: 3}
+      propertyPath: m_IsActive
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 2222497671967373605, guid: 81ce49f96577d844ab806a3654e6ae19, type: 3}
+      propertyPath: m_IsActive
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 5654605271917456908, guid: 81ce49f96577d844ab806a3654e6ae19, type: 3}
+      propertyPath: m_IsActive
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 6646797674622987713, guid: 81ce49f96577d844ab806a3654e6ae19, type: 3}
+      propertyPath: player
+      value: 
+      objectReference: {fileID: 1698406083}
+    - target: {fileID: 6646797674622987713, guid: 81ce49f96577d844ab806a3654e6ae19, type: 3}
+      propertyPath: isPlayerGun
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 6646797674622987713, guid: 81ce49f96577d844ab806a3654e6ae19, type: 3}
+      propertyPath: inTutorialArea
+      value: 1
+      objectReference: {fileID: 0}
     - target: {fileID: 6646797674794803048, guid: 81ce49f96577d844ab806a3654e6ae19, type: 3}
       propertyPath: m_RootOrder
       value: 4
@@ -3511,6 +3539,18 @@ PrefabInstance:
     - target: {fileID: 6646797674794803052, guid: 81ce49f96577d844ab806a3654e6ae19, type: 3}
       propertyPath: m_Name
       value: Player
+      objectReference: {fileID: 0}
+    - target: {fileID: 8726845973564220242, guid: 81ce49f96577d844ab806a3654e6ae19, type: 3}
+      propertyPath: m_IsActive
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 8726845974402694186, guid: 81ce49f96577d844ab806a3654e6ae19, type: 3}
+      propertyPath: m_OnClick.m_PersistentCalls.m_Calls.Array.data[0].m_Target
+      value: 
+      objectReference: {fileID: 851453005}
+    - target: {fileID: 8726845974402694186, guid: 81ce49f96577d844ab806a3654e6ae19, type: 3}
+      propertyPath: m_OnClick.m_PersistentCalls.m_Calls.Array.data[0].m_MethodName
+      value: SetActive
       objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: 81ce49f96577d844ab806a3654e6ae19, type: 3}
@@ -3980,6 +4020,11 @@ BoxCollider:
   serializedVersion: 2
   m_Size: {x: 19.5, y: 10, z: 0.7100005}
   m_Center: {x: 2, y: 0.46470475, z: -0.0000019073486}
+--- !u!1 &709189102 stripped
+GameObject:
+  m_CorrespondingSourceObject: {fileID: 1788139145430132581, guid: 81ce49f96577d844ab806a3654e6ae19, type: 3}
+  m_PrefabInstance: {fileID: 649598464}
+  m_PrefabAsset: {fileID: 0}
 --- !u!1001 &742998453
 PrefabInstance:
   m_ObjectHideFlags: 0
@@ -4385,6 +4430,11 @@ BoxCollider:
   serializedVersion: 2
   m_Size: {x: 0.99999994, y: 0.99999994, z: 0.99999994}
   m_Center: {x: -0.0000019073486, y: 0.5, z: 0.0000009536743}
+--- !u!1 &851453005 stripped
+GameObject:
+  m_CorrespondingSourceObject: {fileID: 3005007959699830932, guid: 81ce49f96577d844ab806a3654e6ae19, type: 3}
+  m_PrefabInstance: {fileID: 649598464}
+  m_PrefabAsset: {fileID: 0}
 --- !u!1001 &858855892
 PrefabInstance:
   m_ObjectHideFlags: 0
@@ -4576,8 +4626,11 @@ MonoBehaviour:
   - {fileID: 2101013011}
   - {fileID: 1174548015}
   boxTrigger: {fileID: 1833064738}
-  boxShot: []
-  humveeCar: {fileID: 657458029}
+  boxShot:
+  - {fileID: 1896330805}
+  - {fileID: 1379989821}
+  - {fileID: 822626665}
+  - {fileID: 1421655342}
 --- !u!4 &871569889
 Transform:
   m_ObjectHideFlags: 0
@@ -10077,6 +10130,11 @@ Transform:
   m_CorrespondingSourceObject: {fileID: -8679921383154817045, guid: 67cec0b0fdfbc604fbbc685ffec8231e, type: 3}
   m_PrefabInstance: {fileID: 1696574755}
   m_PrefabAsset: {fileID: 0}
+--- !u!1 &1698406083 stripped
+GameObject:
+  m_CorrespondingSourceObject: {fileID: 6646797674794803052, guid: 81ce49f96577d844ab806a3654e6ae19, type: 3}
+  m_PrefabInstance: {fileID: 649598464}
+  m_PrefabAsset: {fileID: 0}
 --- !u!1 &1706565058
 GameObject:
   m_ObjectHideFlags: 0
@@ -10650,7 +10708,7 @@ GameObject:
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
-  m_StaticEditorFlags: 0
+  m_StaticEditorFlags: 2147483647
   m_IsActive: 1
 --- !u!65 &1833064736
 BoxCollider:

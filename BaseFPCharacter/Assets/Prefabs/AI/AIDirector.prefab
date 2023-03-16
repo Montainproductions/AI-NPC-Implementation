@@ -54,6 +54,7 @@ MonoBehaviour:
   spawnLocations: []
   maxAttacking: 3
   currentAttacking: 0
+  audioRange: 60
 --- !u!114 &2460812123129524719
 MonoBehaviour:
   m_ObjectHideFlags: 0

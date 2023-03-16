@@ -88,7 +88,7 @@ public class Sc_Attacking : MonoBehaviour{
         }
         else if (canShootAttack && !baseGunScript.shotRecently)
         {
-            Debug.Log("Attacking");
+            //Debug.Log("Attacking");
             StartCoroutine(baseGunScript.ShotFired());
         }
         yield return null;

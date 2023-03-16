@@ -79,7 +79,7 @@ public class Sc_CoverState : Sc_AIBaseState
                 closestCover = allCover[i];
             }
         }
-        //Debug.Log(closestCover);
+        Debug.Log(closestCover.transform.position);
         //int allCoverPos = closestCover.transform.childCount;
 
         //Choosing a cover point that is behind the cover when comparing to the player
@@ -92,10 +92,10 @@ public class Sc_CoverState : Sc_AIBaseState
                 //Debug.Log(closestCover.transform.GetChild(i));
                 coverPosition = closestCover.transform.GetChild(i).transform.position;
                 coverScript.beingUsed = true;
-                commonMethodsScript.StartMovement(coverPosition, "Cover", false);
+                Debug.Log("Cover position: " + coverPosition);
             }
         }
-
+        commonMethodsScript.StartMovement(coverPosition, "Cover", true);
         //Debug.Log(closeCover.Length);
         yield return null;
     }
@@ -120,6 +120,7 @@ public class Sc_CoverState : Sc_AIBaseState
         else
         {
             ChoosingCover();
+            coverScript.beingUsed = false;
         }
 
         yield return new WaitForSeconds(2.5f);

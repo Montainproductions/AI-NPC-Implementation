@@ -85,6 +85,8 @@ public class Sc_CommonMethods : MonoBehaviour
     {
         walkingPosition = position;
         this.currentState = currentState;
+        Debug.Log("Current action state: " + currentState);
+        Debug.Log(this.currentState);
         lookingAtPlayer = lookAtPlayer;
     }
 
