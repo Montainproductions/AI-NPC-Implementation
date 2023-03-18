@@ -12,7 +12,7 @@ public class Sc_CoverPoints : MonoBehaviour
     private GameObject player;
 
     // Bit shift the index of the layer (7) to get a bit mask
-    private int layerMask = 1 << 7;
+    private int layerMask = 1 << 9;
 
     private RaycastHit hit;
 
@@ -35,7 +35,7 @@ public class Sc_CoverPoints : MonoBehaviour
             Vector3 direction = player.transform.position - gameObject.transform.position;
             if (Physics.Raycast(gameObject.transform.position, direction, out hit, 10, layerMask))
             {
-                //Debug.DrawRay(gameObject.transform.position, direction * hit.distance, Color.red);
+                Debug.DrawRay(gameObject.transform.position, direction * hit.distance, Color.red);
                 //Debug.Log("Object Hit, Can be used for cover");*/
 
                 behindCover = true;

@@ -654,6 +654,7 @@ MonoBehaviour:
   currentWeapon: {fileID: 4800562019042892381}
   cover: []
   coverDistance: 20
+  lastSeenTimer: 0
   searchFormats: []
 --- !u!114 &5627217062832147697
 MonoBehaviour:
@@ -928,7 +929,7 @@ RectTransform:
   m_AnchorMin: {x: 0, y: 0}
   m_AnchorMax: {x: 0, y: 0}
   m_AnchoredPosition: {x: 0, y: 0}
-  m_SizeDelta: {x: 100, y: 100}
+  m_SizeDelta: {x: 3, y: 3}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!223 &6351767948180764822
 Canvas:

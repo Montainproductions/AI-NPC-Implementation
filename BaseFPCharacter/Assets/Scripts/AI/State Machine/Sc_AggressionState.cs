@@ -40,13 +40,10 @@ public class Sc_AggressionState : Sc_AIBaseState
     {
         playerNoticed = playerSeen;
         stateManager.StartCoroutine(StoppingAI());
-        if (playerNoticed)
-        {
-            directorAI.PlayerFound(stateManager.gameObject);
-        }
-        else
+        if (!playerNoticed)
         {
             playerNoticed = true;
+            directorAI.PlayerFound(stateManager.gameObject);
         }
         //Debug.Log(self.name + " Player detected");
 

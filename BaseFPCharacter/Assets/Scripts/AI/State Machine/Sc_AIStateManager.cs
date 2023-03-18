@@ -78,12 +78,14 @@ public class Sc_AIStateManager : MonoBehaviour
 
     [Header("Searching")]
     [SerializeField]
+    private float lastSeenTimer;
+    [SerializeField]
     private GameObject[] searchFormats;
 
     //Animation information
     private bool isAttacking, isIdling, isWalking;
 
-    // Bit shift the index of the layer (6) to get a bit mask
+    // Bit shift the index of the layer (9) to get a bit mask
     private int layerMask = 1 << 9;
 
     private RaycastHit hit;

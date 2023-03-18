@@ -84,10 +84,14 @@ public class Sc_AIDirector : MonoBehaviour
             {
                 yield return new WaitForSeconds(1.25f);
                 stateManager = allCurrentEnemy[i].GetComponent<Sc_AIStateManager>();
-                stateManager.SwitchState(stateManager.aggressionDesicionState);
-                //stateManager = null;
+                if (!stateManager.playerNoticed)
+                {
+                    stateManager.playerNoticed = true;
+                    stateManager.SwitchState(stateManager.aggressionDesicionState);
+                }
+                    //stateManager = null;
+                }
             }
-        }
         yield return null;
     }
 

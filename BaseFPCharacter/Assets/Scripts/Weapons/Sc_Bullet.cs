@@ -42,14 +42,14 @@ public class Sc_Bullet : MonoBehaviour{
 
         if (other.gameObject.tag == "Enemy" && playerGun) {
             other.gameObject.GetComponent<Sc_Health>().TakeDamage(dmgFromBullet);
+            Destroy(gameObject);
         }
         else if (other.gameObject.tag == "Player" && !playerGun)
         {
             player.GetComponent<Sc_Health>().TakeDamage(dmgFromBullet);
-        }
-        if (other.tag == "Player" && !playerGun) //Will destroy the bullet when it hits something that isnt the gun itself
-        {
             Destroy(gameObject);
         }
+        Destroy(gameObject);
+        
     }
 }

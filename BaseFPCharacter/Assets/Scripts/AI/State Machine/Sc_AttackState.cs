@@ -41,7 +41,7 @@ public class Sc_AttackState : Sc_AIBaseState
         stateManager.transform.LookAt(playerPos);
         if (currentWeapon != null)
         {
-            CantSeePlayer(distPlayer, angleToPlayer, playerBehindWall);
+            CantSeePlayer(distPlayer, angleToPlayer);
             //state.transform.LookAt(playerPos);
 
             stateManager.StartCoroutine(PlayerDistance());
@@ -95,10 +95,10 @@ public class Sc_AttackState : Sc_AIBaseState
         this.visionConeAngle = visionConeAngle;
     }
 
-    public void CantSeePlayer(float distPlayer, float angleToPlayer, bool playerBehindWall)
+    public void CantSeePlayer(float distPlayer, float angleToPlayer)
     {
         bool playerHidden = playerMovementScript.ReturnIsHidden();
-        if (distPlayer > visionRange || angleToPlayer > visionConeAngle || playerHidden || playerBehindWall)
+        if (distPlayer > visionRange || angleToPlayer > visionConeAngle || playerHidden)
         {
             stateManager.SwitchState(stateManager.searchState);
         }

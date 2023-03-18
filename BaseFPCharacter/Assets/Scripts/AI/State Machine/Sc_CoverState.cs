@@ -38,7 +38,7 @@ public class Sc_CoverState : Sc_AIBaseState
     {
         playerPos = player.transform.position;
         stateManager.transform.LookAt(playerPos);
-        CantSeePlayer(distPlayer, angleToPlayer, playerBehindWall);
+        CantSeePlayer(distPlayer, angleToPlayer);
     }
 
     //Recives important variables that are needed for the entire state to work properly.
@@ -56,10 +56,10 @@ public class Sc_CoverState : Sc_AIBaseState
     }
 
     //If the player leaves the AIs line of site then it will stop trying to go to cover and start to search for the player.
-    public void CantSeePlayer(float distPlayer, float angleToPlayer, bool playerBehindWall)
+    public void CantSeePlayer(float distPlayer, float angleToPlayer)
     {
         bool playerHidden = playerMovementScript.ReturnIsHidden();
-        if (distPlayer > visionRange || angleToPlayer > visionConeAngle || playerHidden || playerBehindWall)
+        if (distPlayer > visionRange || angleToPlayer > visionConeAngle || playerHidden)
         {
             stateManager.SwitchState(stateManager.searchState);
         }
@@ -79,7 +79,7 @@ public class Sc_CoverState : Sc_AIBaseState
                 closestCover = allCover[i];
             }
         }
-        Debug.Log(closestCover.transform.position);
+        //Debug.Log(closestCover.transform.position);
         //int allCoverPos = closestCover.transform.childCount;
 
         //Choosing a cover point that is behind the cover when comparing to the player
@@ -92,10 +92,11 @@ public class Sc_CoverState : Sc_AIBaseState
                 //Debug.Log(closestCover.transform.GetChild(i));
                 coverPosition = closestCover.transform.GetChild(i).transform.position;
                 coverScript.beingUsed = true;
-                Debug.Log("Cover position: " + coverPosition);
+                //Debug.Log("Cover position: " + coverPosition);
+                commonMethodsScript.StartMovement(coverPosition, "Cover", true);
+                break;
             }
         }
-        commonMethodsScript.StartMovement(coverPosition, "Cover", true);
         //Debug.Log(closeCover.Length);
         yield return null;
     }
@@ -120,7 +121,7 @@ public class Sc_CoverState : Sc_AIBaseState
         else
         {
             ChoosingCover();
-            coverScript.beingUsed = false;
+            //coverScript.beingUsed = false;
         }
 
         yield return new WaitForSeconds(2.5f);
