@@ -7,14 +7,13 @@ using UnityEngine.InputSystem.HID;
 
 public class Sc_AIStateManager : MonoBehaviour
 {
+    //Setting up the traits of the AI.
     public string behaviour;
     public float agressionValueChange, approchPlayerChange;
     public float accuracy;
     public AudioClip[] audioclips = new AudioClip[33];
 
-    [SerializeField]
-    private Sc_CommonMethods commonMethods;
-
+    //All the current state the AI can be in
     [HideInInspector]
     public Sc_AIBaseState currentState;
     [HideInInspector]
@@ -30,24 +29,72 @@ public class Sc_AIStateManager : MonoBehaviour
     [HideInInspector]
     public Sc_SearchState searchState = new Sc_SearchState();
 
+    //A script that contains a set of common methods that multiple states can call on
     [SerializeField]
-    private float speed;
+    private Sc_CommonMethods commonMethods;
     
+    //The navigation agent of the AI
     [SerializeField]
     private NavMeshAgent navMeshAgent;
     
+    //Director AI that controls all of the AI
     [SerializeField]
     private Sc_AIDirector directorAI;
 
+    //The player game object and weather they have been spotted
     [SerializeField]
     private GameObject player;
     [HideInInspector]
     public bool playerNoticed;
 
+    //Set of timers and ranges that determine how the AI percives the player and for how long they will be searching.
     [SerializeField]
     private float visionRange, visionConeAngle, audioRange, alertedTimer, decisionTimer, idleTimer;
     private float distPlayer, angleToPlayer;
 
+    //The value that the AI determines if they should go and attack the player or go to cover
+    private int decisionValue = 0;
+
+    //Variables that are important for the patrol state
+    [Header("Patroling")]
+    //All the patrol points the AI can walk to and from
+    [SerializeField]
+    private GameObject[] patrolPoints;
+
+    //All variables related to the attack state the player
+    [Header("Attacking/Chasing")]
+    //Current weapon gameobject
+    [SerializeField]
+    private GameObject currentWeapon;
+
+    //Variables important to the cover state
+    [Header("Cover")]
+    //All cover positions that the player can use
+    [SerializeField]
+    private GameObject[] cover;
+    //How far the AI is willing to run to cover
+    [SerializeField]
+    private float coverDistance;
+
+    //All variables related to the AI searching for the player when they lose line of sight
+    [Header("Searching")]
+    //How long ago was the player seen
+    [SerializeField]
+    private float lastSeenTimer;
+    //Group of positions that the AI can take to search for the player.
+    [SerializeField]
+    private GameObject[] searchFormats;
+
+    //Animation information
+    private bool isAttacking, isIdling, isWalking;
+
+    //To check if the player is being blocked by some objects.
+    // Bit shift the index of the layer (9) to get a bit mask
+    private int layerMask = 1 << 9;
+
+    private RaycastHit hit;
+
+    //UI variables that appears on top of each AI that helps explain what their current actions are. Helps with debuging each individual AI better
     [Header("UI State Text")]
     [SerializeField]
     private bool showActions;
@@ -57,61 +104,33 @@ public class Sc_AIStateManager : MonoBehaviour
     private TextMeshProUGUI stateText;
     public string currentAction;
 
-    [Header("Patroling")]
-    [SerializeField]
-    private GameObject[] patrolPoints;
-
-    //[SerializeField]
-    private bool canSeeEnemy;
-
-    private int decisionValue = 0;
-
-    [Header("Attacking/Chasing")]
-    [SerializeField]
-    private GameObject currentWeapon;
-
-    [Header("Cover")]
-    [SerializeField]
-    private GameObject[] cover;
-    [SerializeField]
-    private float coverDistance;
-
-    [Header("Searching")]
-    [SerializeField]
-    private float lastSeenTimer;
-    [SerializeField]
-    private GameObject[] searchFormats;
-
-    //Animation information
-    private bool isAttacking, isIdling, isWalking;
-
-    // Bit shift the index of the layer (9) to get a bit mask
-    private int layerMask = 1 << 9;
-
-    private RaycastHit hit;
-
     // Start is called before the first frame update
     void Start()
     {
+        //Sets starting state to patroling
         currentState = patrolState;
+
+        //Sends crucial information of varabiles and scripts that each state needs before starting as it helps with the states to operate correctly.
         patrolState.PatrolStartStateInfo(this, commonMethods, player.GetComponent<Sc_Player_Movement>(), patrolPoints, visionRange, visionConeAngle, audioRange);
         attackState.AttackStartStateInfo(this, commonMethods, player.GetComponent<Sc_Player_Movement>(), gameObject, player, currentWeapon, navMeshAgent, visionRange, visionConeAngle);
         aggressionDesicionState.AggressionStartStateInfo(this, directorAI, gameObject, player, currentWeapon, cover, navMeshAgent, coverDistance);
         coverState.CoverStartStateInfo(this, commonMethods, player.GetComponent<Sc_Player_Movement>(), gameObject, player, currentWeapon, cover, visionRange, visionConeAngle);
         searchState.SearchStartStateInfo(this, player.GetComponent<Sc_Player_Movement>(), gameObject, player, searchFormats, navMeshAgent, visionRange, visionConeAngle);
         idleState.IdleStartStateInfo(this, player.GetComponent<Sc_Player_Movement>(), idleTimer, visionRange, visionConeAngle, audioRange);
-        currentState.EnterState(speed, playerNoticed);
+        currentState.EnterState(playerNoticed);
 
         //stateText = stateTextObj.GetComponent<TextMeshProUGUI>();
 
+        //Sets animation to walking
         SetIsIdling(false);
         SetIsAttacking(false);
         SetIsWalking(true);
 
+        //Sets UI text for AI to active or not
         actionUIText.SetActive(showActions);
         
 
-        //Setting up agression trait
+        //Sets up trait of enemies. Might move around depending on how I get it to work
         if (behaviour == "Agression")
         {
             agressionValueChange = 3;
@@ -142,19 +161,13 @@ public class Sc_AIStateManager : MonoBehaviour
         angleToPlayer = Vector3.Angle(transform.forward, player.transform.position - transform.position);
         //Debug.Log(currentState);
 
+        //Determines if the player is currently behind a wall. Currently being used to check if the AI can see the player while it is patroling but will be also used to check if the AI can shoot directly at the player
         Vector3 direction = player.transform.position - transform.position;
         bool playerBehindWall = Physics.Raycast(transform.position, direction, out hit, visionRange - 5, layerMask);
-        if (playerBehindWall)
-        {
-            Debug.DrawRay(transform.position, direction, Color.red);
-        }
-        else
-        {
-            Debug.DrawRay(transform.position, direction, Color.green);
-        }
 
         currentState.UpdateState(distPlayer, angleToPlayer, playerBehindWall);
 
+        //If the UI text should be updated
         if (showActions)
         {
             //Sets the text on top of the AI to show the current state and action that the AI is doing. Helps to show what they are "Thinking"
@@ -166,14 +179,16 @@ public class Sc_AIStateManager : MonoBehaviour
     public void SwitchState(Sc_AIBaseState state)
     {
         currentState = state;
-        currentState.EnterState(speed, playerNoticed);
+        currentState.EnterState(playerNoticed);
     }
 
+    //Sets the AIs decision value
     public void SetDecisionValue(int value)
     {
         decisionValue = value;
     }
 
+    //returns the AIs decision value
     public int ReturnDecisionValue()
     {
         return decisionValue;
@@ -185,31 +200,37 @@ public class Sc_AIStateManager : MonoBehaviour
         currentAction = action;
     }
 
+    //Sets if the AI is attacking the player
     public void SetIsAttacking(bool isAttacking)
     {
         this.isAttacking = isAttacking;
     }
 
+    //Returns if the AI is attacking
     public bool ReturnIsAttacking()
     {
         return isAttacking;
     }
 
+    //Setsif the AI is idling
     public void SetIsIdling(bool isIdling)
     {
         this.isIdling = isIdling;
     }
 
+    //Returns if the AI is idling
     public bool ReturnIsIdling()
     {
         return isIdling;
     }
 
+    //Sets if the AI is walking
     public void SetIsWalking(bool isWalking)
     {
         this.isWalking = isWalking;
     }
 
+    //Returns if the AI is walking
     public bool ReturnIsWalking()
     {
         return isWalking;

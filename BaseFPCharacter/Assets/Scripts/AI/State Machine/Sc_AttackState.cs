@@ -28,7 +28,7 @@ public class Sc_AttackState : Sc_AIBaseState
     private Transform weaponPosition;
 
     //When first entering the attack state it will strat a redecide timer so that is will go back to the aggression state
-    public override void EnterState(float speed, bool playerSeen) {
+    public override void EnterState(bool playerSeen) {
         //Debug.Log("Going to attack");
         isMoving = false;
 

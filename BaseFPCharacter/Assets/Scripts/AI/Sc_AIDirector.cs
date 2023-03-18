@@ -109,6 +109,7 @@ public class Sc_AIDirector : MonoBehaviour
         StartCoroutine(AverageDecisionValue());
     }
 
+    //Grabs all of the manager scripts from the AI
     IEnumerator AIManagerScripts()
     {
         for (int i = 0; i < allCurrentEnemy.Length; i++)
@@ -210,6 +211,7 @@ public class Sc_AIDirector : MonoBehaviour
         yield return null;
     }
 
+    //When a shot is fire
     public IEnumerator ShotFired(Vector3 positionOfShot)
     {
         for(int i = 0; i < allCurrentEnemy.Length; i++)

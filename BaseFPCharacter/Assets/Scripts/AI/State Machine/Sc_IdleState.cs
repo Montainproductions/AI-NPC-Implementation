@@ -12,7 +12,7 @@ public class Sc_IdleState : Sc_AIBaseState
 
     Vector3 randomLookDirection;
 
-    public override void EnterState(float speed, bool playerSeen) {
+    public override void EnterState( bool playerSeen) {
         stateManager.StartCoroutine(IdleTimed());
     }
 

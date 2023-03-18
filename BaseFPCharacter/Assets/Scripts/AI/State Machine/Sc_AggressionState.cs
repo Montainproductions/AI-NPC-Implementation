@@ -36,7 +36,7 @@ public class Sc_AggressionState : Sc_AIBaseState
     private int decisionVal;
 
     //Method for when the AI first enters the state. Will determine if the player was already found or if they are the first enemy to notice the player. Will then start calculating the value for wether to attack or run to cover.
-    public override void EnterState(float speed, bool playerSeen)
+    public override void EnterState( bool playerSeen)
     {
         playerNoticed = playerSeen;
         stateManager.StartCoroutine(StoppingAI());

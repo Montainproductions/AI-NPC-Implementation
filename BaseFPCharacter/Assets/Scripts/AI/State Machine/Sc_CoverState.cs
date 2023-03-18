@@ -24,7 +24,7 @@ public class Sc_CoverState : Sc_AIBaseState
     private float closestDist, visionRange, visionConeAngle;
 
     //When first entering the state the choosing cover IEnumerator and the redeciding timer.
-    public override void EnterState(float speed, bool playerSeen)
+    public override void EnterState(bool playerSeen)
     {
         closestDist = Mathf.Infinity;
         //Debug.Log("Going to cover Start");

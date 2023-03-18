@@ -19,7 +19,7 @@ public class Sc_PatrolState : Sc_AIBaseState
 
     private bool playerBhindObjects;
 
-    public override void EnterState(float speed, bool playerNoticed) {
+    public override void EnterState(bool playerNoticed) {
         //Debug.Log("Patroling");
         ChooseRandomPatrolPos();
     }

@@ -16,7 +16,7 @@ public class Sc_SearchState : Sc_AIBaseState
     private float visionRange, visionConeAngle;
 
     private Vector3 playerLastLocation;
-    public override void EnterState(float speed, bool playerSeen)
+    public override void EnterState(bool playerSeen)
     {
         //Debug.Log("Searching for Player");
         playerLastLocation = player.transform.position;
