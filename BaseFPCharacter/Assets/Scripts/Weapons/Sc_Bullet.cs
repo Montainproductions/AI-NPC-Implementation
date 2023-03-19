@@ -49,7 +49,8 @@ public class Sc_Bullet : MonoBehaviour{
             player.GetComponent<Sc_Health>().TakeDamage(dmgFromBullet);
             Destroy(gameObject);
         }
-        Destroy(gameObject);
-        
+        else if(other.gameObject.tag == "Walls") {
+            Destroy(gameObject);
+        }
     }
 }

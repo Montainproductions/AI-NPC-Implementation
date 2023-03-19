@@ -29,55 +29,30 @@ public class Sc_AttackState : Sc_AIBaseState
 
     //When first entering the attack state it will strat a redecide timer so that is will go back to the aggression state
     public override void EnterState(bool playerSeen) {
+
         //Debug.Log("Going to attack");
+        stateManager.StartCoroutine(StoppingAI());
         isMoving = false;
 
         newPosition = Vector3.zero;
+
+        stateManager.StartCoroutine(AttackOrMove());
         stateManager.StartCoroutine(commonMethodsScript.ReDecide());
     }
 
     public override void UpdateState(float distPlayer, float angleToPlayer, bool playerBehindWall) {
         playerPos = player.transform.position;
         stateManager.transform.LookAt(playerPos);
-        if (currentWeapon != null)
-        {
-            CantSeePlayer(distPlayer, angleToPlayer);
-            //state.transform.LookAt(playerPos);
+        CantSeePlayer(distPlayer, angleToPlayer);
+        //state.transform.LookAt(playerPos);
 
-            stateManager.StartCoroutine(PlayerDistance());
+        stateManager.StartCoroutine(PlayerDistance());
 
-            //Debug.Log(diffDistToAttack);
-            if (diffDistToAttack >= 0 && !isMoving)
-            {
-                isMoving = true;
-                stateManager.StartCoroutine(commonMethodsScript.AttackingGettingCloser(diffDistToAttack));
-            }
-            else if(gunScript.ReturnCurrentAmmo() > 0)
-            {
-                stateManager.StartCoroutine(AttackingWithGun());
-            }
-            else if (gunScript.ReturnCurrentAmmo() <= 0)
-            {
-                stateManager.StartCoroutine(Reloading());
-            }
-
-            if (newPosition != Vector3.zero)
+            /*if (newPosition != Vector3.zero)
             {
                 navMeshAgent.destination = newPosition;
-            }
+            }*/
             //Debug.Log(distFromPlayer);
-        }
-        else if(currentWeapon == null && newPosition != Vector3.zero)
-        {
-            navMeshAgent.destination = newPosition;
-            stateManager.transform.LookAt(newPosition);
-            float distToWeapon = Vector3.Distance(stateManager.transform.position, newPosition);
-            if(distToWeapon <= 0.5f)
-            {
-                stateManager.StartCoroutine(PickUpGun());
-                stateManager.StartCoroutine(commonMethodsScript.ReDecide());
-            }
-        }
     }
 
     public void AttackStartStateInfo(Sc_AIStateManager stateManager, Sc_CommonMethods commonMethodsScript, Sc_Player_Movement playerMovementScript, GameObject self, GameObject player, GameObject currentWeapon, NavMeshAgent navMeshAgent, float visionRange, float visionConeAngle)
@@ -100,8 +75,29 @@ public class Sc_AttackState : Sc_AIBaseState
         bool playerHidden = playerMovementScript.ReturnIsHidden();
         if (distPlayer > visionRange || angleToPlayer > visionConeAngle || playerHidden)
         {
+            stateManager.playerNoticed = false;
             stateManager.SwitchState(stateManager.searchState);
         }
+    }
+
+    IEnumerator AttackOrMove()
+    {
+        if (diffDistToAttack >= 0)
+        {
+            //isMoving = true;
+            stateManager.StartCoroutine(commonMethodsScript.AttackingGettingCloser(diffDistToAttack));
+        }
+        else if (gunScript.ReturnCurrentAmmo() > 0 && diffDistToAttack < 0)
+        {
+            stateManager.StartCoroutine(AttackingWithGun());
+        }
+        else if (gunScript.ReturnCurrentAmmo() <= 0)
+        {
+            stateManager.StartCoroutine(Reloading());
+        }
+        yield return new WaitForSeconds(4);
+        stateManager.StartCoroutine(AttackOrMove());
+        yield return null;
     }
 
     //Will shoot to the player with random time delays so that it looks like the AI is shooting at random intervals and taking its time to aim and shoot. 
@@ -111,7 +107,7 @@ public class Sc_AttackState : Sc_AIBaseState
         stateManager.SetIsAttacking(true);
         stateManager.SetIsWalking(false);
         //Debug.Log("Shooting");
-        timeDelay = Random.Range(5, 8.25f);
+        timeDelay = Random.Range(3, 5.25f);
         yield return new WaitForSeconds(timeDelay);
         stateManager.StartCoroutine(gunScript.ShotFired());
         //Debug.Log("Enemy ammo count: " + gunScript.currentAmmoAmount);
@@ -164,8 +160,19 @@ public class Sc_AttackState : Sc_AIBaseState
     {
         float playerDist = Vector3.Distance(playerPos, self.transform.position);
         diffDistToAttack = playerDist - attackRange;
-        yield return new WaitForSeconds(1f);
+        yield return new WaitForSeconds(0.2f);
         stateManager.StartCoroutine(PlayerDistance());
+        yield return null;
+    }
+
+    IEnumerator StoppingAI()
+    {
+        yield return new WaitForSeconds(0.45f);
+        navMeshAgent.isStopped = true;
+        navMeshAgent.ResetPath();
+        navMeshAgent.SetDestination(stateManager.transform.position);
+        //Debug.Log(stateManager.name);
+        //Debug.Log(navMeshAgent.destination);
         yield return null;
     }
 }

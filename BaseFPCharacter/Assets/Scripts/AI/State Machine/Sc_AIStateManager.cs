@@ -8,10 +8,7 @@ using UnityEngine.InputSystem.HID;
 public class Sc_AIStateManager : MonoBehaviour
 {
     //Setting up the traits of the AI.
-    public string behaviour;
-    public float agressionValueChange, approchPlayerChange;
-    public float accuracy;
-    public AudioClip[] audioclips = new AudioClip[33];
+    private Trait aiTrait;
 
     //All the current state the AI can be in
     [HideInInspector]
@@ -53,7 +50,7 @@ public class Sc_AIStateManager : MonoBehaviour
     private float distPlayer, angleToPlayer;
 
     //The value that the AI determines if they should go and attack the player or go to cover
-    private int decisionValue = 0;
+    private float decisionValue = 0;
 
     //Variables that are important for the patrol state
     [Header("Patroling")]
@@ -117,9 +114,9 @@ public class Sc_AIStateManager : MonoBehaviour
         coverState.CoverStartStateInfo(this, commonMethods, player.GetComponent<Sc_Player_Movement>(), gameObject, player, currentWeapon, cover, visionRange, visionConeAngle);
         searchState.SearchStartStateInfo(this, player.GetComponent<Sc_Player_Movement>(), gameObject, player, searchFormats, navMeshAgent, visionRange, visionConeAngle);
         idleState.IdleStartStateInfo(this, player.GetComponent<Sc_Player_Movement>(), idleTimer, visionRange, visionConeAngle, audioRange);
+        
         currentState.EnterState(playerNoticed);
 
-        //stateText = stateTextObj.GetComponent<TextMeshProUGUI>();
 
         //Sets animation to walking
         SetIsIdling(false);
@@ -128,29 +125,6 @@ public class Sc_AIStateManager : MonoBehaviour
 
         //Sets UI text for AI to active or not
         actionUIText.SetActive(showActions);
-        
-
-        //Sets up trait of enemies. Might move around depending on how I get it to work
-        if (behaviour == "Agression")
-        {
-            agressionValueChange = 3;
-            approchPlayerChange = 2;
-        }
-        else if (behaviour == "Bold") //Setting up bold trait
-        {
-            agressionValueChange = 1.5f;
-            approchPlayerChange = 0.5f;
-        }
-        else if (behaviour == "Cautious") //Setting up cautious trait
-        {
-            agressionValueChange = -1.5f;
-            approchPlayerChange = -0.5f;
-        }
-        else if (behaviour == "Scared") //Setting up scared trait
-        {
-            agressionValueChange = -3;
-            approchPlayerChange = -2;
-        }
     }
 
     // Update is called once per frame
@@ -170,6 +144,7 @@ public class Sc_AIStateManager : MonoBehaviour
         //If the UI text should be updated
         if (showActions)
         {
+            //aiTrait.ReturnAgressionValue();
             //Sets the text on top of the AI to show the current state and action that the AI is doing. Helps to show what they are "Thinking"
             stateText.SetText(currentState.ToString() + " " + currentAction);
         }
@@ -182,14 +157,23 @@ public class Sc_AIStateManager : MonoBehaviour
         currentState.EnterState(playerNoticed);
     }
 
+    public void SetUpTraits(Trait newAITrait)
+    {
+        this.aiTrait = newAITrait;
+        //Debug.Log(newAITrait.ReturnName());
+        //Debug.Log(aiTrait.ReturnName());
+        commonMethods.SetUpTrait(aiTrait);
+        aggressionDesicionState.SetUpTrait(aiTrait);
+    }
+
     //Sets the AIs decision value
-    public void SetDecisionValue(int value)
+    public void SetDecisionValue(float value)
     {
         decisionValue = value;
     }
 
     //returns the AIs decision value
-    public int ReturnDecisionValue()
+    public float ReturnDecisionValue()
     {
         return decisionValue;
     }

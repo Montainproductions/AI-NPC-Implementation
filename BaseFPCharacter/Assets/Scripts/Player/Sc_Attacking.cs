@@ -61,15 +61,6 @@ public class Sc_Attacking : MonoBehaviour{
         }
     }
 
-    //Checks if the enemy is hiting the collidor and then deal damage
-    public void OnTriggerStay(Collider collision){
-        if (collision.tag == "Enemy"){
-            if (canMeleeAttack){
-                collision.GetComponent<Sc_Health>().TakeDamage(meleeDamage);
-            }
-        }
-    }
-
     public void PlayerAttackBox()
     {
         var lookPos = (Vector3.up * Sc_Player_Camera.Instance.mouseX) - playerBox.transform.position;
@@ -107,6 +98,18 @@ public class Sc_Attacking : MonoBehaviour{
         if (!context.performed && attackForPlayer) return;
 
         StartCoroutine(baseGunScript.Reloading());
+    }
+
+    //Checks if the enemy is hiting the collidor and then deal damage
+    public void OnTriggerStay(Collider collision)
+    {
+        if (collision.tag == "Enemy")
+        {
+            if (canMeleeAttack)
+            {
+                collision.GetComponent<Sc_Health>().TakeDamage(meleeDamage);
+            }
+        }
     }
 
     public void OnDestroy()

@@ -12,6 +12,9 @@ public class Sc_AggressionState : Sc_AIBaseState
     private Sc_AIStateManager stateManager;
     //The director AI to send inte desicion value
     private Sc_AIDirector directorAI;
+
+    private Trait aiTrait;
+
     //The script for the weapons
     private Sc_BaseGun baseGunScript;
 
@@ -33,7 +36,7 @@ public class Sc_AggressionState : Sc_AIBaseState
     private float attackRange, coverDistance;
 
     //The decision val of the AI
-    private int decisionVal;
+    private float decisionVal;
 
     //Method for when the AI first enters the state. Will determine if the player was already found or if they are the first enemy to notice the player. Will then start calculating the value for wether to attack or run to cover.
     public override void EnterState( bool playerSeen)
@@ -74,6 +77,11 @@ public class Sc_AggressionState : Sc_AIBaseState
 
     }
 
+    public void SetUpTrait(Trait newAITrait)
+    {
+        this.aiTrait = newAITrait;
+    }
+
     /*This method determines the AIs decision value. If the AIs is close enough to the player and their weapons range is less then the distance then it will increase the value by 2.
     I use a random range of the attack range and the range -2 because that will simulate the enemy determining the range it belives it needs to be at to confidently deal damage
     to the player.It will then go through each cover positon in the map and if the distance between the AI and the cover position is less then the cover distance that has already
@@ -83,6 +91,8 @@ public class Sc_AggressionState : Sc_AIBaseState
     {
         float distFromPlayer = Vector3.Distance(player.transform.position, stateManager.transform.position);
         float currentAttackRange = Random.Range(attackRange, attackRange - 3);
+        decisionVal += aiTrait.ReturnAgressionValue();
+
         if (currentAttackRange > distFromPlayer)
         {
             decisionVal += 2;
@@ -109,8 +119,8 @@ public class Sc_AggressionState : Sc_AIBaseState
         navMeshAgent.isStopped = true;
         navMeshAgent.ResetPath();
         navMeshAgent.SetDestination(stateManager.transform.position);
-        Debug.Log(stateManager.name);
-        Debug.Log(navMeshAgent.destination);
+        //Debug.Log(stateManager.name);
+        //Debug.Log(navMeshAgent.destination);
         yield return null;
     }
 }

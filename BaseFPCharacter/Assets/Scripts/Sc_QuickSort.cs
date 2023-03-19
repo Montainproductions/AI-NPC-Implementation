@@ -27,7 +27,7 @@ public class Sc_QuickSort : MonoBehaviour
     {
 
         // pivot
-        int pivot = arrayObjects[highEnd].GetComponent<Sc_AIStateManager>().ReturnDecisionValue();
+        float pivot = arrayObjects[highEnd].GetComponent<Sc_AIStateManager>().ReturnDecisionValue();
 
         // Index of smaller element and
         // indicates the right position

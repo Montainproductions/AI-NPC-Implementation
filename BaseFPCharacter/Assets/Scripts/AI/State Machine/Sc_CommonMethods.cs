@@ -10,7 +10,8 @@ public class Sc_CommonMethods : MonoBehaviour
 {
     [SerializeField]
     private Sc_AIStateManager stateManager;
-    //Sc_AIStateManager state
+
+    private Trait aiTrait;
 
     [SerializeField]
     private NavMeshAgent navMeshAgent;
@@ -79,7 +80,10 @@ public class Sc_CommonMethods : MonoBehaviour
         }
     }
 
-
+    public void SetUpTrait(Trait aiTrait)
+    {
+        this.aiTrait = aiTrait;
+    }
 
     public void StartMovement(Vector3 position, string currentState, bool lookAtPlayer = false)
     {
@@ -106,7 +110,7 @@ public class Sc_CommonMethods : MonoBehaviour
     
     public IEnumerator AttackingGettingCloser(float diffDistToAttack)
     {
-        float zDistance = Random.Range(diffDistToAttack + 1, diffDistToAttack + 6);
+        float zDistance = Random.Range(diffDistToAttack + 1 + aiTrait.ReturnApprochingPlayer(), diffDistToAttack + 6 + aiTrait.ReturnApprochingPlayer());
         //Debug.Log(zDistance);
         //float yDistance = Random.Range(-diffDistToAttack, diffDistToAttack);
         Vector3 newPosition = stateManager.transform.position + stateManager.transform.forward * zDistance;

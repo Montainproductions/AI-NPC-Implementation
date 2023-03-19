@@ -738,66 +738,27 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 34acd208d9af86846a20656eef7ece85, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  behaviour: 
-  agressionValueChange: 0
-  approchPlayerChange: 0
-  accuracy: 0
-  audioclips:
-  - {fileID: 0}
-  - {fileID: 0}
-  - {fileID: 0}
-  - {fileID: 0}
-  - {fileID: 0}
-  - {fileID: 0}
-  - {fileID: 0}
-  - {fileID: 0}
-  - {fileID: 0}
-  - {fileID: 0}
-  - {fileID: 0}
-  - {fileID: 0}
-  - {fileID: 0}
-  - {fileID: 0}
-  - {fileID: 0}
-  - {fileID: 0}
-  - {fileID: 0}
-  - {fileID: 0}
-  - {fileID: 0}
-  - {fileID: 0}
-  - {fileID: 0}
-  - {fileID: 0}
-  - {fileID: 0}
-  - {fileID: 0}
-  - {fileID: 0}
-  - {fileID: 0}
-  - {fileID: 0}
-  - {fileID: 0}
-  - {fileID: 0}
-  - {fileID: 0}
-  - {fileID: 0}
-  - {fileID: 0}
-  - {fileID: 0}
   commonMethods: {fileID: 780441598457401939}
-  speed: 6
   navMeshAgent: {fileID: 5355143908986894846}
   directorAI: {fileID: 2460812123129524718, guid: 9a1b04fd93715f84585c30af5c65b4ea, type: 3}
   player: {fileID: 6646797674794803052, guid: 81ce49f96577d844ab806a3654e6ae19, type: 3}
   playerNoticed: 0
-  visionRange: 50
-  visionConeAngle: 90
+  visionRange: 55
+  visionConeAngle: 100
   audioRange: 60
   alertedTimer: 30
   decisionTimer: 20
-  idleTimer: 30
-  showActions: 0
-  actionUIText: {fileID: 3997668409159272549}
-  stateText: {fileID: 5036883433435283141}
-  currentAction: 
+  idleTimer: 25
   patrolPoints: []
   currentWeapon: {fileID: 4800562019042892381}
   cover: []
   coverDistance: 20
   lastSeenTimer: 0
   searchFormats: []
+  showActions: 0
+  actionUIText: {fileID: 3997668409159272549}
+  stateText: {fileID: 5036883433435283141}
+  currentAction: 
 --- !u!114 &5627217062832147697
 MonoBehaviour:
   m_ObjectHideFlags: 0

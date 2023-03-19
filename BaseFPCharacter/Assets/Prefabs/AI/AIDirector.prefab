@@ -11,6 +11,7 @@ GameObject:
   - component: {fileID: 2460812123129524717}
   - component: {fileID: 2460812123129524718}
   - component: {fileID: 2460812123129524719}
+  - component: {fileID: 2265215693331665680}
   m_Layer: 0
   m_Name: AIDirector
   m_TagString: Untagged
@@ -67,3 +68,17 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: eacc0f956dcf42a4fbf3c7a481a219c0, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+--- !u!114 &2265215693331665680
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 2460812123129523728}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 9750b9afc2752dc4a994272af497db14, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  AudioClip: []
+  enemyAIScripts: []

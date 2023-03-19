@@ -84,14 +84,14 @@ public class Sc_AIDirector : MonoBehaviour
             {
                 yield return new WaitForSeconds(1.25f);
                 stateManager = allCurrentEnemy[i].GetComponent<Sc_AIStateManager>();
-                if (!stateManager.playerNoticed)
+                if (!allAIManagerScript[i].playerNoticed)
                 {
                     stateManager.playerNoticed = true;
                     stateManager.SwitchState(stateManager.aggressionDesicionState);
                 }
                     //stateManager = null;
-                }
             }
+        }
         yield return null;
     }
 
@@ -159,7 +159,7 @@ public class Sc_AIDirector : MonoBehaviour
                 {
                     //Debug.Log("Attacking");
                     //stateManager.SwitchState(stateManager.attackState);
-                    stateManager.SwitchState(stateManager.coverState);
+                    stateManager.SwitchState(stateManager.attackState);
                     currentAttacking++;
                 }
                 else
@@ -174,7 +174,7 @@ public class Sc_AIDirector : MonoBehaviour
                 {
                     //Debug.Log("Attacking part 2");
                     //stateManager.SwitchState(stateManager.attackState);
-                    stateManager.SwitchState(stateManager.coverState);
+                    stateManager.SwitchState(stateManager.attackState);
                     currentAttacking++;
                 }
                 else
@@ -214,14 +214,17 @@ public class Sc_AIDirector : MonoBehaviour
     //When a shot is fire
     public IEnumerator ShotFired(Vector3 positionOfShot)
     {
+
         for(int i = 0; i < allCurrentEnemy.Length; i++)
         {
+            if (allCurrentEnemy[i] == null) { continue; }
+            //yield return new WaitForSeconds(1.0f);
             //Debug.Log(allCurrentEnemy[i]);
             if (Vector3.Distance(allCurrentEnemy[i].transform.position, positionOfShot) < audioRange && (allAIManagerScript[i].currentState == allAIManagerScript[i].idleState || allAIManagerScript[i].currentState == allAIManagerScript[i].patrolState))
             {
-                //Debug.Log("Player Heard");
+                Debug.Log("Player Heard");
                 allAIManagerScript[i].playerNoticed = true;
-                allAIManagerScript[i].SwitchState(stateManager.searchState);
+                allAIManagerScript[i].SwitchState(allAIManagerScript[i].searchState);
             }
         }
         yield return null;
