@@ -3,6 +3,8 @@ using System.Collections.Generic;
 using UnityEngine;
 
 public class Sc_Health : MonoBehaviour{
+    [SerializeField]
+    private bool isPlayer;
 
     //Health
     [SerializeField]
@@ -37,7 +39,7 @@ public class Sc_Health : MonoBehaviour{
         currentHealth = maxHealth;
         lastTimeHitTimer = 0;
         recentlyHit = false;
-        StartCoroutine(HealingOverTime());
+        //StartCoroutine(HealingOverTime());
     }
 
     // Update is called once per frame
@@ -47,7 +49,7 @@ public class Sc_Health : MonoBehaviour{
             Sc_Basic_UI.Instance.NewHealth(currentHealth);
         }
         if (!healingOverTimeAllowed) return; //If the player isnt allowed to heal automaticly then return
-        //Healing();
+        Healing();
     }
 
     //Heal over time at a certain amount of hp per second
@@ -79,7 +81,13 @@ public class Sc_Health : MonoBehaviour{
             Sc_Basic_UI.Instance.NewHealth(currentHealth);
         }
 
-        if (currentHealth <= 0) { Destroy(gameObject); } //If no more Health then tell the game manager to go to end game
+        if (currentHealth <= 0) {
+            if (isPlayer)
+            {
+                Sc_GameManager.Instance.PlayerDied(gameObject.transform.position);
+            }
+            Destroy(gameObject); 
+        } //If no more Health then tell the game manager to go to end game
     }
 
     IEnumerator HealingOverTime()
@@ -97,7 +105,7 @@ public class Sc_Health : MonoBehaviour{
         else
         {
             //Debug.Log("Healing");
-            currentHealth += healingRate;
+            Healing();
         }
         yield return null;
     }

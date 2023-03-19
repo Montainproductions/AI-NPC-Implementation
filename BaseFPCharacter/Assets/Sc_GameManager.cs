@@ -8,6 +8,9 @@ public class Sc_GameManager : MonoBehaviour
 {
     public static Sc_GameManager Instance { get; set; }
 
+    [SerializeField]
+    private GameObject deathCanves;
+
     private PlayerInputActions playerInputActions;
 
     [SerializeField]
@@ -36,6 +39,11 @@ public class Sc_GameManager : MonoBehaviour
     {
         pauseActivated = false;
         pauseMenu.SetActive(pauseActivated);
+    }
+
+    public void PlayerDied(Vector3 spawnLocation)
+    {
+        Instantiate(deathCanves, spawnLocation, Quaternion.identity);
     }
 
     public void ChangeLevel(int newLevel)

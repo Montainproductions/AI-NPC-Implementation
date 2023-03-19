@@ -95,7 +95,7 @@ public class Sc_AttackState : Sc_AIBaseState
         {
             stateManager.StartCoroutine(Reloading());
         }
-        yield return new WaitForSeconds(4);
+        yield return new WaitForSeconds(0.2f);
         stateManager.StartCoroutine(AttackOrMove());
         yield return null;
     }
@@ -107,11 +107,11 @@ public class Sc_AttackState : Sc_AIBaseState
         stateManager.SetIsAttacking(true);
         stateManager.SetIsWalking(false);
         //Debug.Log("Shooting");
-        timeDelay = Random.Range(3, 5.25f);
+        timeDelay = Random.Range(1, 2);
         yield return new WaitForSeconds(timeDelay);
         stateManager.StartCoroutine(gunScript.ShotFired());
         //Debug.Log("Enemy ammo count: " + gunScript.currentAmmoAmount);
-        timeDelay = Random.Range(3.5f, 5.75f);
+        timeDelay = Random.Range(1.25f, 1.85f);
         yield return new WaitForSeconds(timeDelay);
         stateManager.SetIsAttacking(false);
         yield return null;
@@ -160,7 +160,7 @@ public class Sc_AttackState : Sc_AIBaseState
     {
         float playerDist = Vector3.Distance(playerPos, self.transform.position);
         diffDistToAttack = playerDist - attackRange;
-        yield return new WaitForSeconds(0.2f);
+        yield return new WaitForSeconds(0.1f);
         stateManager.StartCoroutine(PlayerDistance());
         yield return null;
     }

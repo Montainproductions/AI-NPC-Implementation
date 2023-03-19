@@ -179,7 +179,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   playerCamera: {fileID: 6646797674624269428}
-  mouseSensativity: 15
+  mouseSensativity: 9
   mouseX: 0
   mouseY: 0
   playerBody: {fileID: 6646797674794803048}
@@ -356,6 +356,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 46379d01e2457ac47aff58c2f987be41, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  isPlayer: 0
   currentHealth: 0
   maxHealth: 120
   healingOverTimeAllowed: 1

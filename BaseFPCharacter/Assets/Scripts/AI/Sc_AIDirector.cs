@@ -224,7 +224,7 @@ public class Sc_AIDirector : MonoBehaviour
             {
                 Debug.Log("Player Heard");
                 allAIManagerScript[i].playerNoticed = true;
-                allAIManagerScript[i].SwitchState(allAIManagerScript[i].searchState);
+                allAIManagerScript[i].SwitchState(allAIManagerScript[i].aggressionDesicionState);
             }
         }
         yield return null;
