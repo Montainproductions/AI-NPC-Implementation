@@ -93,6 +93,7 @@ public class Sc_CoverState : Sc_AIBaseState
                 coverPosition = closestCover.transform.GetChild(i).transform.position;
                 coverScript.beingUsed = true;
                 //Debug.Log("Cover position: " + coverPosition);
+                stateManager.PlayAudioOneShot(12, 14);
                 commonMethodsScript.StartMovement(coverPosition, "Cover", true);
                 break;
             }
@@ -133,6 +134,7 @@ public class Sc_CoverState : Sc_AIBaseState
     {
         //Debug.Log("Shooting");
         stateManager.SetIsAttacking(true);
+        stateManager.PlayAudioOneShot(9, 11);
         yield return new WaitForSeconds(2.75f);
         Sc_BaseGun gunScript = currentWeapon.GetComponent<Sc_BaseGun>();
         stateManager.StartCoroutine(gunScript.ShotFired());

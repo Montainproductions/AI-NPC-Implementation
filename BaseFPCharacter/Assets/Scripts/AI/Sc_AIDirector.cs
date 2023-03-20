@@ -9,6 +9,15 @@ public class Sc_AIDirector : MonoBehaviour
 {
     public Sc_AIDirector Instance { get; set; }
 
+    [HideInInspector]
+    public Trait Aggressive = new Trait("Aggressive", 12, 3, 2);
+    [HideInInspector]
+    public Trait Bold = new Trait("Bold", 6, 1.5f, 0.5f);
+    [HideInInspector]
+    public Trait Cautious = new Trait("Cautious", -6, -1.5f, -0.5f);
+    [HideInInspector]
+    public Trait Scared = new Trait("Scared", -12, -3, -2);
+
     //Grabs the quick sort algorithem script
     [SerializeField]
     private Sc_QuickSort quickSort;
@@ -16,7 +25,7 @@ public class Sc_AIDirector : MonoBehaviour
     //All current enemis in the map
     [SerializeField]
     private GameObject[] allCurrentEnemy, spawnLocations;
-    private Sc_AIStateManager[] allAIManagerScript;
+    private Sc_AIStateManager[] allEnemyAIManagerScript;
     //List of current enemy Decision values.
     //It is a list instead of an array since not all enemies will have to decide what to do when it sees the player at the same time.
     public static List<GameObject> enemyAIDesicionValue = new List<GameObject>();
@@ -27,6 +36,12 @@ public class Sc_AIDirector : MonoBehaviour
     [SerializeField]
     private int maxAttacking, currentAttacking;
     private float average = 0;
+
+    [SerializeField]
+    private AudioClip[] agressiveAudioClips1, boldAudioClips1;
+
+    [SerializeField]
+    private int maxSoundsPlaying, currentSoundsPlaying;
 
     //The specific enemy game object
     private GameObject enemy;
@@ -44,7 +59,7 @@ public class Sc_AIDirector : MonoBehaviour
     {
         //enemyAIDesicionValue = new GameObject[allCurrentEnemy.Length];
 
-        allAIManagerScript = new Sc_AIStateManager[allCurrentEnemy.Length];
+        allEnemyAIManagerScript = new Sc_AIStateManager[allCurrentEnemy.Length];
 
         playerSeen = false;
         //Starts the timer coroutine so that each time it will grab the current set of AIs that have seen the Player and chosses which state they go to.
@@ -59,6 +74,14 @@ public class Sc_AIDirector : MonoBehaviour
 
     }
 
+    public void PlayAudio()
+    {
+        if(currentSoundsPlaying < maxSoundsPlaying)
+        {
+
+        }
+    }
+
     //This will decide how many more enemies to spawn if there is less enemies then the limit
     public void WantToSpawnMore(float amountToSpawn, int spawnLocation)
     {
@@ -70,29 +93,6 @@ public class Sc_AIDirector : MonoBehaviour
         {
             SpawnEnemy(amountToSpawn, spawnLocation);
         }
-    }
-
-    //If the player was found by an enemy it will aleart all other enemies in the map. I might slightly change this in the future so that its in a radius of the enemy so that it dosent feel over welming that all enemies seem to instantly know where the player is after being spotted.
-    public IEnumerator PlayerFound(GameObject enemyObject)
-    {
-        playerSeen = true;
-
-        for (int i = 0; i < allCurrentEnemy.Length; i++) {
-            //Debug.Log(allCurrentEnemy[i]);
-            //Debug.Log(enemyObject);
-            if (allCurrentEnemy[i] != enemyObject && (Vector3.Distance(allCurrentEnemy[i].transform.position, enemyObject.transform.position)) < audioRange)
-            {
-                yield return new WaitForSeconds(1.25f);
-                stateManager = allCurrentEnemy[i].GetComponent<Sc_AIStateManager>();
-                if (!allAIManagerScript[i].playerNoticed)
-                {
-                    stateManager.playerNoticed = true;
-                    stateManager.SwitchState(stateManager.aggressionDesicionState);
-                }
-                    //stateManager = null;
-            }
-        }
-        yield return null;
     }
 
     //Adds the AI Enemy to the list and recalculates the average decision value of all AI in list
@@ -109,12 +109,56 @@ public class Sc_AIDirector : MonoBehaviour
         StartCoroutine(AverageDecisionValue());
     }
 
+    //If the player was found by an enemy it will aleart all other enemies in the map. I might slightly change this in the future so that its in a radius of the enemy so that it dosent feel over welming that all enemies seem to instantly know where the player is after being spotted.
+    public IEnumerator PlayerFound(GameObject enemyObject)
+    {
+        playerSeen = true;
+
+        for (int i = 0; i < allCurrentEnemy.Length; i++) {
+            //Debug.Log(allCurrentEnemy[i]);
+            //Debug.Log(enemyObject);
+            if (allCurrentEnemy[i] != enemyObject && (Vector3.Distance(allCurrentEnemy[i].transform.position, enemyObject.transform.position)) < audioRange)
+            {
+                yield return new WaitForSeconds(1.25f);
+                stateManager = allCurrentEnemy[i].GetComponent<Sc_AIStateManager>();
+                if (!allEnemyAIManagerScript[i].playerNoticed)
+                {
+                    stateManager.playerNoticed = true;
+                    stateManager.SwitchState(stateManager.aggressionDesicionState);
+                }
+                    //stateManager = null;
+            }
+        }
+        yield return null;
+    }
+
     //Grabs all of the manager scripts from the AI
     IEnumerator AIManagerScripts()
     {
         for (int i = 0; i < allCurrentEnemy.Length; i++)
         {
-            allAIManagerScript[i] = allCurrentEnemy[i].GetComponent<Sc_AIStateManager>();
+            allEnemyAIManagerScript[i] = allCurrentEnemy[i].GetComponent<Sc_AIStateManager>();
+            float randomValue = Random.Range(0.0f, 1.0f);
+            if (randomValue >= 0.75f)
+            {
+                //Debug.Log(Aggressive.ReturnAgressionValue());
+                allEnemyAIManagerScript[i].SetUpTraits(Aggressive, agressiveAudioClips1);
+            }
+            else if (7.5f > randomValue && randomValue >= 0.5f)
+            {
+                //Debug.Log(Bold.ReturnAgressionValue());
+                allEnemyAIManagerScript[i].SetUpTraits(Bold, boldAudioClips1);
+            }
+            else if (5.0f > randomValue && randomValue >= 0.25f)
+            {
+                //Debug.Log(Cautious.ReturnAgressionValue());
+                allEnemyAIManagerScript[i].SetUpTraits(Cautious, agressiveAudioClips1);
+            }
+            else
+            {
+                //Debug.Log(Scared.ReturnAgressionValue());
+                allEnemyAIManagerScript[i].SetUpTraits(Scared, boldAudioClips1);
+            }
         }
         yield return null;
     }
@@ -220,13 +264,73 @@ public class Sc_AIDirector : MonoBehaviour
             if (allCurrentEnemy[i] == null) { continue; }
             //yield return new WaitForSeconds(1.0f);
             //Debug.Log(allCurrentEnemy[i]);
-            if (Vector3.Distance(allCurrentEnemy[i].transform.position, positionOfShot) < audioRange && (allAIManagerScript[i].currentState == allAIManagerScript[i].idleState || allAIManagerScript[i].currentState == allAIManagerScript[i].patrolState))
+            if (Vector3.Distance(allCurrentEnemy[i].transform.position, positionOfShot) < audioRange && (allEnemyAIManagerScript[i].currentState == allEnemyAIManagerScript[i].idleState || allEnemyAIManagerScript[i].currentState == allEnemyAIManagerScript[i].patrolState))
             {
-                Debug.Log("Player Heard");
-                allAIManagerScript[i].playerNoticed = true;
-                allAIManagerScript[i].SwitchState(allAIManagerScript[i].aggressionDesicionState);
+                //Debug.Log("Player Heard");
+                allEnemyAIManagerScript[i].playerNoticed = true;
+                allEnemyAIManagerScript[i].SwitchState(allEnemyAIManagerScript[i].aggressionDesicionState);
             }
         }
         yield return null;
+    }
+}
+
+public class Trait
+{
+    private string traitName;
+    private float healthChange, agressionValue, approchPlayerChange;
+    private AudioClip[] audioclips;
+
+    public Trait()
+    {
+
+    }
+
+    public Trait(string traitName, float healthChange, float agressionValueChange, float approchPlayerChange)
+    {
+        this.traitName = traitName;
+        this.healthChange = healthChange;
+        this.agressionValue = agressionValueChange;
+        this.approchPlayerChange = approchPlayerChange;
+    }
+
+    public void SetUpName(string traitName)
+    {
+        this.traitName = traitName;
+    }
+
+    public void SetUpHealthChange(float healthChange)
+    {
+        this.healthChange = healthChange;
+    }
+
+    public void SetUpAgressionValue(float agressionValue)
+    {
+        this.agressionValue = agressionValue;
+    }
+
+    public void SetUpApprochingPlayer(float approchPlayerChange)
+    {
+        this.approchPlayerChange = approchPlayerChange;
+    }
+
+    public string ReturnName()
+    {
+        return traitName;
+    }
+
+    public float ReturnHealthChange()
+    {
+        return healthChange;
+    }
+
+    public float ReturnAgressionValue()
+    {
+        return agressionValue;
+    }
+
+    public float ReturnApprochingPlayer()
+    {
+        return approchPlayerChange;
     }
 }

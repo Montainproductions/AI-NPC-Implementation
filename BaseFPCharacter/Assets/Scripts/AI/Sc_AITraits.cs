@@ -5,7 +5,7 @@ using UnityEngine;
 public class Sc_AITraits : MonoBehaviour
 {
     [SerializeField]
-    private AudioClip[] AudioClip;
+    private AudioClip[] agressiveAudioClips1, boldAudioClips1;
 
     [SerializeField]
     private Sc_AIStateManager[] enemyAIScripts;
@@ -33,84 +33,24 @@ public class Sc_AITraits : MonoBehaviour
             if (randomValue >= 0.75f)
             {
                 //Debug.Log(Aggressive.ReturnAgressionValue());
-                enemyAIScripts[i].SetUpTraits(Aggressive);
+                enemyAIScripts[i].SetUpTraits(Aggressive, agressiveAudioClips1);
             }
             else if (7.5f > randomValue && randomValue >= 0.5f)
             {
                 //Debug.Log(Bold.ReturnAgressionValue());
-                enemyAIScripts[i].SetUpTraits(Bold);
+                enemyAIScripts[i].SetUpTraits(Bold, boldAudioClips1);
             }
             else if(5.0f > randomValue && randomValue >= 0.25f)
             {
                 //Debug.Log(Cautious.ReturnAgressionValue());
-                enemyAIScripts[i].SetUpTraits(Cautious);
+                enemyAIScripts[i].SetUpTraits(Cautious, agressiveAudioClips1);
             }
             else
             {
                 //Debug.Log(Scared.ReturnAgressionValue());
-                enemyAIScripts[i].SetUpTraits(Scared);
+                enemyAIScripts[i].SetUpTraits(Scared, boldAudioClips1);
             }
         }
         yield return null;
-    }
-}
-
-public class Trait
-{
-    private string traitName;
-    private float healthChange, agressionValue, approchPlayerChange;
-    private AudioClip[] audioclips;
-
-    public Trait()
-    {
-
-    }
-
-    public Trait(string traitName, float healthChange, float agressionValueChange, float approchPlayerChange)
-    {
-        this.traitName = traitName;
-        this.healthChange = healthChange;
-        this.agressionValue = agressionValueChange;
-        this.approchPlayerChange = approchPlayerChange;
-    }
-
-    public void SetUpName(string traitName)
-    {
-        this.traitName = traitName;
-    }
-
-    public void SetUpHealthChange(float healthChange)
-    {
-        this.healthChange = healthChange;
-    }
-
-    public void SetUpAgressionValue(float agressionValue)
-    {
-        this.agressionValue = agressionValue;
-    }
-
-    public void SetUpApprochingPlayer(float approchPlayerChange)
-    {
-        this.approchPlayerChange = approchPlayerChange;
-    }
-
-    public string ReturnName()
-    {
-        return traitName;
-    }
-
-    public float ReturnHealthChange()
-    {
-        return healthChange;
-    }
-
-    public float ReturnAgressionValue()
-    {
-        return agressionValue;
-    }
-
-    public float ReturnApprochingPlayer()
-    {
-        return approchPlayerChange;
     }
 }

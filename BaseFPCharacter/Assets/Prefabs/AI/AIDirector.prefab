@@ -11,7 +11,6 @@ GameObject:
   - component: {fileID: 2460812123129524717}
   - component: {fileID: 2460812123129524718}
   - component: {fileID: 2460812123129524719}
-  - component: {fileID: 2265215693331665680}
   m_Layer: 0
   m_Name: AIDirector
   m_TagString: Untagged
@@ -55,7 +54,53 @@ MonoBehaviour:
   spawnLocations: []
   maxAttacking: 3
   currentAttacking: 0
-  audioRange: 60
+  agressiveAudioClips1:
+  - {fileID: 8300000, guid: 836b4686fe4ab074aa471ddb25e52f0c, type: 3}
+  - {fileID: 8300000, guid: ff50e26e729f977469e65bb5595163fc, type: 3}
+  - {fileID: 8300000, guid: 32f2e12691f181446b7c82146c3d4206, type: 3}
+  - {fileID: 8300000, guid: acb2c8c1437c6c14abd1235f4061c48e, type: 3}
+  - {fileID: 8300000, guid: c9dc17c038fd8e048bcce1d4bcd038ff, type: 3}
+  - {fileID: 8300000, guid: ccb9abd3502dbd54baa9eb074e88c1dd, type: 3}
+  - {fileID: 8300000, guid: ad37b8e70956877489d1200b2e2f944c, type: 3}
+  - {fileID: 8300000, guid: 6028358bc30dd5c4aa4d142f4dc3ef82, type: 3}
+  - {fileID: 8300000, guid: 1b0a240be90744e418d47fe29ae1863a, type: 3}
+  - {fileID: 8300000, guid: 2cddb97aa8447dd42a95ca614b69508c, type: 3}
+  - {fileID: 8300000, guid: 1d64f15ac143b8c4e954f13625bd0b9e, type: 3}
+  - {fileID: 8300000, guid: 2a6d766f23596364388af5098ae3b20b, type: 3}
+  - {fileID: 8300000, guid: 27498c384808fa645ac31ecb3b8c58e8, type: 3}
+  - {fileID: 8300000, guid: f456451d7f96c16409baae068a320055, type: 3}
+  - {fileID: 8300000, guid: 6f22fea09e3111d46916ba238cc77601, type: 3}
+  - {fileID: 8300000, guid: 266db6f4e094a434084945e89b1af8d7, type: 3}
+  - {fileID: 8300000, guid: 845242b7bd4a946409186b999a2395b8, type: 3}
+  - {fileID: 8300000, guid: 2ec21deace3d70b4b8928cc04f391b79, type: 3}
+  - {fileID: 8300000, guid: 266db6f4e094a434084945e89b1af8d7, type: 3}
+  - {fileID: 8300000, guid: 654ea5be3b4318449875b902458513ce, type: 3}
+  - {fileID: 8300000, guid: f2bdc948fc3e8a04d959fd97e02f484c, type: 3}
+  - {fileID: 8300000, guid: 66d43c494fd15db498b078dc0fc8ddd6, type: 3}
+  - {fileID: 8300000, guid: 10d67674fd7f7f44faf40eb76f90b516, type: 3}
+  - {fileID: 8300000, guid: f0543293718087947b4768cc85b64d00, type: 3}
+  - {fileID: 8300000, guid: 2f769fcddb0f038488636265de3d5222, type: 3}
+  - {fileID: 8300000, guid: 0a81896993ecff8469af117b7a64a07c, type: 3}
+  - {fileID: 8300000, guid: 60b94b19643dc954bbed3084a4eac5e4, type: 3}
+  boldAudioClips1:
+  - {fileID: 8300000, guid: 08d730a3984e97a4baa86ddb65fa2510, type: 3}
+  - {fileID: 8300000, guid: fef90c8b01ab2bd42b9b64e97bf9862e, type: 3}
+  - {fileID: 8300000, guid: 188958d5a371fc34e8e170b70e2ec100, type: 3}
+  - {fileID: 8300000, guid: 118b705e62e9a8e4ab8e71bfc76c154e, type: 3}
+  - {fileID: 8300000, guid: f66078b2aa7f494459e854af4f55741c, type: 3}
+  - {fileID: 8300000, guid: e413cab94c663fc4e94fb1358ed6c7cb, type: 3}
+  - {fileID: 8300000, guid: 70b8c978cf41d434fa6b9e1201278615, type: 3}
+  - {fileID: 8300000, guid: 1f5265a5eafe07343bd58973d65573a2, type: 3}
+  - {fileID: 8300000, guid: 0936ef86ec70e6b499d096504af1275c, type: 3}
+  - {fileID: 8300000, guid: 70b8c978cf41d434fa6b9e1201278615, type: 3}
+  - {fileID: 8300000, guid: 2d229d742b6dbaf41b97d0697f20af79, type: 3}
+  - {fileID: 8300000, guid: 50203095219ec924bb27056913fe5e44, type: 3}
+  - {fileID: 8300000, guid: 31b3d75848eff44429b766d2bc01c30e, type: 3}
+  - {fileID: 8300000, guid: c461e35bde5d76f4692f1c61421756c8, type: 3}
+  - {fileID: 8300000, guid: a3664522fee1a904cb901e522742c002, type: 3}
+  maxSoundsPlaying: 2
+  currentSoundsPlaying: 0
+  audioRange: 85
 --- !u!114 &2460812123129524719
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -68,17 +113,3 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: eacc0f956dcf42a4fbf3c7a481a219c0, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
---- !u!114 &2265215693331665680
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 2460812123129523728}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 9750b9afc2752dc4a994272af497db14, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  AudioClip: []
-  enemyAIScripts: []

@@ -25,6 +25,8 @@ public class Sc_CommonMethods : MonoBehaviour
     private Vector3 walkingPosition;
     private Vector3 direction;
 
+    private Transform lookingAtTransform;
+
     [SerializeField]
     private float decisionTimer;
 
@@ -55,7 +57,8 @@ public class Sc_CommonMethods : MonoBehaviour
                 //Creates Quaternion version of the vector3 direction
                 Quaternion lookRotation = Quaternion.LookRotation(direction);
                 //Rotate Enemy over time according to speed until we are in the required rotation
-                transform.rotation = Quaternion.Slerp(transform.rotation, lookRotation, Time.deltaTime * 0.25f);
+                //transform.rotation = Quaternion.Slerp(transform.rotation, lookRotation, Time.deltaTime * 0.25f);
+                transform.LookAt(lookingAtTransform, Vector3.up);
                 navMeshAgent.destination = walkingPosition;
             }
             else
@@ -85,13 +88,14 @@ public class Sc_CommonMethods : MonoBehaviour
         this.aiTrait = aiTrait;
     }
 
-    public void StartMovement(Vector3 position, string currentState, bool lookAtPlayer = false)
+    public void StartMovement(Vector3 position, string currentState, bool lookAtPlayer = false, Transform lookAt = null)
     {
         walkingPosition = position;
         this.currentState = currentState;
         //Debug.Log("Current action state: " + currentState);
         //Debug.Log(this.currentState);
         lookingAtPlayer = lookAtPlayer;
+        lookingAtTransform = lookAt;
     }
 
     public void StopMovement()
@@ -108,13 +112,13 @@ public class Sc_CommonMethods : MonoBehaviour
         yield return null;
     }
     
-    public IEnumerator AttackingGettingCloser(float diffDistToAttack)
+    public IEnumerator AttackingGettingCloser(Transform player, float diffDistToAttack)
     {
         float zDistance = Random.Range(diffDistToAttack + 1 + aiTrait.ReturnApprochingPlayer(), diffDistToAttack + 6 + aiTrait.ReturnApprochingPlayer());
         //Debug.Log(zDistance);
         //float yDistance = Random.Range(-diffDistToAttack, diffDistToAttack);
         Vector3 newPosition = stateManager.transform.position + stateManager.transform.forward * zDistance;
-        StartMovement(newPosition, "Approching", true);
+        StartMovement(newPosition, "Approching", true, player);
         yield return null;
     }
 }

@@ -9,6 +9,10 @@ public class Sc_AIStateManager : MonoBehaviour
 {
     //Setting up the traits of the AI.
     private Trait aiTrait;
+    private AudioClip[] aiAudioClips;
+    private AudioClip audioToplay;
+    [SerializeField]
+    private AudioSource aiAudioSource;
 
     //All the current state the AI can be in
     [HideInInspector]
@@ -157,13 +161,25 @@ public class Sc_AIStateManager : MonoBehaviour
         currentState.EnterState(playerNoticed);
     }
 
-    public void SetUpTraits(Trait newAITrait)
+    public void SetUpTraits(Trait newAITrait, AudioClip[] audioClips)
     {
         this.aiTrait = newAITrait;
+        this.aiAudioClips = audioClips;
+
         //Debug.Log(newAITrait.ReturnName());
         //Debug.Log(aiTrait.ReturnName());
         commonMethods.SetUpTrait(aiTrait);
         aggressionDesicionState.SetUpTrait(aiTrait);
+    }
+
+    public void PlayAudioOneShot(int lowerLevelIncl, int higherLevelIncl)
+    {
+        if (!aiAudioSource.isPlaying)
+        {
+            directorAI.PlayAudio();
+            audioToplay = aiAudioClips[Random.Range(lowerLevelIncl, higherLevelIncl)];
+            aiAudioSource.PlayOneShot(audioToplay);
+        }
     }
 
     //Sets the AIs decision value

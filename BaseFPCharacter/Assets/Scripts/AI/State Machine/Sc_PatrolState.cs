@@ -85,8 +85,9 @@ public class Sc_PatrolState : Sc_AIBaseState
         bool playerHidden = playerMovementScript.ReturnIsHidden();
 
 
-        if ((distPlayer <= visionRange - 5 && angleToPlayer <= visionConeAngle - 5) && !playerHidden && !playerBehindWall)
+        if ((distPlayer <= visionRange - 15 && angleToPlayer <= visionConeAngle - 15) && !playerHidden && !playerBehindWall)
         {
+            stateManager.PlayAudioOneShot(0, 3);
             //directorAI.PlayerFound(state.gameObject);
             stateManager.playerNoticed = true;
             stateManager.SwitchState(stateManager.aggressionDesicionState);

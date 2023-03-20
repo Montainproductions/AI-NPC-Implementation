@@ -85,7 +85,7 @@ public class Sc_AttackState : Sc_AIBaseState
         if (diffDistToAttack >= 0)
         {
             //isMoving = true;
-            stateManager.StartCoroutine(commonMethodsScript.AttackingGettingCloser(diffDistToAttack));
+            stateManager.StartCoroutine(commonMethodsScript.AttackingGettingCloser(player.transform, diffDistToAttack));
         }
         else if (gunScript.ReturnCurrentAmmo() > 0 && diffDistToAttack < 0)
         {
@@ -108,6 +108,7 @@ public class Sc_AttackState : Sc_AIBaseState
         stateManager.SetIsWalking(false);
         //Debug.Log("Shooting");
         timeDelay = Random.Range(1, 2);
+        stateManager.PlayAudioOneShot(6, 8);
         yield return new WaitForSeconds(timeDelay);
         stateManager.StartCoroutine(gunScript.ShotFired());
         //Debug.Log("Enemy ammo count: " + gunScript.currentAmmoAmount);
@@ -140,6 +141,7 @@ public class Sc_AttackState : Sc_AIBaseState
     {
         stateManager.SetCurrentAction("Reloading");
         //Debug.Log("Shooting");
+        stateManager.PlayAudioOneShot(3, 6);
         yield return new WaitForSeconds(3.25f);
         stateManager.StartCoroutine(gunScript.Reloading());
         yield return new WaitForSeconds(2);

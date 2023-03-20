@@ -88,7 +88,7 @@ GameObject:
   - component: {fileID: 3535069998013017123}
   - component: {fileID: 5579509022116902810}
   m_Layer: 8
-  m_Name: Audio
+  m_Name: AudioSource
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -738,13 +738,14 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 34acd208d9af86846a20656eef7ece85, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  aiAudioSource: {fileID: 3535069998013017123}
   commonMethods: {fileID: 780441598457401939}
   navMeshAgent: {fileID: 5355143908986894846}
   directorAI: {fileID: 2460812123129524718, guid: 9a1b04fd93715f84585c30af5c65b4ea, type: 3}
   player: {fileID: 6646797674794803052, guid: 81ce49f96577d844ab806a3654e6ae19, type: 3}
   playerNoticed: 0
   visionRange: 55
-  visionConeAngle: 100
+  visionConeAngle: 180
   audioRange: 60
   alertedTimer: 30
   decisionTimer: 20
@@ -771,6 +772,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 46379d01e2457ac47aff58c2f987be41, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  isPlayer: 0
   currentHealth: 0
   maxHealth: 55
   healingOverTimeAllowed: 0
