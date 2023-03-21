@@ -30,7 +30,7 @@ public class Sc_AIDirector : MonoBehaviour
     //It is a list instead of an array since not all enemies will have to decide what to do when it sees the player at the same time.
     public static List<GameObject> enemyAIDesicionValue = new List<GameObject>();
     //The state manager is the specific scprit that controls each individual AI NPC
-    private Sc_AIStateManager stateManager;
+    //private Sc_AIStateManager stateManager;
 
     //Numbers of enemies that are allowed and are currently attacking the player
     [SerializeField]
@@ -42,6 +42,10 @@ public class Sc_AIDirector : MonoBehaviour
 
     [SerializeField]
     private int maxSoundsPlaying, currentSoundsPlaying;
+
+    private int[] arrayOfSoundsToPlay;
+
+    private int lastPlayedAudioGroup;
 
     //The specific enemy game object
     private GameObject enemy;
@@ -61,6 +65,14 @@ public class Sc_AIDirector : MonoBehaviour
 
         allEnemyAIManagerScript = new Sc_AIStateManager[allCurrentEnemy.Length];
 
+        currentSoundsPlaying = 0;
+        arrayOfSoundsToPlay = new int[4];
+
+        for (int i = 0; i < arrayOfSoundsToPlay.Length; i++)
+        {
+            arrayOfSoundsToPlay[i] = -1;
+        }
+
         playerSeen = false;
         //Starts the timer coroutine so that each time it will grab the current set of AIs that have seen the Player and chosses which state they go to.
         StartCoroutine(WhatToDoTimer());
@@ -74,11 +86,51 @@ public class Sc_AIDirector : MonoBehaviour
 
     }
 
-    public void PlayAudio()
+    public bool PlayAudio(int audioPosition, Sc_AIStateManager statemanager)
     {
-        if(currentSoundsPlaying < maxSoundsPlaying)
+        bool enoughSpace = false;
+        int spacePosition = -1;
+        for(int i = 0; i < arrayOfSoundsToPlay.Length; i++)
         {
+            if (arrayOfSoundsToPlay[i] == -1)
+            {
+                enoughSpace = true;
+                spacePosition = i;
+                break;
+            }
+        }
 
+        if (currentSoundsPlaying < maxSoundsPlaying)
+        {
+            currentSoundsPlaying++;
+            return true;
+        }
+        else if (enoughSpace)
+        {
+            Debug.Log(audioPosition);
+            arrayOfSoundsToPlay[spacePosition] = audioPosition;
+            StartCoroutine(PlayAudioLaterTimer(statemanager, audioPosition, spacePosition));
+            return false;
+        }
+        return false;
+    }
+
+    IEnumerator PlayAudioLaterTimer(Sc_AIStateManager stateManager, int audioPosition, int arrayOfSoundsPosition)
+    {
+        yield return new WaitForSeconds(1.5f);
+        if (stateManager != null)
+        {
+            stateManager.PlayAudioOneShot(audioPosition);
+        }
+        arrayOfSoundsToPlay[arrayOfSoundsPosition] = -1;
+        yield return null;
+    }
+
+    public void NotPlayingAudio()
+    {
+        if (currentSoundsPlaying > 0)
+        {
+            currentSoundsPlaying--;
         }
     }
 
@@ -95,6 +147,17 @@ public class Sc_AIDirector : MonoBehaviour
         }
     }
 
+    //Will instantiate the required amount of enemies.
+    IEnumerator SpawnEnemy(float amountToSpawn, int spawnLocation)
+    {
+        for (int i = 0; i <= amountToSpawn; i++)
+        {
+            GameObject newEnemy = Instantiate(enemy, spawnLocations[spawnLocation].transform);
+            yield return new WaitForSeconds(spawnerWaitTimer);
+        }
+        yield return null;
+    }
+
     //Adds the AI Enemy to the list and recalculates the average decision value of all AI in list
     public void AIAttackAddList(GameObject enemyObj)
     {
@@ -107,29 +170,6 @@ public class Sc_AIDirector : MonoBehaviour
     {
         enemyAIDesicionValue.Remove(enemyObj);
         StartCoroutine(AverageDecisionValue());
-    }
-
-    //If the player was found by an enemy it will aleart all other enemies in the map. I might slightly change this in the future so that its in a radius of the enemy so that it dosent feel over welming that all enemies seem to instantly know where the player is after being spotted.
-    public IEnumerator PlayerFound(GameObject enemyObject)
-    {
-        playerSeen = true;
-
-        for (int i = 0; i < allCurrentEnemy.Length; i++) {
-            //Debug.Log(allCurrentEnemy[i]);
-            //Debug.Log(enemyObject);
-            if (allCurrentEnemy[i] != enemyObject && (Vector3.Distance(allCurrentEnemy[i].transform.position, enemyObject.transform.position)) < audioRange)
-            {
-                yield return new WaitForSeconds(1.25f);
-                stateManager = allCurrentEnemy[i].GetComponent<Sc_AIStateManager>();
-                if (!allEnemyAIManagerScript[i].playerNoticed)
-                {
-                    stateManager.playerNoticed = true;
-                    stateManager.SwitchState(stateManager.aggressionDesicionState);
-                }
-                    //stateManager = null;
-            }
-        }
-        yield return null;
     }
 
     //Grabs all of the manager scripts from the AI
@@ -147,7 +187,7 @@ public class Sc_AIDirector : MonoBehaviour
             else if (7.5f > randomValue && randomValue >= 0.5f)
             {
                 //Debug.Log(Bold.ReturnAgressionValue());
-                allEnemyAIManagerScript[i].SetUpTraits(Bold, boldAudioClips1);
+                allEnemyAIManagerScript[i].SetUpTraits(Bold, agressiveAudioClips1);
             }
             else if (5.0f > randomValue && randomValue >= 0.25f)
             {
@@ -157,19 +197,31 @@ public class Sc_AIDirector : MonoBehaviour
             else
             {
                 //Debug.Log(Scared.ReturnAgressionValue());
-                allEnemyAIManagerScript[i].SetUpTraits(Scared, boldAudioClips1);
+                allEnemyAIManagerScript[i].SetUpTraits(Scared, agressiveAudioClips1);
             }
         }
         yield return null;
     }
 
-    //Will instantiate the required amount of enemies.
-    IEnumerator SpawnEnemy(float amountToSpawn, int spawnLocation)
+    //If the player was found by an enemy it will aleart all other enemies in the map. I might slightly change this in the future so that its in a radius of the enemy so that it dosent feel over welming that all enemies seem to instantly know where the player is after being spotted.
+    public IEnumerator PlayerFound(GameObject enemyObject)
     {
-        for (int i = 0; i <= amountToSpawn; i++)
+        playerSeen = true;
+
+        for (int i = 0; i < allCurrentEnemy.Length; i++)
         {
-            GameObject newEnemy = Instantiate(enemy, spawnLocations[spawnLocation].transform);
-            yield return new WaitForSeconds(spawnerWaitTimer);
+            //Debug.Log(allCurrentEnemy[i]);
+            //Debug.Log(enemyObject);
+            if (allCurrentEnemy[i] != enemyObject && (Vector3.Distance(allCurrentEnemy[i].transform.position, enemyObject.transform.position)) < audioRange)
+            {
+                yield return new WaitForSeconds(1.25f);
+                if (!allEnemyAIManagerScript[i].playerNoticed)
+                {
+                    allEnemyAIManagerScript[i].playerNoticed = true;
+                    allEnemyAIManagerScript[i].SwitchState(allEnemyAIManagerScript[i].aggressionDesicionState);
+                }
+                //stateManager = null;
+            }
         }
         yield return null;
     }
@@ -184,7 +236,6 @@ public class Sc_AIDirector : MonoBehaviour
 
         for (int i = 0; i < enemyAIDesicionValue.Count; i++)
         {
-            stateManager = enemyAIDesicionValue[i].GetComponent<Sc_AIStateManager>();
             float v = Random.Range(1.0f, 10.0f);
             
             //Debug.Log(v);
@@ -192,24 +243,24 @@ public class Sc_AIDirector : MonoBehaviour
             //If too many enemy AIs are attacking the player then the current one will go to the cover state
             if (currentAttacking >= maxAttacking)
             {
-                stateManager.SwitchState(stateManager.coverState);
+                allEnemyAIManagerScript[i].SwitchState(allEnemyAIManagerScript[i].coverState);
 
             }
             //If the current desicion value of the enemy is greater than the average value of all enemies then the enemy will have a 75% chance of going to the attack state or a 25% chance to go to the cover state.
             //This is meant to help
-            else if (stateManager.ReturnDecisionValue() >= valueLimit)
+            else if (allEnemyAIManagerScript[i].ReturnDecisionValue() >= valueLimit)
             {
                 if(v >= 2.5f) //2.5f
                 {
                     //Debug.Log("Attacking");
                     //stateManager.SwitchState(stateManager.attackState);
-                    stateManager.SwitchState(stateManager.attackState);
+                    allEnemyAIManagerScript[i].SwitchState(allEnemyAIManagerScript[i].coverState);
                     currentAttacking++;
                 }
                 else
                 {
                     //Debug.Log("Lower");
-                    stateManager.SwitchState(stateManager.coverState);
+                    allEnemyAIManagerScript[i].SwitchState(allEnemyAIManagerScript[i].coverState);
                 }
             }
             else
@@ -218,13 +269,13 @@ public class Sc_AIDirector : MonoBehaviour
                 {
                     //Debug.Log("Attacking part 2");
                     //stateManager.SwitchState(stateManager.attackState);
-                    stateManager.SwitchState(stateManager.attackState);
+                    allEnemyAIManagerScript[i].SwitchState(allEnemyAIManagerScript[i].coverState);
                     currentAttacking++;
                 }
                 else
                 {
                     //Debug.Log("Lower Part 2");
-                    stateManager.SwitchState(stateManager.coverState);
+                    allEnemyAIManagerScript[i].SwitchState(allEnemyAIManagerScript[i].coverState);
                 }
             }
         }
@@ -239,8 +290,8 @@ public class Sc_AIDirector : MonoBehaviour
     {
         for (int i = 0; i < enemyAIDesicionValue.Count; i++)
         {
-            stateManager = enemyAIDesicionValue[i].GetComponent<Sc_AIStateManager>();
-            average += stateManager.ReturnDecisionValue();
+            //allEnemyAIManagerScript[i] = enemyAIDesicionValue[i].GetComponent<Sc_AIStateManager>();
+            average += allEnemyAIManagerScript[i].ReturnDecisionValue();
         }
         average = average / enemyAIDesicionValue.Count;
         yield return null;
@@ -266,6 +317,7 @@ public class Sc_AIDirector : MonoBehaviour
             //Debug.Log(allCurrentEnemy[i]);
             if (Vector3.Distance(allCurrentEnemy[i].transform.position, positionOfShot) < audioRange && (allEnemyAIManagerScript[i].currentState == allEnemyAIManagerScript[i].idleState || allEnemyAIManagerScript[i].currentState == allEnemyAIManagerScript[i].patrolState))
             {
+                StartCoroutine(allEnemyAIManagerScript[i].PlayAudioOneShot(6, 8));
                 //Debug.Log("Player Heard");
                 allEnemyAIManagerScript[i].playerNoticed = true;
                 allEnemyAIManagerScript[i].SwitchState(allEnemyAIManagerScript[i].aggressionDesicionState);

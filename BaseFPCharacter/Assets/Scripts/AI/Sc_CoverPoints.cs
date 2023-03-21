@@ -12,7 +12,7 @@ public class Sc_CoverPoints : MonoBehaviour
     private GameObject player;
 
     // Bit shift the index of the layer (7) to get a bit mask
-    private int layerMask = 1 << 9;
+    private int layerMask = 1 << 7;
 
     private RaycastHit hit;
 
@@ -22,6 +22,25 @@ public class Sc_CoverPoints : MonoBehaviour
     public void Start()
     {
         beingUsed = false;
+    }
+
+    public void Update()
+    {
+        Vector3 direction = player.transform.position - gameObject.transform.position;
+        if (Physics.Raycast(gameObject.transform.position, direction, out hit, 10, layerMask))
+        {
+            Debug.DrawRay(gameObject.transform.position, direction * hit.distance, Color.red);
+            //Debug.Log("Object Hit, Can be used for cover");*/
+
+            //behindCover = true;
+        }
+        else
+        {
+            Debug.DrawRay(gameObject.transform.position, direction * 1000, Color.white);
+            //Debug.Log("Did not Hit");*/
+
+            //behindCover = false;
+        }
     }
 
     //This method checks if the point is being used by another AI NPC and then with a raycast towards the player it will check if its behind the cover object. The method will then return wether the point is behind cover.
@@ -42,7 +61,7 @@ public class Sc_CoverPoints : MonoBehaviour
             }
             else
             {
-                //Debug.DrawRay(gameObject.transform.position, direction * 1000, Color.white);
+                Debug.DrawRay(gameObject.transform.position, direction * 1000, Color.white);
                 //Debug.Log("Did not Hit");*/
 
                 behindCover = false;

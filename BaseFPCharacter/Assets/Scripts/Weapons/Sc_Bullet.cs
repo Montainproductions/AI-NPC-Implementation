@@ -37,10 +37,11 @@ public class Sc_Bullet : MonoBehaviour{
     }
 
     public void OnTriggerEnter(Collider other){
-        //Debug.Log(other.gameObject);
+        Debug.Log(other.gameObject);
         //Damages an enemy if it has health
 
         if (other.gameObject.tag == "Enemy" && playerGun) {
+            Debug.Log("Enemy Hit");
             other.gameObject.GetComponent<Sc_Health>().TakeDamage(dmgFromBullet);
             Destroy(gameObject);
         }
@@ -49,7 +50,7 @@ public class Sc_Bullet : MonoBehaviour{
             player.GetComponent<Sc_Health>().TakeDamage(dmgFromBullet);
             Destroy(gameObject);
         }
-        else if(other.gameObject.tag == "Walls") {
+        else if(other.gameObject.tag == "Walls" || other.gameObject.tag == "Cover") {
             Destroy(gameObject);
         }
     }

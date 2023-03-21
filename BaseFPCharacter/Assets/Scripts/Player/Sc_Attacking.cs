@@ -54,6 +54,7 @@ public class Sc_Attacking : MonoBehaviour{
     // Update is called once per frame
     void Update(){
         if (attackForPlayer) {
+            //Debug.Log(baseGunScript.reloaded);
             if (Input.GetMouseButton(0)) {
                 StartCoroutine(Attacking());
             }
@@ -95,9 +96,10 @@ public class Sc_Attacking : MonoBehaviour{
 
     private void Reload_preformed(InputAction.CallbackContext context)
     {
-        if (!context.performed && attackForPlayer) return;
-
-        StartCoroutine(baseGunScript.Reloading());
+        if (context.performed && attackForPlayer)
+        {
+            StartCoroutine(baseGunScript.Reloading());
+        }
     }
 
     //Checks if the enemy is hiting the collidor and then deal damage

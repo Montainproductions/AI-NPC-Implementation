@@ -179,7 +179,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   playerCamera: {fileID: 6646797674624269428}
-  mouseSensativity: 9
+  mouseSensativity: 6
   mouseX: 0
   mouseY: 0
   playerBody: {fileID: 6646797674794803048}
@@ -356,11 +356,11 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 46379d01e2457ac47aff58c2f987be41, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  isPlayer: 0
+  isPlayer: 1
   currentHealth: 0
-  maxHealth: 120
+  maxHealth: 200
   healingOverTimeAllowed: 1
-  healingRate: 2
+  healingRate: 15
   printingValues: 0
   updateHealthUI: 1
 --- !u!114 &1793502380870240587
@@ -508,6 +508,38 @@ PrefabInstance:
       propertyPath: effectiveRange
       value: 50
       objectReference: {fileID: 0}
+    - target: {fileID: 7687749147882011708, guid: 7133376c2d13887488df58dced69d27c, type: 3}
+      propertyPath: MaxDistance
+      value: 80
+      objectReference: {fileID: 0}
+    - target: {fileID: 7687749147882011708, guid: 7133376c2d13887488df58dced69d27c, type: 3}
+      propertyPath: rolloffCustomCurve.m_Curve.Array.size
+      value: 2
+      objectReference: {fileID: 0}
+    - target: {fileID: 7687749147882011708, guid: 7133376c2d13887488df58dced69d27c, type: 3}
+      propertyPath: rolloffCustomCurve.m_Curve.Array.data[0].time
+      value: 0.019830704
+      objectReference: {fileID: 0}
+    - target: {fileID: 7687749147882011708, guid: 7133376c2d13887488df58dced69d27c, type: 3}
+      propertyPath: rolloffCustomCurve.m_Curve.Array.data[1].time
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 7687749147882011708, guid: 7133376c2d13887488df58dced69d27c, type: 3}
+      propertyPath: rolloffCustomCurve.m_Curve.Array.data[0].value
+      value: 0.41249466
+      objectReference: {fileID: 0}
+    - target: {fileID: 7687749147882011708, guid: 7133376c2d13887488df58dced69d27c, type: 3}
+      propertyPath: rolloffCustomCurve.m_Curve.Array.data[1].value
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 7687749147882011708, guid: 7133376c2d13887488df58dced69d27c, type: 3}
+      propertyPath: rolloffCustomCurve.m_Curve.Array.data[1].inSlope
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 7687749147882011708, guid: 7133376c2d13887488df58dced69d27c, type: 3}
+      propertyPath: rolloffCustomCurve.m_Curve.Array.data[1].outSlope
+      value: 0
+      objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: 7133376c2d13887488df58dced69d27c, type: 3}
 --- !u!114 &6646797674622987713 stripped
@@ -642,6 +674,10 @@ PrefabInstance:
   m_Modification:
     m_TransformParent: {fileID: 6646797674624269427}
     m_Modifications:
+    - target: {fileID: 7530717273690330300, guid: d7fcd743e8032ca4fb3d4f771da7cfe5, type: 3}
+      propertyPath: m_AnchoredPosition.x
+      value: 0.5
+      objectReference: {fileID: 0}
     - target: {fileID: 7530717273750023128, guid: d7fcd743e8032ca4fb3d4f771da7cfe5, type: 3}
       propertyPath: m_Pivot.x
       value: 0
@@ -729,6 +765,10 @@ PrefabInstance:
     - target: {fileID: 7530717273750023132, guid: d7fcd743e8032ca4fb3d4f771da7cfe5, type: 3}
       propertyPath: m_Name
       value: Canvas
+      objectReference: {fileID: 0}
+    - target: {fileID: 7530717275004814955, guid: d7fcd743e8032ca4fb3d4f771da7cfe5, type: 3}
+      propertyPath: m_AnchoredPosition.x
+      value: 0.5
       objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: d7fcd743e8032ca4fb3d4f771da7cfe5, type: 3}

@@ -300,9 +300,10 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   isPlayerGun: 0
+  inTutorialArea: 0
   player: {fileID: 0}
   dmgPerBullet: 20
-  bulletSpeed: 95
+  bulletSpeed: 85
   fireRate: 6
   effectiveRange: 50
   timeBetweenShots: 0.25
@@ -371,7 +372,7 @@ AudioSource:
   Priority: 128
   DopplerLevel: 1
   MinDistance: 1
-  MaxDistance: 100
+  MaxDistance: 80
   Pan2D: 0
   rolloffMode: 2
   BypassEffects: 0
@@ -381,19 +382,10 @@ AudioSource:
     serializedVersion: 2
     m_Curve:
     - serializedVersion: 3
-      time: 0
-      value: 1
+      time: 0.028327942
+      value: 0.41249466
       inSlope: 0
       outSlope: 0
-      tangentMode: 0
-      weightedMode: 0
-      inWeight: 0.33333334
-      outWeight: 0.33333334
-    - serializedVersion: 3
-      time: 0.72427374
-      value: 0.7446266
-      inSlope: -1.378941
-      outSlope: -1.378941
       tangentMode: 0
       weightedMode: 0
       inWeight: 0.33333334

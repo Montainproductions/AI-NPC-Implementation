@@ -60,8 +60,9 @@ public class Sc_GameManager : MonoBehaviour
     {
         if (SceneManager.sceneCountInBuildSettings != 0)
         {
-            pauseActivated = !pauseActivated;
-            pauseMenu.SetActive(pauseActivated);
+            Application.Quit();
+            //pauseActivated = !pauseActivated;
+            //pauseMenu.SetActive(pauseActivated);
 
             /*GameState currentGameState = GameStateManager.Instance.CurrentGameState;
             GameState newGameState = currentGameState == GameState.Gameplay
@@ -87,6 +88,8 @@ public class Sc_GameManager : MonoBehaviour
 
     private void OnDestroy()
     {
+        playerInputActions.Player.Escape.performed -= Escape_performed;
+        playerInputActions.Player.Restart.performed -= GameRestarted_performed;
         GameStateManager.Instance.OnGameStateChanged -= OnGameStateChanged;
     }
 }

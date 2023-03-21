@@ -61,6 +61,8 @@ public class Sc_CoverState : Sc_AIBaseState
         bool playerHidden = playerMovementScript.ReturnIsHidden();
         if (distPlayer > visionRange || angleToPlayer > visionConeAngle || playerHidden)
         {
+            stateManager.PlayAudioOneShot(3, 5);
+            stateManager.playerNoticed = false;
             stateManager.SwitchState(stateManager.searchState);
         }
     }
@@ -85,6 +87,7 @@ public class Sc_CoverState : Sc_AIBaseState
         //Choosing a cover point that is behind the cover when comparing to the player
         for (int i = 0; i < 4; i++)
         {
+            Debug.Log("ChoosingCover");
             Sc_CoverPoints coverScript = closestCover.transform.GetChild(i).GetComponent<Sc_CoverPoints>();
             bool behindCover = coverScript.IsBehindCover();
             if (behindCover && !coverScript.beingUsed)
@@ -92,8 +95,8 @@ public class Sc_CoverState : Sc_AIBaseState
                 //Debug.Log(closestCover.transform.GetChild(i));
                 coverPosition = closestCover.transform.GetChild(i).transform.position;
                 coverScript.beingUsed = true;
-                //Debug.Log("Cover position: " + coverPosition);
-                stateManager.PlayAudioOneShot(12, 14);
+                Debug.Log("Cover position: " + coverPosition);
+                yield return new WaitForSeconds(1.5f);
                 commonMethodsScript.StartMovement(coverPosition, "Cover", true);
                 break;
             }
@@ -134,8 +137,8 @@ public class Sc_CoverState : Sc_AIBaseState
     {
         //Debug.Log("Shooting");
         stateManager.SetIsAttacking(true);
-        stateManager.PlayAudioOneShot(9, 11);
         yield return new WaitForSeconds(2.75f);
+        stateManager.PlayAudioOneShot(18, 20);
         Sc_BaseGun gunScript = currentWeapon.GetComponent<Sc_BaseGun>();
         stateManager.StartCoroutine(gunScript.ShotFired());
         yield return new WaitForSeconds(1.25f);

@@ -68,6 +68,7 @@ public class Sc_CommonMethods : MonoBehaviour
                 walkingPosition = Vector3.zero;
                 if (currentState == "Cover")
                 {
+                    stateManager.PlayAudioOneShot(24, 26);
                     StartCoroutine(stateManager.coverState.AtCover());
                 }
                 else if (currentState == "Attack")

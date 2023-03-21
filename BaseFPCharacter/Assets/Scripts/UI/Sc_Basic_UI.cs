@@ -62,7 +62,8 @@ public class Sc_Basic_UI : MonoBehaviour{
     }
 
     public void NewHealth(float currentHealth) {
-        healthTextUI.SetText(currentHealth.ToString());
+        int health = (int)currentHealth;
+        healthTextUI.SetText(health.ToString());
     }
 
     public void SetCurrentAmmo(float currentAmmo, float maxCurrentAmmo)

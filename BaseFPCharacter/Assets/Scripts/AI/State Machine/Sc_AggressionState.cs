@@ -91,6 +91,7 @@ public class Sc_AggressionState : Sc_AIBaseState
     {
         float distFromPlayer = Vector3.Distance(player.transform.position, stateManager.transform.position);
         float currentAttackRange = Random.Range(attackRange, attackRange - 3);
+        
         decisionVal += aiTrait.ReturnAgressionValue();
 
         if (currentAttackRange > distFromPlayer)
@@ -106,10 +107,11 @@ public class Sc_AggressionState : Sc_AIBaseState
             }
         }
         //Debug.Log("Obj: " + self.name + " Value: " + decisionVal);
-
+        stateManager.StartCoroutine(StoppingAI());
         stateManager.SetDecisionValue(decisionVal);
         
         directorAI.AIAttackAddList(self);
+        decisionVal = 0;
     }
 
     //This method will have the AI stop moving towards any position that it might be going to. This is princippaly so that if the AI is transitioning from the patrol state then it will actually stop moving towards its patrol point and face the player.

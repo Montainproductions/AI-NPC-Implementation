@@ -7,12 +7,14 @@ using UnityEngine.InputSystem.HID;
 
 public class Sc_AIStateManager : MonoBehaviour
 {
+    //Audioclips currently not being used: 0-2, 12-14, 21-23
     //Setting up the traits of the AI.
     private Trait aiTrait;
     private AudioClip[] aiAudioClips;
     private AudioClip audioToplay;
     [SerializeField]
     private AudioSource aiAudioSource;
+    private bool lastAudioPassed;
 
     //All the current state the AI can be in
     [HideInInspector]
@@ -108,6 +110,8 @@ public class Sc_AIStateManager : MonoBehaviour
     // Start is called before the first frame update
     void Start()
     {
+        lastAudioPassed = true;
+
         //Sets starting state to patroling
         currentState = patrolState;
 
@@ -172,14 +176,28 @@ public class Sc_AIStateManager : MonoBehaviour
         aggressionDesicionState.SetUpTrait(aiTrait);
     }
 
-    public void PlayAudioOneShot(int lowerLevelIncl, int higherLevelIncl)
+    public void PlayAudioOneShot(int audioPosition)
+    {
+        aiAudioSource.PlayOneShot(aiAudioClips[audioPosition]);
+    }
+
+    public IEnumerator PlayAudioOneShot(int lowerLevelIncl, int higherLevelIncl)
     {
         if (!aiAudioSource.isPlaying)
         {
-            directorAI.PlayAudio();
-            audioToplay = aiAudioClips[Random.Range(lowerLevelIncl, higherLevelIncl)];
-            aiAudioSource.PlayOneShot(audioToplay);
+            int audioPosition = Random.Range(lowerLevelIncl, higherLevelIncl);
+            if (directorAI.PlayAudio(audioPosition, this) /*&& lastAudioPassed*/)
+            {
+                //Debug.Log("PlayingAudio");
+                lastAudioPassed = false;
+                aiAudioSource.PlayOneShot(aiAudioClips[audioPosition]);
+                directorAI.NotPlayingAudio();
+                yield return new WaitForSeconds(0.2f);
+                lastAudioPassed = true;
+            }
         }
+
+        yield return null;
     }
 
     //Sets the AIs decision value

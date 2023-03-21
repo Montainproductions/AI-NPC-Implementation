@@ -27,8 +27,8 @@ public class Sc_BaseGun : MonoBehaviour {
     [HideInInspector]
     public bool shotRecently;
 
-    [SerializeField]
-    private bool reloaded;
+    [HideInInspector]
+    public bool reloaded;
     [SerializeField]
     private float reloadTimer;
 
