@@ -70,6 +70,11 @@ public class Sc_Attacking : MonoBehaviour{
         playerBox.transform.rotation = Quaternion.Slerp(playerBox.transform.rotation, rotation, Time.deltaTime * damping);
     }
 
+    public void AddingAmmo(int ammoIncrease)
+    {
+        baseGunScript.AddingAmmo(ammoIncrease);
+    }
+
     public IEnumerator Attacking(){
         if (canMeleeAttack)
         {

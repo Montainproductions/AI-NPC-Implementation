@@ -53,6 +53,18 @@ public class Sc_BaseGun : MonoBehaviour {
         }
     }
 
+    public void AddingAmmo(int ammoIncrease)
+    {
+        if((currentMaxAmmo + ammoIncrease) <= maxAmmo)
+        {
+            currentMaxAmmo += ammoIncrease;
+        }
+        else
+        {
+            currentMaxAmmo = maxAmmo;
+        }
+    }
+
     //A Coroutine that runs whenever the player or the AI trys shoots the current gun.
     public IEnumerator ShotFired()
     {
