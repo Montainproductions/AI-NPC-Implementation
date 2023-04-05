@@ -35,18 +35,10 @@ public class Sc_IdleState : Sc_AIBaseState
         bool playerHidden = playerMovementScript.ReturnIsHidden();
         if ((distPlayer <= visionRange - 5 && angleToPlayer <= visionConeAngle - 5) && !playerHidden && !playerBehindWall)
         {
+            stateManager.StartCoroutine(stateManager.PlayAudioOneShot(6, 8));
             stateManager.playerNoticed = true;
             stateManager.SwitchState(stateManager.aggressionDesicionState);
         }
-    }
-
-    public void HeardGunShots(float distPlayer)
-    {
-        if(distPlayer <= audioRange)
-        {
-
-        }
-
     }
 
     IEnumerator IdleTimed()

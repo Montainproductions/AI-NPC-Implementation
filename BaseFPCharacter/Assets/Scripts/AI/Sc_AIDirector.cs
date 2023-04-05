@@ -88,7 +88,7 @@ public class Sc_AIDirector : MonoBehaviour
 
     public bool PlayAudio(int audioPosition, Sc_AIStateManager statemanager)
     {
-        bool enoughSpace = false;
+        /*bool enoughSpace = false;
         int spacePosition = -1;
         for(int i = 0; i < arrayOfSoundsToPlay.Length; i++)
         {
@@ -98,19 +98,29 @@ public class Sc_AIDirector : MonoBehaviour
                 spacePosition = i;
                 break;
             }
-        }
+        }*/
 
         if (currentSoundsPlaying < maxSoundsPlaying)
         {
             currentSoundsPlaying++;
             return true;
         }
-        else if (enoughSpace)
+        /*else if (enoughSpace)
         {
             Debug.Log(audioPosition);
             arrayOfSoundsToPlay[spacePosition] = audioPosition;
             StartCoroutine(PlayAudioLaterTimer(statemanager, audioPosition, spacePosition));
             return false;
+        }*/
+        return false;
+    }
+
+    public bool PlayAudio()
+    {
+        if(currentSoundsPlaying < maxSoundsPlaying)
+        {
+            currentSoundsPlaying++;
+            return true;
         }
         return false;
     }
@@ -184,12 +194,12 @@ public class Sc_AIDirector : MonoBehaviour
                 //Debug.Log(Aggressive.ReturnAgressionValue());
                 allEnemyAIManagerScript[i].SetUpTraits(Aggressive, agressiveAudioClips1);
             }
-            else if (7.5f > randomValue && randomValue >= 0.5f)
+            else if (0.75f > randomValue && randomValue >= 0.5f)
             {
                 //Debug.Log(Bold.ReturnAgressionValue());
                 allEnemyAIManagerScript[i].SetUpTraits(Bold, agressiveAudioClips1);
             }
-            else if (5.0f > randomValue && randomValue >= 0.25f)
+            else if (0.5f > randomValue && randomValue >= 0.25f)
             {
                 //Debug.Log(Cautious.ReturnAgressionValue());
                 allEnemyAIManagerScript[i].SetUpTraits(Cautious, agressiveAudioClips1);
@@ -254,7 +264,7 @@ public class Sc_AIDirector : MonoBehaviour
                 {
                     //Debug.Log("Attacking");
                     //stateManager.SwitchState(stateManager.attackState);
-                    allEnemyAIManagerScript[i].SwitchState(allEnemyAIManagerScript[i].coverState);
+                    allEnemyAIManagerScript[i].SwitchState(allEnemyAIManagerScript[i].attackState);
                     currentAttacking++;
                 }
                 else
@@ -269,7 +279,7 @@ public class Sc_AIDirector : MonoBehaviour
                 {
                     //Debug.Log("Attacking part 2");
                     //stateManager.SwitchState(stateManager.attackState);
-                    allEnemyAIManagerScript[i].SwitchState(allEnemyAIManagerScript[i].coverState);
+                    allEnemyAIManagerScript[i].SwitchState(allEnemyAIManagerScript[i].attackState);
                     currentAttacking++;
                 }
                 else

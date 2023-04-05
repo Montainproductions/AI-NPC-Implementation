@@ -11,7 +11,7 @@ public class Sc_AmmoBox : MonoBehaviour
     {
         if(other.tag == "Player")
         {
-            other.gameObject.GetComponent<Sc_Attacking>().AddAmmo(ammoCount);
+            other.gameObject.GetComponent<Sc_Attacking>().AddingAmmo(ammoCount);
             Destroy(gameObject);
         }
     }

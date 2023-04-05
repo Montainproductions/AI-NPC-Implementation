@@ -11,10 +11,11 @@ public class Sc_AIStateManager : MonoBehaviour
     //Setting up the traits of the AI.
     private Trait aiTrait;
     private AudioClip[] aiAudioClips;
-    private AudioClip audioToplay;
+    private AudioClip audioToplay, recentlyPlayedAudio;
     [SerializeField]
     private AudioSource aiAudioSource;
-    private bool lastAudioPassed;
+    private float lastAudioTimer;
+    private bool canPlayAudio;
 
     //All the current state the AI can be in
     [HideInInspector]
@@ -110,7 +111,8 @@ public class Sc_AIStateManager : MonoBehaviour
     // Start is called before the first frame update
     void Start()
     {
-        lastAudioPassed = true;
+        lastAudioTimer = 1;
+        canPlayAudio = true;
 
         //Sets starting state to patroling
         currentState = patrolState;
@@ -178,22 +180,32 @@ public class Sc_AIStateManager : MonoBehaviour
 
     public void PlayAudioOneShot(int audioPosition)
     {
-        aiAudioSource.PlayOneShot(aiAudioClips[audioPosition]);
+        if (!aiAudioSource.isPlaying)
+        {
+            aiAudioSource.PlayOneShot(aiAudioClips[audioPosition]);
+        }
     }
 
     public IEnumerator PlayAudioOneShot(int lowerLevelIncl, int higherLevelIncl)
     {
-        if (!aiAudioSource.isPlaying)
+        Debug.Log("Playing audio");
+        if (!aiAudioSource.isPlaying && canPlayAudio)
         {
             int audioPosition = Random.Range(lowerLevelIncl, higherLevelIncl);
-            if (directorAI.PlayAudio(audioPosition, this) /*&& lastAudioPassed*/)
+
+            if (recentlyPlayedAudio == null)
             {
+                recentlyPlayedAudio = aiAudioClips[audioPosition];
+            }
+            
+            if (directorAI.PlayAudio(audioPosition, this))
+            {
+                canPlayAudio = false;
                 //Debug.Log("PlayingAudio");
-                lastAudioPassed = false;
                 aiAudioSource.PlayOneShot(aiAudioClips[audioPosition]);
                 directorAI.NotPlayingAudio();
-                yield return new WaitForSeconds(0.2f);
-                lastAudioPassed = true;
+                yield return new WaitForSeconds(lastAudioTimer);
+                canPlayAudio = true;
             }
         }
 

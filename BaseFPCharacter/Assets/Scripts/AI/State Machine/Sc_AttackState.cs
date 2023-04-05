@@ -75,7 +75,7 @@ public class Sc_AttackState : Sc_AIBaseState
         bool playerHidden = playerMovementScript.ReturnIsHidden();
         if (distPlayer > visionRange || angleToPlayer > visionConeAngle || playerHidden)
         {
-            stateManager.PlayAudioOneShot(3, 5);
+            stateManager.StartCoroutine(stateManager.PlayAudioOneShot(3, 5));
             stateManager.playerNoticed = false;
             stateManager.SwitchState(stateManager.searchState);
         }
@@ -110,7 +110,7 @@ public class Sc_AttackState : Sc_AIBaseState
         //Debug.Log("Shooting");
         timeDelay = Random.Range(1.5f, 2.5f);
         yield return new WaitForSeconds(timeDelay);
-        stateManager.PlayAudioOneShot(15, 17);
+        stateManager.StartCoroutine(stateManager.PlayAudioOneShot(15, 17));
         stateManager.StartCoroutine(gunScript.ShotFired());
         //Debug.Log("Enemy ammo count: " + gunScript.currentAmmoAmount);
         timeDelay = Random.Range(1.25f, 1.85f);
@@ -142,7 +142,7 @@ public class Sc_AttackState : Sc_AIBaseState
     {
         stateManager.SetCurrentAction("Reloading");
         //Debug.Log("Shooting");
-        stateManager.PlayAudioOneShot(9, 11);
+        stateManager.StartCoroutine(stateManager.PlayAudioOneShot(9, 11));
         yield return new WaitForSeconds(3.25f);
         stateManager.StartCoroutine(gunScript.Reloading());
         yield return new WaitForSeconds(2);
