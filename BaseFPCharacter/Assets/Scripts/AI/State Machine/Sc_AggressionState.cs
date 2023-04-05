@@ -112,12 +112,23 @@ public class Sc_AggressionState : Sc_AIBaseState
         
         directorAI.AIAttackAddList(self);
         decisionVal = 0;
+        stateManager.StartCoroutine(AITakingTooLong());
+    }
+
+    IEnumerator AITakingTooLong()
+    {
+        yield return new WaitForSeconds(6.0f);
+        if (stateManager.currentState == stateManager.aggressionDesicionState)
+        {
+            stateManager.SwitchState(stateManager.coverState);
+        }
+        yield return null;
     }
 
     //This method will have the AI stop moving towards any position that it might be going to. This is princippaly so that if the AI is transitioning from the patrol state then it will actually stop moving towards its patrol point and face the player.
     IEnumerator StoppingAI()
     {
-        yield return new WaitForSeconds(0.45f);
+        yield return new WaitForSeconds(0.25f);
         navMeshAgent.isStopped = true;
         navMeshAgent.ResetPath();
         navMeshAgent.SetDestination(stateManager.transform.position);

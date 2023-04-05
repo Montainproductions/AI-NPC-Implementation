@@ -111,7 +111,7 @@ public class Sc_AIStateManager : MonoBehaviour
     // Start is called before the first frame update
     void Start()
     {
-        lastAudioTimer = 1;
+        lastAudioTimer = 4.0f;
         canPlayAudio = true;
 
         //Sets starting state to patroling
@@ -126,7 +126,6 @@ public class Sc_AIStateManager : MonoBehaviour
         idleState.IdleStartStateInfo(this, player.GetComponent<Sc_Player_Movement>(), idleTimer, visionRange, visionConeAngle, audioRange);
         
         currentState.EnterState(playerNoticed);
-
 
         //Sets animation to walking
         SetIsIdling(false);
@@ -192,11 +191,6 @@ public class Sc_AIStateManager : MonoBehaviour
         if (!aiAudioSource.isPlaying && canPlayAudio)
         {
             int audioPosition = Random.Range(lowerLevelIncl, higherLevelIncl);
-
-            if (recentlyPlayedAudio == null)
-            {
-                recentlyPlayedAudio = aiAudioClips[audioPosition];
-            }
             
             if (directorAI.PlayAudio(audioPosition, this))
             {
