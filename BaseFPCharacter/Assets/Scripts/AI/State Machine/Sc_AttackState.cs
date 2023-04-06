@@ -29,7 +29,7 @@ public class Sc_AttackState : Sc_AIBaseState
 
     //When first entering the attack state it will strat a redecide timer so that is will go back to the aggression state
     public override void EnterState(bool playerSeen) {
-
+        if (stateManager.gameObject == null) return;
         //Debug.Log("Going to attack");
         stateManager.StartCoroutine(StoppingAI());
         isMoving = false;

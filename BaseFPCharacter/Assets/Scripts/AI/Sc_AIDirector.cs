@@ -247,30 +247,29 @@ public class Sc_AIDirector : MonoBehaviour
         for (int i = 0; i < enemyAIDesicionValue.Count; i++)
         {
             float v = Random.Range(1.0f, 10.0f);
-            
-            //Debug.Log(v);
-            
+
+            Sc_AIStateManager aiScript = enemyAIDesicionValue[i].GetComponent<Sc_AIStateManager>();
+
             //If too many enemy AIs are attacking the player then the current one will go to the cover state
             if (currentAttacking >= maxAttacking)
             {
-                allEnemyAIManagerScript[i].SwitchState(allEnemyAIManagerScript[i].coverState);
-
+                aiScript.SwitchState(allEnemyAIManagerScript[i].coverState);
             }
             //If the current desicion value of the enemy is greater than the average value of all enemies then the enemy will have a 75% chance of going to the attack state or a 25% chance to go to the cover state.
             //This is meant to help
-            else if (allEnemyAIManagerScript[i].ReturnDecisionValue() >= valueLimit)
+            else if (aiScript.ReturnDecisionValue() >= valueLimit)
             {
                 if(v >= 2.5f) //2.5f
                 {
                     //Debug.Log("Attacking");
                     //stateManager.SwitchState(stateManager.attackState);
-                    allEnemyAIManagerScript[i].SwitchState(allEnemyAIManagerScript[i].attackState);
+                    aiScript.SwitchState(aiScript.attackState);
                     currentAttacking++;
                 }
                 else
                 {
                     //Debug.Log("Lower");
-                    allEnemyAIManagerScript[i].SwitchState(allEnemyAIManagerScript[i].coverState);
+                    aiScript.SwitchState(aiScript.coverState);
                 }
             }
             else
@@ -279,13 +278,13 @@ public class Sc_AIDirector : MonoBehaviour
                 {
                     //Debug.Log("Attacking part 2");
                     //stateManager.SwitchState(stateManager.attackState);
-                    allEnemyAIManagerScript[i].SwitchState(allEnemyAIManagerScript[i].attackState);
+                    aiScript.SwitchState(aiScript.attackState);
                     currentAttacking++;
                 }
                 else
                 {
                     //Debug.Log("Lower Part 2");
-                    allEnemyAIManagerScript[i].SwitchState(allEnemyAIManagerScript[i].coverState);
+                    aiScript.SwitchState(aiScript.coverState);
                 }
             }
         }
@@ -300,8 +299,8 @@ public class Sc_AIDirector : MonoBehaviour
     {
         for (int i = 0; i < enemyAIDesicionValue.Count; i++)
         {
-            //allEnemyAIManagerScript[i] = enemyAIDesicionValue[i].GetComponent<Sc_AIStateManager>();
-            average += allEnemyAIManagerScript[i].ReturnDecisionValue();
+            Sc_AIStateManager aiScript = enemyAIDesicionValue[i].GetComponent<Sc_AIStateManager>();
+            average += aiScript.ReturnDecisionValue();
         }
         average = average / enemyAIDesicionValue.Count;
         yield return null;
@@ -316,7 +315,7 @@ public class Sc_AIDirector : MonoBehaviour
         yield return null;
     }
 
-    //When a shot is fire
+    //When a shot is fired all enemies near by hear
     public IEnumerator ShotFired(Vector3 positionOfShot)
     {
 
@@ -343,10 +342,7 @@ public class Trait
     private float healthChange, agressionValue, approchPlayerChange;
     private AudioClip[] audioclips;
 
-    public Trait()
-    {
-
-    }
+    public Trait(){}
 
     public Trait(string traitName, float healthChange, float agressionValueChange, float approchPlayerChange)
     {

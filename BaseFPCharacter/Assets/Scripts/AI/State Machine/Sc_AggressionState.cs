@@ -106,7 +106,7 @@ public class Sc_AggressionState : Sc_AIBaseState
                 decisionVal--;
             }
         }
-        //Debug.Log("Obj: " + self.name + " Value: " + decisionVal);
+        Debug.Log("Enemy name: " + self.name + " Value: " + decisionVal);
         stateManager.StartCoroutine(StoppingAI());
         stateManager.SetDecisionValue(decisionVal);
         

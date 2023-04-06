@@ -11,7 +11,7 @@ public class Sc_AIStateManager : MonoBehaviour
     //Setting up the traits of the AI.
     private Trait aiTrait;
     private AudioClip[] aiAudioClips;
-    private AudioClip audioToplay, recentlyPlayedAudio;
+    private int recentlyPlayedAudio;
     [SerializeField]
     private AudioSource aiAudioSource;
     private float lastAudioTimer;
@@ -50,6 +50,8 @@ public class Sc_AIStateManager : MonoBehaviour
     private GameObject player;
     [HideInInspector]
     public bool playerNoticed;
+
+    private Sc_Health aiHealthScript;
 
     //Set of timers and ranges that determine how the AI percives the player and for how long they will be searching.
     [SerializeField]
@@ -111,7 +113,8 @@ public class Sc_AIStateManager : MonoBehaviour
     // Start is called before the first frame update
     void Start()
     {
-        lastAudioTimer = 4.0f;
+        recentlyPlayedAudio = -1;
+        lastAudioTimer = 2.5f;
         canPlayAudio = true;
 
         //Sets starting state to patroling
@@ -126,6 +129,8 @@ public class Sc_AIStateManager : MonoBehaviour
         idleState.IdleStartStateInfo(this, player.GetComponent<Sc_Player_Movement>(), idleTimer, visionRange, visionConeAngle, audioRange);
         
         currentState.EnterState(playerNoticed);
+
+        aiHealthScript = gameObject.GetComponent<Sc_Health>();
 
         //Sets animation to walking
         SetIsIdling(false);
@@ -192,8 +197,9 @@ public class Sc_AIStateManager : MonoBehaviour
         {
             int audioPosition = Random.Range(lowerLevelIncl, higherLevelIncl);
             
-            if (directorAI.PlayAudio(audioPosition, this))
+            if (directorAI.PlayAudio(audioPosition, this) && recentlyPlayedAudio != audioPosition)
             {
+                recentlyPlayedAudio = audioPosition;
                 canPlayAudio = false;
                 //Debug.Log("PlayingAudio");
                 aiAudioSource.PlayOneShot(aiAudioClips[audioPosition]);
@@ -204,6 +210,14 @@ public class Sc_AIStateManager : MonoBehaviour
         }
 
         yield return null;
+    }
+
+    public void RecentlyHit()
+    {
+        if (currentState != attackState || currentState != coverState)
+        {
+            SwitchState(aggressionDesicionState);
+        }
     }
 
     //Sets the AIs decision value

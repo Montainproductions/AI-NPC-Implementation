@@ -48,10 +48,9 @@ public class Sc_Health : MonoBehaviour{
         {
             Sc_Basic_UI.Instance.NewHealth(currentHealth);
         }
-        if (healingOverTimeAllowed)
-        { //If the player isnt allowed to heal automaticly then return
+        
             Healing();
-        }
+        
     }
 
     //Heal over time at a certain amount of hp per second
@@ -71,8 +70,8 @@ public class Sc_Health : MonoBehaviour{
         { //Else if it was recently hit but 5 seconds have passed then they player wasnt hit recently
             lastTimeHitTimer = 0;
             recentlyHit = false;
-        }else if (!recentlyHit)
-        { //Start healing
+        }else if (!recentlyHit && healingOverTimeAllowed)
+        { //If it can heal then start healing
             Debug.Log("Healing");
             lastTimeHitTimer = 0;
             currentHealth += healingRate * Time.deltaTime;
@@ -84,6 +83,11 @@ public class Sc_Health : MonoBehaviour{
         currentHealth -= damage;
         recentlyHit = true;
         lastTimeHitTimer = 0.0f;
+
+        if (!isPlayer && gameObject.tag == "Enemy")
+        {
+            gameObject.GetComponent<Sc_AIStateManager>().RecentlyHit();
+        }
 
         if (updateHealthUI)
         {
@@ -126,5 +130,10 @@ public class Sc_Health : MonoBehaviour{
     public float MaxHealthValue()
     {
         return maxHealth;
+    }
+
+    public bool ReturnRecentlyHit()
+    {
+        return recentlyHit;
     }
 }

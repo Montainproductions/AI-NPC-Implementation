@@ -761,7 +761,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   isPlayer: 0
   currentHealth: 0
-  maxHealth: 55
+  maxHealth: 50
   healingOverTimeAllowed: 0
   healingRate: 0
   printingValues: 0
