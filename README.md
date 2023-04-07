@@ -1,64 +1,9 @@
 # First person character for unity
 
 ## Intro
-Over the past couple of years whenever I have started a new Unity project I find my self spending a few hours to a few days recreating a first person character just so that I could finally start testing any ideas that I might of originally wanted. This lead me to creating this Repo where I have a basic first person character based on 'Catslike coding" tutorial ([Link](https://catlikecoding.com/unity/tutorials/)) and adding some extra things that I normally like to have in my character. At the same time many of the turorials are made for the old movement system which isent as friendly for adding and having diffrent controllers working which is why I also implimented the new input system and Im planning over time implementing more controller support.
+This project was initially made so that I could have a standardized first person character (First person 3D and 2D) that I believe would have better controls then the current FPS controller that Unity has. I also planned on having extra components (Like a health system) that I could easily reuse in future games as a way to take care of the more repeatable tasks that occur when I want to test a new idea out for a game. But I then started a branch of the repo and started to work on an AI state machine in part because for a while I've been wanting to learn how to make my own AI systems for games as well as I had recently started a class at my university that allowed me to work on said AI system. This meant that over time I spent more time designing and working on the AI system I ended up working less on the FPC and I've decided to just fully switch the project to be a demonstration of my skills in designing and making AI NPC systems for games.
 
-## 3D
-I mostly plan on mostly working on this 3D character since I mostly like working on 3D projects in Unity but also plan on adding a 2D character in case I or someone else wishes to use that.
+##Current AI enemy NPCS
+The current enemy AI is a Finite State Machine (FSM) with 6 different states defined; Aggression, Attack, Cover, Idle, Patrol, Search. Currently the AI will start the game in the patrol state and will choose a set of patrol points from their list of available points and then proceed to walk in between them. As they patrol if the player is ever in visual range, another close enemy detects the player, or if the player shoots a weapon in audio range of the enemy then they will transition to the aggression state. In this state the AI NPC will tell the AI director to alert all nearby enemies that aren't already aware of the player that the player is in fact nearby and to transition them to Aggression state, after this the AI NPC will calculated based on their trait, the distance to the player in relation to their weapons range and all of the close by cover points to return a value that will be given to the AI director alongside all other AI NPC that have recently calculated their decision value. Then every few seconds the AI Director will rank the value from the AI NPCs that are currently waiting to be assigned, at this point the AI Director will decide which of the AI NPCs will be allowed to change to the attack state while the other ones will go to the cover state weighted towards a higher decision value meaning a higher chance of going to the attack state. 
 
-## Current features
-- Movement (Transform position)
-- Camera looking around
-- Jumping
-- Health
-- Healing over time
-- Crouching
-- Camera/head bobbing while walking
-- Melee combat
-- Combat
-- Firearm (Shooting) combat
-
-## Features Im working on
-- UI (Mostly to show that the other features are working)
-- Chasing AI that will shoot when close (Mostly to test if Weapons can work on AI objects besides just Player)
-
-## Features I plan to impliment
-- Picking up items
-- Inventory (Both "quick" inventory and backpack style of inventory)
-
-## Features future implimentation
-### If more people start using this package then I might add the following features
-- Wall running
-- Throwables
-- Grapple gun
-- Blocking melee attacks
-
-## Things I am currently not planning on implementing
-- Animation. Since animations are very dependent on the models being used I want it to still be open for each project and the models they use.
-- Sound. This might be to much since it can be very diffrent depending on the game each person is planning on making and it would be very hard to make enough audio clips for each situation that a person can find themselves in. Especially for the scope of this project.
-
-## 2D
-After working and finishing the 3D character I plan on working on a 2D character version. It will have basicly many of the same scripts from the 3D character besids the looking around and the movement. This means that I can relativly easily reuse many of those duplicated scripts from the 3D character.
-
-## Current features
-- Health
-- Healing over time
-
-## Features Im working on
-
-
-## Features I plan to impliment
-- Movement (Transform position)
-- Jumping
-- Crouching
-- Picking up items
-- Melee combat
-- Firearm (Shooting) combat
-- Inventory (Both quick by changing through mouse wheel and backpack style of inventory)
-- UI (Mostly to show that the other features are working)
-
-## Features future implimentation
-### If more people start using this package then I might add the following features
-- Throwables
-- Grapple gun
-- Blocking melee attacks
+Once in the Attack state the AI NPC will calculate how close they need to approve the player to be in range of them and approach if necessary and when in range will shoot at the player. Meanwhile if the Cover state is chosen then it will choose the closest unoccupied cover point and run to cover and crouch once it has arrived. At which point it will randomly decide if it should shoot the player, stay covered or move to a new cover point allowing the AI NPC to seem like it is trying to decide whether it believes it is safe enough behind the cover to attack or if it needs to change. If line of sight is ever lost on the player then the AI will proceed to the Search state allowing it to attempt to search for the player or after a certain amount of time just return to patrolling the area when it assumes the player isn't nearby any more.
