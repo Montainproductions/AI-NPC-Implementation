@@ -6505,6 +6505,10 @@ PrefabInstance:
       propertyPath: patrolPoints.Array.data[15]
       value: 
       objectReference: {fileID: 830544444}
+    - target: {fileID: 5355143908986894846, guid: 321288f039be29840b9076a8a23566c6, type: 3}
+      propertyPath: m_Speed
+      value: 3
+      objectReference: {fileID: 0}
     - target: {fileID: 5355143908986894847, guid: 321288f039be29840b9076a8a23566c6, type: 3}
       propertyPath: m_RootOrder
       value: 0

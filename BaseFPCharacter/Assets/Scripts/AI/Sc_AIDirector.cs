@@ -24,11 +24,12 @@ public class Sc_AIDirector : MonoBehaviour
 
     //All current enemis in the map
     [SerializeField]
-    private GameObject[] allCurrentEnemy, spawnLocations;
-    private Sc_AIStateManager[] allEnemyAIManagerScript;
+    private GameObject[] /*allCurrentEnemy,*/ spawnLocations;
+    //private Sc_AIStateManager[] allEnemyAIManagerScript;
     //List of current enemy Decision values.
-    //It is a list instead of an array since not all enemies will have to decide what to do when it sees the player at the same time.
     public static List<GameObject> enemyAIDesicionValue = new List<GameObject>();
+    public static List<GameObject> allCurrentEnemy = new List<GameObject>();
+    public static List<Sc_AIStateManager> allEnemyAIManagerScript = new List<Sc_AIStateManager>();
     //The state manager is the specific scprit that controls each individual AI NPC
     //private Sc_AIStateManager stateManager;
 
@@ -63,7 +64,7 @@ public class Sc_AIDirector : MonoBehaviour
     {
         //enemyAIDesicionValue = new GameObject[allCurrentEnemy.Length];
 
-        allEnemyAIManagerScript = new Sc_AIStateManager[allCurrentEnemy.Length];
+        //allEnemyAIManagerScript = new Sc_AIStateManager[allCurrentEnemy.Count];
 
         currentSoundsPlaying = 0;
         arrayOfSoundsToPlay = new int[4];
@@ -144,6 +145,13 @@ public class Sc_AIDirector : MonoBehaviour
         }
     }
 
+    public void EnemyDied(GameObject enemyThatDied)
+    {
+        enemyAIDesicionValue.Remove(enemyThatDied);
+        allCurrentEnemy.Remove(enemyThatDied);
+        allEnemyAIManagerScript.Remove(enemyThatDied.GetComponent<Sc_AIStateManager>());
+    }
+
     //This will decide how many more enemies to spawn if there is less enemies then the limit
     public void WantToSpawnMore(float amountToSpawn, int spawnLocation)
     {
@@ -185,9 +193,9 @@ public class Sc_AIDirector : MonoBehaviour
     //Grabs all of the manager scripts from the AI
     IEnumerator AIManagerScripts()
     {
-        for (int i = 0; i < allCurrentEnemy.Length; i++)
+        for (int i = 0; i < allCurrentEnemy.Count; i++)
         {
-            allEnemyAIManagerScript[i] = allCurrentEnemy[i].GetComponent<Sc_AIStateManager>();
+            allEnemyAIManagerScript.Add(allCurrentEnemy[i].GetComponent<Sc_AIStateManager>());
             float randomValue = Random.Range(0.0f, 1.0f);
             if (randomValue >= 0.75f)
             {
@@ -218,7 +226,7 @@ public class Sc_AIDirector : MonoBehaviour
     {
         playerSeen = true;
 
-        for (int i = 0; i < allCurrentEnemy.Length; i++)
+        for (int i = 0; i < allCurrentEnemy.Count; i++)
         {
             //Debug.Log(allCurrentEnemy[i]);
             //Debug.Log(enemyObject);
@@ -319,7 +327,7 @@ public class Sc_AIDirector : MonoBehaviour
     public IEnumerator ShotFired(Vector3 positionOfShot)
     {
 
-        for(int i = 0; i < allCurrentEnemy.Length; i++)
+        for(int i = 0; i < allCurrentEnemy.Count; i++)
         {
             if (allCurrentEnemy[i] == null) { continue; }
             //yield return new WaitForSeconds(1.0f);

@@ -80,6 +80,7 @@ public class Sc_AggressionState : Sc_AIBaseState
     public void SetUpTrait(Trait newAITrait)
     {
         this.aiTrait = newAITrait;
+        Debug.Log(""+ aiTrait.ReturnAgressionValue());
     }
 
     /*This method determines the AIs decision value. If the AIs is close enough to the player and their weapons range is less then the distance then it will increase the value by 2.
@@ -92,7 +93,7 @@ public class Sc_AggressionState : Sc_AIBaseState
         float distFromPlayer = Vector3.Distance(player.transform.position, stateManager.transform.position);
         float currentAttackRange = Random.Range(attackRange, attackRange - 3);
         
-        decisionVal += aiTrait.ReturnAgressionValue();
+        //Debug.Log(aiTrait.ReturnAgressionValue());
 
         if (currentAttackRange > distFromPlayer)
         {
