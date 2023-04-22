@@ -176,8 +176,6 @@ public class Sc_AIStateManager : MonoBehaviour
         this.aiTrait = newAITrait;
         this.aiAudioClips = audioClips;
 
-        //Debug.Log(newAITrait.ReturnName());
-        //Debug.Log(aiTrait.ReturnName());
         commonMethods.SetUpTrait(aiTrait);
         aggressionDesicionState.SetUpTrait(aiTrait);
     }

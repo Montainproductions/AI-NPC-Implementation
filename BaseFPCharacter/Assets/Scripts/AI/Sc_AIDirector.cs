@@ -2,6 +2,7 @@ using System.Collections;
 using System.Collections.Generic;
 using Unity.IO.LowLevel.Unsafe;
 using UnityEngine;
+using System.Linq;
 
 /* The Sc_AIDirector is the main script that grabs all of the current NPCs in the map and will decide how many AI NPCS can do certain tasks. This helps control the NPCs so that there arent to many enemies attack the player at the same time 
  */
@@ -23,15 +24,13 @@ public class Sc_AIDirector : MonoBehaviour
     private Sc_QuickSort quickSort;
 
     //All current enemis in the map
+    public static List<GameObject> enemyAIToDecide = new List<GameObject>();
     [SerializeField]
-    private GameObject[] /*allCurrentEnemy,*/ spawnLocations;
-    //private Sc_AIStateManager[] allEnemyAIManagerScript;
-    //List of current enemy Decision values.
-    public static List<GameObject> enemyAIDesicionValue = new List<GameObject>();
-    public static List<GameObject> allCurrentEnemy = new List<GameObject>();
+    private List<GameObject> allCurrentEnemy =  new List<GameObject>();
     public static List<Sc_AIStateManager> allEnemyAIManagerScript = new List<Sc_AIStateManager>();
-    //The state manager is the specific scprit that controls each individual AI NPC
-    //private Sc_AIStateManager stateManager;
+
+    [SerializeField]
+    private GameObject[] spawnLocations;
 
     //Numbers of enemies that are allowed and are currently attacking the player
     [SerializeField]
@@ -62,10 +61,6 @@ public class Sc_AIDirector : MonoBehaviour
     // Start is called before the first frame update
     void Start()
     {
-        //enemyAIDesicionValue = new GameObject[allCurrentEnemy.Length];
-
-        //allEnemyAIManagerScript = new Sc_AIStateManager[allCurrentEnemy.Count];
-
         currentSoundsPlaying = 0;
         arrayOfSoundsToPlay = new int[4];
 
@@ -81,38 +76,13 @@ public class Sc_AIDirector : MonoBehaviour
         StartCoroutine(AIManagerScripts());
     }
 
-    // Update is called once per frame
-    void Update()
-    {
-
-    }
-
     public bool PlayAudio(int audioPosition, Sc_AIStateManager statemanager)
     {
-        /*bool enoughSpace = false;
-        int spacePosition = -1;
-        for(int i = 0; i < arrayOfSoundsToPlay.Length; i++)
-        {
-            if (arrayOfSoundsToPlay[i] == -1)
-            {
-                enoughSpace = true;
-                spacePosition = i;
-                break;
-            }
-        }*/
-
         if (currentSoundsPlaying < maxSoundsPlaying)
         {
             currentSoundsPlaying++;
             return true;
         }
-        /*else if (enoughSpace)
-        {
-            Debug.Log(audioPosition);
-            arrayOfSoundsToPlay[spacePosition] = audioPosition;
-            StartCoroutine(PlayAudioLaterTimer(statemanager, audioPosition, spacePosition));
-            return false;
-        }*/
         return false;
     }
 
@@ -147,7 +117,7 @@ public class Sc_AIDirector : MonoBehaviour
 
     public void EnemyDied(GameObject enemyThatDied)
     {
-        enemyAIDesicionValue.Remove(enemyThatDied);
+        enemyAIToDecide.Remove(enemyThatDied);
         allCurrentEnemy.Remove(enemyThatDied);
         allEnemyAIManagerScript.Remove(enemyThatDied.GetComponent<Sc_AIStateManager>());
     }
@@ -179,43 +149,44 @@ public class Sc_AIDirector : MonoBehaviour
     //Adds the AI Enemy to the list and recalculates the average decision value of all AI in list
     public void AIAttackAddList(GameObject enemyObj)
     {
-        enemyAIDesicionValue.Add(enemyObj);
+        enemyAIToDecide.Add(enemyObj);
         StartCoroutine(AverageDecisionValue());
     }
 
     //Remove the enemy from the list of enemis that need to decide what to do
     public void AIAttackRemoveList(GameObject enemyObj)
     {
-        enemyAIDesicionValue.Remove(enemyObj);
+        enemyAIToDecide.Remove(enemyObj);
         StartCoroutine(AverageDecisionValue());
     }
 
     //Grabs all of the manager scripts from the AI
     IEnumerator AIManagerScripts()
     {
-        for (int i = 0; i < allCurrentEnemy.Count; i++)
+        foreach (GameObject i in allCurrentEnemy)
         {
-            allEnemyAIManagerScript.Add(allCurrentEnemy[i].GetComponent<Sc_AIStateManager>());
+            allEnemyAIManagerScript.Add(i.GetComponent<Sc_AIStateManager>());
+            Sc_AIStateManager stateManager = allEnemyAIManagerScript.Last();
             float randomValue = Random.Range(0.0f, 1.0f);
             if (randomValue >= 0.75f)
             {
                 //Debug.Log(Aggressive.ReturnAgressionValue());
-                allEnemyAIManagerScript[i].SetUpTraits(Aggressive, agressiveAudioClips1);
+                stateManager.SetUpTraits(Aggressive, agressiveAudioClips1);
             }
             else if (0.75f > randomValue && randomValue >= 0.5f)
             {
                 //Debug.Log(Bold.ReturnAgressionValue());
-                allEnemyAIManagerScript[i].SetUpTraits(Bold, agressiveAudioClips1);
+                stateManager.SetUpTraits(Bold, agressiveAudioClips1);
             }
             else if (0.5f > randomValue && randomValue >= 0.25f)
             {
                 //Debug.Log(Cautious.ReturnAgressionValue());
-                allEnemyAIManagerScript[i].SetUpTraits(Cautious, agressiveAudioClips1);
+                stateManager.SetUpTraits(Cautious, agressiveAudioClips1);
             }
             else
             {
                 //Debug.Log(Scared.ReturnAgressionValue());
-                allEnemyAIManagerScript[i].SetUpTraits(Scared, agressiveAudioClips1);
+                stateManager.SetUpTraits(Scared, agressiveAudioClips1);
             }
         }
         yield return null;
@@ -248,15 +219,15 @@ public class Sc_AIDirector : MonoBehaviour
     //After that it will go through the list and then it will check if the limit of enemies attacking the player has been meet and if so will have the enemy run to cover. If the limit of attacking enemies hasnt been reached and the current value is greater then 
     IEnumerator WhatToDo(float valueLimit)
     {
-        quickSort.Main(enemyAIDesicionValue);
+        quickSort.Main(enemyAIToDecide);
         //Debug.Log(enemyAIDesicionValue.Count);
         //Debug.Log("Ready to decide");
 
-        for (int i = 0; i < enemyAIDesicionValue.Count; i++)
+        for (int i = 0; i < enemyAIToDecide.Count; i++)
         {
             float v = Random.Range(1.0f, 10.0f);
 
-            Sc_AIStateManager aiScript = enemyAIDesicionValue[i].GetComponent<Sc_AIStateManager>();
+            Sc_AIStateManager aiScript = enemyAIToDecide[i].GetComponent<Sc_AIStateManager>();
 
             //If too many enemy AIs are attacking the player then the current one will go to the cover state
             if (currentAttacking >= maxAttacking)
@@ -297,7 +268,7 @@ public class Sc_AIDirector : MonoBehaviour
             }
         }
 
-        enemyAIDesicionValue.Clear();
+        enemyAIToDecide.Clear();
         //Debug.Log("All enemies decided");
         yield return null;
     }
@@ -305,12 +276,12 @@ public class Sc_AIDirector : MonoBehaviour
     //Calculates the average of all the decions values for each of the enemies in the enemenyAIDesicionValue list
     IEnumerator AverageDecisionValue()
     {
-        for (int i = 0; i < enemyAIDesicionValue.Count; i++)
+        for (int i = 0; i < enemyAIToDecide.Count; i++)
         {
-            Sc_AIStateManager aiScript = enemyAIDesicionValue[i].GetComponent<Sc_AIStateManager>();
+            Sc_AIStateManager aiScript = enemyAIToDecide[i].GetComponent<Sc_AIStateManager>();
             average += aiScript.ReturnDecisionValue();
         }
-        average = average / enemyAIDesicionValue.Count;
+        average = average / enemyAIToDecide.Count;
         yield return null;
     }
 

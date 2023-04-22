@@ -2065,6 +2065,10 @@ PrefabInstance:
       propertyPath: m_AnchorMax.y
       value: 0
       objectReference: {fileID: 0}
+    - target: {fileID: 3366765922595931412, guid: 321288f039be29840b9076a8a23566c6, type: 3}
+      propertyPath: m_IsTrigger
+      value: 0
+      objectReference: {fileID: 0}
     - target: {fileID: 5355143908986894841, guid: 321288f039be29840b9076a8a23566c6, type: 3}
       propertyPath: m_Name
       value: BaseEnemy
