@@ -4,14 +4,12 @@ using UnityEngine;
 using UnityEngine.InputSystem;
 
 public class Sc_Attacking : MonoBehaviour{
-    //Is player info
-    [SerializeField]
-    private bool attackForPlayer;
     //The player input system
     private PlayerInputActions playerInputActions;
-
-    //General attacking variables
-    private bool attacking; //If the player is melee attacking
+    [SerializeField]
+    private bool attackForPlayer;
+    [SerializeField]
+    private GameObject playerBox;
 
     //Melee
     [SerializeField]
@@ -48,30 +46,36 @@ public class Sc_Attacking : MonoBehaviour{
         }
     }
 
-    // Update is called once per frame
-    void Update(){
+    public void Start()
+    {
         baseGunScript = currentGun.GetComponent<Sc_BaseGun>();
-        if (attackForPlayer) { PlayerAttackBox(); }
     }
 
-    //Checks if the enemy is hiting the collidor and then deal damage
-    public void OnTriggerStay(Collider collision){
-        if ((collision.tag == "Enemy") && attacking){
-            if (canMeleeAttack){
-                collision.GetComponent<Sc_Health>().TakeDamage(meleeDamage);
+    // Update is called once per frame
+    void Update(){
+        if (attackForPlayer) {
+            //Debug.Log(baseGunScript.reloaded);
+            if (Input.GetMouseButton(0)) {
+                StartCoroutine(Attacking());
             }
+            PlayerAttackBox();
         }
     }
 
     public void PlayerAttackBox()
     {
-        var lookPos = (Vector3.up * Sc_Player_Camera.Instance.mouseX) - transform.position;
+        var lookPos = (Vector3.up * Sc_Player_Camera.Instance.mouseX) - playerBox.transform.position;
         lookPos.y = 0;
         var rotation = Quaternion.LookRotation(lookPos);
-        transform.rotation = Quaternion.Slerp(transform.rotation, rotation, Time.deltaTime * damping);
+        playerBox.transform.rotation = Quaternion.Slerp(playerBox.transform.rotation, rotation, Time.deltaTime * damping);
     }
 
-    IEnumerator Attacking(){
+    public void AddingAmmo(int ammoIncrease)
+    {
+        baseGunScript.AddingAmmo(ammoIncrease);
+    }
+
+    public IEnumerator Attacking(){
         if (canMeleeAttack)
         {
             Sc_Basic_UI.Instance.CantAttackUI();
@@ -79,9 +83,9 @@ public class Sc_Attacking : MonoBehaviour{
             Sc_Basic_UI.Instance.CanAttackUI();
             yield return null;
         }
-        else if (canShootAttack)
+        else if (canShootAttack && !baseGunScript.shotRecently)
         {
-            Debug.Log("Attacking");
+            //Debug.Log("Attacking");
             StartCoroutine(baseGunScript.ShotFired());
         }
         yield return null;
@@ -89,16 +93,30 @@ public class Sc_Attacking : MonoBehaviour{
 
     //If the attack button is pressed (Left mouse button currently) then flip some values to allow for damage to take place
     private void Attacking_performed(InputAction.CallbackContext context){
+        //Debug.Log(context.ReadValue<float>());
         if(!context.performed && attackForPlayer) return;
-
-        StartCoroutine(Attacking());
+        
+        //StartCoroutine(Attacking());
     }
 
     private void Reload_preformed(InputAction.CallbackContext context)
     {
-        if (!context.performed && attackForPlayer) return;
+        if (context.performed && attackForPlayer)
+        {
+            StartCoroutine(baseGunScript.Reloading());
+        }
+    }
 
-        StartCoroutine(baseGunScript.Reloading());
+    //Checks if the enemy is hiting the collidor and then deal damage
+    public void OnTriggerStay(Collider collision)
+    {
+        if (collision.tag == "Enemy")
+        {
+            if (canMeleeAttack)
+            {
+                collision.GetComponent<Sc_Health>().TakeDamage(meleeDamage);
+            }
+        }
     }
 
     public void OnDestroy()

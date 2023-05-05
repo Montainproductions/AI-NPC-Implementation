@@ -1,0 +1,11 @@
+Parts I still need to implement:
+The main features I still need to implement into the project is better animations with their transitions as well as more audio for the enemies and the tutorial so that there is more context of what the diffrent AIs are doing.
+
+
+List of known bugs:
+When ramming into two corner walls or wherever there is two box colliders the player has a chance of being forced pushed into them and then because of the Unity engine conitue moving forward untill they reach the other side.
+I belive this is occuring because I add a certain amount of acceleration over time to a velocity untill it has reached a maximum. 
+I would need to check if there is a speed/velocity combination that would cause this to not happen or if there is some check I can do for when the player is coliding between two box colliders.
+
+When the player starts  the game and presses one of the buttons, if they press esc to open the pause menu UI they wont be able to press any of the buttons while still being able to controll the player.
+I will likly need to remake the pause menu UI so that it works correctly.

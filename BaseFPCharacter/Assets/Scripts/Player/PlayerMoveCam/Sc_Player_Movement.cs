@@ -4,10 +4,11 @@ using UnityEngine;
 using UnityEngine.InputSystem;
 
 public class Sc_Player_Movement : MonoBehaviour{
-    //The player input system
-    private PlayerInputActions playerInputActions;
     //Sets up the singleton so that the player can be called by some other scripts without needing to create a new variable for it.
     public static Sc_Player_Movement Instance { get; private set; }
+
+    //The player input system
+    private PlayerInputActions playerInputActions;
 
     //Main movement variables
     [SerializeField]
@@ -43,6 +44,8 @@ public class Sc_Player_Movement : MonoBehaviour{
     private bool canCrouch; //Is the player allowed to crouch
     private bool isCrouching; //Is the character currently crouching
 
+    private bool isHidden;
+
     //HeadBobbing
     //https://sharpcoderblog.com/blog/head-bobbing-effect-in-unity-3d
 
@@ -52,6 +55,8 @@ public class Sc_Player_Movement : MonoBehaviour{
 
         playerInputActions = new PlayerInputActions();
         playerInputActions.Player.Enable();
+        playerInputActions.Player.Sprint.performed += Sprint_performed;
+        playerInputActions.Player.Sprint.canceled += Sprint_performed;
         playerInputActions.Player.Jump.performed += Jump_Performed;
         playerInputActions.Player.Crouch.performed += Crouch_performed;
         playerInputActions.Player.Crouch.canceled += Crouch_performed;
@@ -64,6 +69,9 @@ public class Sc_Player_Movement : MonoBehaviour{
         //Jumping
         groundDistance = 0.1f;
         jumping = false;
+
+        //Hiding
+        isHidden = false;
     }
 
     // Update is called once per frame
@@ -122,6 +130,44 @@ public class Sc_Player_Movement : MonoBehaviour{
         }else if (!isCrouching && transform.localScale.y < 1f){
             //Debug.Log("Standing up");
             transform.localScale += new Vector3(0, 0.5f, 0); //Increase the size of character to normal size
+        }
+    }
+
+    public void IsHidden()
+    {
+        isHidden = true;
+    }
+
+    public void NotHidden()
+    {
+        isHidden = false;
+    }
+
+    public bool ReturnIsHidden()
+    {
+        return isHidden;
+    }
+
+    public bool ReturnIsCrouching()
+    {
+        return isCrouching;
+    }
+
+    private void Sprint_performed(InputAction.CallbackContext context)
+    {
+        if (context.performed)
+        {
+            maxSpeed = maxSpeed * 1.3f;
+            acceleration = acceleration * 1.2f;
+            Sc_HeadBobbing.Instance.SetBobbingAmount(0.13f);
+            Sc_HeadBobbing.Instance.SetBobbingSpeed(13);
+        }
+        else if (context.canceled)
+        {
+            maxSpeed = maxSpeed / 1.3f;
+            acceleration = acceleration / 1.2f;
+            Sc_HeadBobbing.Instance.SetBobbingAmount(0.08f);
+            Sc_HeadBobbing.Instance.SetBobbingSpeed(11);
         }
     }
 

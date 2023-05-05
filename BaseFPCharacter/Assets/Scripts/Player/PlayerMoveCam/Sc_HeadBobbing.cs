@@ -3,6 +3,8 @@ using System.Collections.Generic;
 using UnityEngine;
 
 public class Sc_HeadBobbing : MonoBehaviour{
+    public static Sc_HeadBobbing Instance { get; private set; }
+
     //https://sharpcoderblog.com/blog/head-bobbing-effect-in-unity-3d
 
     [SerializeField]
@@ -15,10 +17,16 @@ public class Sc_HeadBobbing : MonoBehaviour{
     [SerializeField]
     [Tooltip("Amount the camera will bob when walking.")]
     [Range(0f, 1f)]
-    public float bobbingAmount = 0.05f;
-    public Sc_Player_Movement controller;
-    float defaultPosY = 0; //Current position of camera
-    float timer = 0; //Timer for camera restart
+    private float bobbingAmount = 0.05f;
+    [SerializeField]
+    private Sc_Player_Movement controller;
+    private float defaultPosY = 0; //Current position of camera
+    private float timer = 0; //Timer for camera restart
+
+    public void Awake()
+    {
+        Instance = this;
+    }
 
     // Start is called before the first frame update
     void Start(){
@@ -38,5 +46,15 @@ public class Sc_HeadBobbing : MonoBehaviour{
             timer = 0;
             transform.localPosition = new Vector3(transform.localPosition.x, Mathf.Lerp(transform.localPosition.y, defaultPosY, Time.deltaTime * walkingBobbingSpeed), transform.localPosition.z);
         }
+    }
+
+    public void SetBobbingAmount(float newBobbingAmount)
+    {
+        bobbingAmount = newBobbingAmount;
+    }
+
+    public void SetBobbingSpeed(float newBobbingSpeed)
+    {
+        walkingBobbingSpeed = newBobbingSpeed;
     }
 }

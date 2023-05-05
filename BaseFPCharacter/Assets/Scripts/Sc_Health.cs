@@ -3,39 +3,54 @@ using System.Collections.Generic;
 using UnityEngine;
 
 public class Sc_Health : MonoBehaviour{
+    [SerializeField]
+    private bool isPlayer;
 
     //Health
     [SerializeField]
     [Tooltip("Current health that the character has at any point.")]
     [Range(0,1000)]
     private float currentHealth;
+    
     [SerializeField]
     [Tooltip("Max health character can have at any point in time.")]
     [Range(0, 1000)]
     private float maxHealth;
     private float lastTimeHitTimer; //Timer to know when to start the self healing
+    
     [SerializeField]
     [Tooltip("Can the character heal healingRate HP per second?")]
     private bool healingOverTimeAllowed;
     private bool recentlyHit; //If the character was recently hit most for the healing
+    
     [SerializeField]
     [Tooltip("Rate in which the character will heal over time.")]
     [Range(0, 1000)]
     private int healingRate;
+
+    [Header("Extra info")]
+    [SerializeField]
+    private bool printingValues;
+    [SerializeField]
+    private bool updateHealthUI;
 
     // Start is called before the first frame update
     void Start(){
         currentHealth = maxHealth;
         lastTimeHitTimer = 0;
         recentlyHit = false;
+        //StartCoroutine(HealingOverTime());
     }
 
     // Update is called once per frame
     void Update(){
-        if(currentHealth <= 0){Destroy(gameObject);} //If no more Health then tell the game manager to go to end game
-
-        if(!healingOverTimeAllowed) return; //If the player isnt allowed to heal automaticly then return
-        Healing();
+        if (updateHealthUI)
+        {
+            Sc_Basic_UI.Instance.NewHealth(currentHealth);
+        }
+        
+            Healing();
+        
     }
 
     //Heal over time at a certain amount of hp per second
@@ -47,11 +62,17 @@ public class Sc_Health : MonoBehaviour{
         }
 
         //If the player was recently hit then increase timer
-        if(recentlyHit){lastTimeHitTimer += Time.deltaTime;}
-        else if(recentlyHit && lastTimeHitTimer > 5.0f){ //Else if it was recently hit but 5 seconds have passed then they player wasnt hit recently
+        if(recentlyHit && lastTimeHitTimer < 3.0f) 
+        {
+            lastTimeHitTimer += Time.deltaTime;
+        }
+        else if(recentlyHit && lastTimeHitTimer > 3.0f)
+        { //Else if it was recently hit but 5 seconds have passed then they player wasnt hit recently
             lastTimeHitTimer = 0;
             recentlyHit = false;
-        }else{ //Start healing
+        }else if (!recentlyHit && healingOverTimeAllowed)
+        { //If it can heal then start healing
+            Debug.Log("Healing");
             lastTimeHitTimer = 0;
             currentHealth += healingRate * Time.deltaTime;
         }
@@ -61,6 +82,58 @@ public class Sc_Health : MonoBehaviour{
     public void TakeDamage(float damage){
         currentHealth -= damage;
         recentlyHit = true;
-        Debug.Log(currentHealth);
+        lastTimeHitTimer = 0.0f;
+
+        if (!isPlayer && gameObject.tag == "Enemy")
+        {
+            gameObject.GetComponent<Sc_AIStateManager>().RecentlyHit();
+        }
+
+        if (updateHealthUI)
+        {
+            Sc_Basic_UI.Instance.NewHealth(currentHealth);
+        }
+
+        if (currentHealth <= 1) {
+            if (isPlayer)
+            {
+                Sc_GameManager.Instance.PlayerDied(gameObject.transform.position);
+            }
+            Destroy(gameObject); 
+        } //If no more Health then tell the game manager to go to end game
+    }
+
+    IEnumerator HealingOverTime()
+    {
+        if (currentHealth >= maxHealth)
+        {
+            currentHealth = maxHealth;
+            yield return null;
+        }
+        if (recentlyHit)
+        {
+            yield return new WaitForSeconds(4);
+            recentlyHit = false;
+        }
+        else
+        {
+            //Debug.Log("Healing");
+            Healing();
+        }
+        yield return null;
+    }
+
+    public float CurrentHealthValue()
+    {
+        return currentHealth;
+    }
+    public float MaxHealthValue()
+    {
+        return maxHealth;
+    }
+
+    public bool ReturnRecentlyHit()
+    {
+        return recentlyHit;
     }
 }
