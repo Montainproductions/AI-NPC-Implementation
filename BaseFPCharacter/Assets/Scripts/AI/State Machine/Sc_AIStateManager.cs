@@ -135,6 +135,7 @@ public class Sc_AIStateManager : MonoBehaviour
         //Sets animation to walking
         SetIsIdling(false);
         SetIsAttacking(false);
+        SetIsReloading(false);
         SetIsWalking(true);
 
         //Sets UI text for AI to active or not
@@ -246,6 +247,11 @@ public class Sc_AIStateManager : MonoBehaviour
     public bool ReturnIsAttacking()
     {
         return isAttacking;
+    }
+
+    public bool SetIsReloading()
+    {
+        return SetIsReloading();
     }
 
     //Setsif the AI is idling

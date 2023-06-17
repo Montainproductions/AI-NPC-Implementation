@@ -143,7 +143,8 @@ public class Sc_AttackState : Sc_AIBaseState
         stateManager.SetCurrentAction("Reloading");
         //Debug.Log("Shooting");
         stateManager.StartCoroutine(stateManager.PlayAudioOneShot(9, 11));
-        yield return new WaitForSeconds(3.25f);
+        yield return new WaitForSeconds(4.25f);
+
         stateManager.StartCoroutine(gunScript.Reloading());
         yield return new WaitForSeconds(2);
         yield return null;
