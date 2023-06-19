@@ -92,7 +92,7 @@ public class Sc_AIStateManager : MonoBehaviour
     private GameObject[] searchFormats;
 
     //Animation information
-    private bool isAttacking, isIdling, isWalking;
+    private bool isAttacking, isReloading, isIdling, isWalking;
 
     //To check if the player is being blocked by some objects.
     // Bit shift the index of the layer (9) to get a bit mask
@@ -249,9 +249,14 @@ public class Sc_AIStateManager : MonoBehaviour
         return isAttacking;
     }
 
-    public bool SetIsReloading()
+    public void SetIsReloading(bool isReloading)
     {
-        return SetIsReloading();
+        this.isReloading = isReloading;
+    }
+
+    public bool ReturnIsReloading()
+    {
+        return isReloading;
     }
 
     //Setsif the AI is idling

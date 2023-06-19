@@ -79,7 +79,7 @@ public class Sc_PatrolState : Sc_AIBaseState
         aiCommonMethods.StartMovement(movePositionTransfrom, "Patrolling", false);
     }
 
-    public void CanSeePlayer(float distPlayer, float angleToPlayer, bool playerBehindWall)
+    public IEnumerator CanSeePlayer(float distPlayer, float angleToPlayer, bool playerBehindWall)
     {
 
         bool playerHidden = playerMovementScript.ReturnIsHidden();
@@ -87,10 +87,15 @@ public class Sc_PatrolState : Sc_AIBaseState
 
         if ((distPlayer <= visionRange - 15 && angleToPlayer <= visionConeAngle - 15) && !playerHidden && !playerBehindWall)
         {
-            stateManager.StartCoroutine(stateManager.PlayAudioOneShot(6, 8));
-            //directorAI.PlayerFound(state.gameObject);
-            stateManager.playerNoticed = true;
-            stateManager.SwitchState(stateManager.aggressionDesicionState);
+            yield return new WaitForSeconds(1.4f);
+            if ((distPlayer <= visionRange - 15 && angleToPlayer <= visionConeAngle - 15) && !playerHidden && !playerBehindWall)
+            {
+                stateManager.StartCoroutine(stateManager.PlayAudioOneShot(6, 8));
+                //directorAI.PlayerFound(state.gameObject);
+                stateManager.playerNoticed = true;
+                stateManager.SwitchState(stateManager.aggressionDesicionState);
+            }
         }
+        yield return null;
     }
 }

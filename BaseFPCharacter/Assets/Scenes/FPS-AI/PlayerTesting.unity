@@ -2363,17 +2363,6 @@ GameObject:
   m_CorrespondingSourceObject: {fileID: 6646797674794803052, guid: 81ce49f96577d844ab806a3654e6ae19, type: 3}
   m_PrefabInstance: {fileID: 6646797675007447303}
   m_PrefabAsset: {fileID: 0}
---- !u!114 &884952686 stripped
-MonoBehaviour:
-  m_CorrespondingSourceObject: {fileID: 6646797674794803063, guid: 81ce49f96577d844ab806a3654e6ae19, type: 3}
-  m_PrefabInstance: {fileID: 6646797675007447303}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 884952683}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 2ad6af26f574aef478e2793d950244aa, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
 --- !u!1001 &937445514
 PrefabInstance:
   m_ObjectHideFlags: 0
@@ -3254,10 +3243,9 @@ GameObject:
   - component: {fileID: 1317197363}
   - component: {fileID: 1317197362}
   - component: {fileID: 1317197361}
-  - component: {fileID: 1317197365}
   m_Layer: 0
   m_Name: Cube
-  m_TagString: Untagged
+  m_TagString: Foilage
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
@@ -3340,19 +3328,6 @@ Transform:
   m_Father: {fileID: 0}
   m_RootOrder: 6
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
---- !u!114 &1317197365
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 1317197360}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 78c37b75ee8bebe409accebfed2f6dd1, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  playerMovementScript: {fileID: 884952686}
 --- !u!1 &1322606105
 GameObject:
   m_ObjectHideFlags: 0
@@ -5841,7 +5816,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 6646797674794803048, guid: 81ce49f96577d844ab806a3654e6ae19, type: 3}
       propertyPath: m_LocalPosition.x
-      value: 14.18
+      value: 1.8
       objectReference: {fileID: 0}
     - target: {fileID: 6646797674794803048, guid: 81ce49f96577d844ab806a3654e6ae19, type: 3}
       propertyPath: m_LocalPosition.y
@@ -5849,7 +5824,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 6646797674794803048, guid: 81ce49f96577d844ab806a3654e6ae19, type: 3}
       propertyPath: m_LocalPosition.z
-      value: 1.02
+      value: -68.4
       objectReference: {fileID: 0}
     - target: {fileID: 6646797674794803048, guid: 81ce49f96577d844ab806a3654e6ae19, type: 3}
       propertyPath: m_LocalRotation.w

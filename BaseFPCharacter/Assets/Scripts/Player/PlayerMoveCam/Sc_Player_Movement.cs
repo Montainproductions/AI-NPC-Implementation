@@ -70,6 +70,7 @@ public class Sc_Player_Movement : MonoBehaviour{
         groundDistance = 0.1f;
         jumping = false;
 
+        isCrouching = false;
         //Hiding
         isHidden = false;
     }
@@ -133,24 +134,29 @@ public class Sc_Player_Movement : MonoBehaviour{
         }
     }
 
-    public void IsHidden()
-    {
-        isHidden = true;
-    }
-
-    public void NotHidden()
-    {
-        isHidden = false;
-    }
-
     public bool ReturnIsHidden()
     {
         return isHidden;
     }
 
-    public bool ReturnIsCrouching()
+    private void OnTriggerStay(Collider other)
     {
-        return isCrouching;
+        if(other.gameObject.tag == "Foilage" && isCrouching)
+        {
+            isHidden = true;
+        }
+        else
+        {
+            isHidden = false;
+        }
+    }
+
+    private void OnTriggerExit(Collider other)
+    {
+        if(other.gameObject.tag == "Foilage")
+        {
+            isHidden = false;
+        }
     }
 
     private void Sprint_performed(InputAction.CallbackContext context)
