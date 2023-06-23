@@ -115,17 +115,41 @@ public class Sc_HFSMCommenMethods : MonoBehaviour
     public IEnumerator CanSeePlayer(float distPlayer, float angleToPlayer, bool playerBehindWall)
     {
 
-        bool playerHidden = playerMovemenetScript.ReturnIsHidden();
+        int alertedTimeLeft = 0;
 
-
-        if ((distPlayer <= visionRange - 15 && angleToPlayer <= visionConeAngle - 15) && !playerHidden && !playerBehindWall)
+        if (PlayerInVision(distPlayer, angleToPlayer, playerBehindWall) && stateManager.currentFLState == stateManager.nonCombatParentState && alertedTimeLeft <= 0)
         {
             //stateManager.StartCoroutine(stateManager.PlayAudioOneShot(6, 8));
             //directorAI.PlayerFound(state.gameObject);
             stateManager.playerNoticed = true;
             stateManager.SwitchFLState(stateManager.alertParentState);
+            stateManager.SwitchSLState(stateManager.alertedState);
+            Debug.Log("Player First Seen");
+            for (alertedTimeLeft = 2; alertedTimeLeft > 0; alertedTimeLeft--)
+                Debug.Log("Time Passed");
+                yield return null;
+        }else if (PlayerInVision(distPlayer, angleToPlayer, playerBehindWall) && stateManager.currentFLState == stateManager.alertParentState)
+        {
+            stateManager.SwitchFLState(stateManager.combatFLState);
             stateManager.SwitchSLState(stateManager.aggressionDesicionState);
+            Debug.Log("Combat Started");
+        }else if (!PlayerInVision(distPlayer, angleToPlayer, playerBehindWall) && stateManager.currentFLState == stateManager.alertParentState && alertedTimeLeft <= 0)
+        {
+            stateManager.SwitchFLState(stateManager.nonCombatParentState);
+            stateManager.SwitchSLState(stateManager.idleState);
+            Debug.Log("Back to idling/patroling ");
         }
         yield return null;
+    }
+
+    public bool PlayerInVision(float distPlayer, float angleToPlayer, bool playerBehindWall)
+    {
+        bool playerVisible = false;
+        bool playerHidden = playerMovemenetScript.ReturnIsHidden();
+        if ((distPlayer <= visionRange - 15 && angleToPlayer <= visionConeAngle - 15) && !playerHidden && !playerBehindWall)
+        {
+            playerVisible = true;
+        }
+        return playerVisible;
     }
 }

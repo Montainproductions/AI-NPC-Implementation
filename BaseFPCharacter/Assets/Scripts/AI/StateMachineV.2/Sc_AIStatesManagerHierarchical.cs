@@ -26,17 +26,19 @@ public class Sc_AIStatesManagerHierarchical : MonoBehaviour
     [HideInInspector]
     public Sc_IdleState idleState = new Sc_IdleState();
     [HideInInspector]
-    public Sc_PatrolState patrolState = new Sc_PatrolState();
+    public Sc_PatrolingSLState patrolState = new Sc_PatrolingSLState();
     [HideInInspector]
     public Sc_AggressionState aggressionDesicionState = new Sc_AggressionState();
     [HideInInspector]
     public Sc_CoverState coverState = new Sc_CoverState();
     [HideInInspector]
     public Sc_SearchState searchState = new Sc_SearchState();
+    [HideInInspector]
+    public Sc_AlertedState alertedState = new Sc_AlertedState();
 
     //A script that contains a set of common methods that multiple states can call on
     [SerializeField]
-    private Sc_CommonMethods commonMethods;
+    private Sc_HFSMCommenMethods commonMethods;
 
     //The navigation agent of the AI
     [SerializeField]
