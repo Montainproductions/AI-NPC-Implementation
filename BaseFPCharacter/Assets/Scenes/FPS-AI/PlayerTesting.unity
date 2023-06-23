@@ -7789,8 +7789,8 @@ MonoBehaviour:
   cover: []
   coverDistance: 20
   showActions: 1
-  actionUIText: {fileID: 0}
-  stateText: {fileID: 0}
+  actionUIText: {fileID: 5306766099730199149}
+  stateText: {fileID: 4267551324570649805}
   currentAction: 
 --- !u!1001 &6646797675007447303
 PrefabInstance:
