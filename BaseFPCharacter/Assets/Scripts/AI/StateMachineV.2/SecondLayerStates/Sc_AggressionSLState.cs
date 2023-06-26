@@ -3,31 +3,23 @@ using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.AI;
 
-/// <summary>
-/// The Aggression state is meant to be a transitionary state in the general state machine from idling/patrolling into combat against the player. The state mostly calculates how close the player is and if they can attack them or if there are a lot of cover positions near by. This will then be placed into the decitionVal variable and be sent to the director AI which then decide which enemy will attack the player or go to cover and change to the corisponding state.
-/// </summary>
-public class Sc_AggressionState : Sc_AIBaseState
+public class Sc_AggressionSLState : Sc_AIBaseStateSL
 {
     //The manager of the AI that controls all of the info and transitions of state for the AI.
-    private Sc_AIStateManager stateManager;
+    private Sc_AIStatesManagerHierarchical stateManager;
     //The director AI to send inte desicion value
     private Sc_AIDirector directorAI;
+    public Sc_HFSMCommenMethods commenMethods;
 
     private Trait aiTrait;
 
     //The script for the weapons
     private Sc_BaseGun baseGunScript;
 
-    //A bool for if the player has been noticed or not.
-    private bool playerNoticed;
-
     //The player and the main AI game object
     private GameObject player, self;
     //All the cover positions in the map
     private GameObject[] coverPositions;
-
-    //The nav mesh agent of the AI
-    private NavMeshAgent navMeshAgent;
 
     //Currentl player position
     private Vector3 playerPos;
@@ -38,32 +30,20 @@ public class Sc_AggressionState : Sc_AIBaseState
     //The decision val of the AI
     private float decisionVal;
 
-    //Method for when the AI first enters the state. Will determine if the player was already found or if they are the first enemy to notice the player. Will then start calculating the value for wether to attack or run to cover.
-    public override void EnterState(bool playerSeen)
+    public override void EnterState()
     {
-        playerNoticed = playerSeen;
-        stateManager.StartCoroutine(StoppingAI());
-        if (!playerNoticed)
-        {
-            playerNoticed = true;
-            directorAI.PlayerFound(stateManager.gameObject);
-        }
-        //Debug.Log(self.name + " Player detected");
-
         decisionVal = 0;
         attackRange = baseGunScript.ReturnEffectiveRange();
         WhenToAttack();
     }
 
-    //Continuasly updates the players current position and to have the enemy look at the player position
-    public override void UpdateState(float distPlayer, float angleToPlayer, bool playerBehindWall)
+    public override void UpdateState()
     {
         playerPos = player.transform.position;
         stateManager.transform.LookAt(playerPos);
     }
 
-    //Reciving all the important information that the state needs to operate
-    public void AggressionStartStateInfo(Sc_AIStateManager stateManager, Sc_AIDirector directorAI, GameObject self, GameObject player, GameObject currentWeapon, GameObject[] coverPos, NavMeshAgent navMeshAgent, float coverDist)
+    public void AggressionStartStateInfo(Sc_AIStatesManagerHierarchical stateManager, Sc_AIDirector directorAI, GameObject self, GameObject player, GameObject currentWeapon, GameObject[] coverPos, float coverDist)
     {
         this.stateManager = stateManager;
         this.directorAI = directorAI;
@@ -71,14 +51,13 @@ public class Sc_AggressionState : Sc_AIBaseState
         this.player = player;
         baseGunScript = currentWeapon.GetComponent<Sc_BaseGun>();
         this.coverPositions = coverPos;
-        this.navMeshAgent = navMeshAgent;
         this.coverDistance = coverDist;
     }
 
     public void SetUpTrait(Trait newAITrait)
     {
         this.aiTrait = newAITrait;
-        Debug.Log(""+ aiTrait.ReturnAgressionValue());
+        Debug.Log("" + aiTrait.ReturnAgressionValue());
     }
 
     /*This method determines the AIs decision value. If the AIs is close enough to the player and their weapons range is less then the distance then it will increase the value by 2.
@@ -90,25 +69,25 @@ public class Sc_AggressionState : Sc_AIBaseState
     {
         float distFromPlayer = Vector3.Distance(player.transform.position, stateManager.transform.position);
         float currentAttackRange = Random.Range(attackRange, attackRange - 3);
-        
+
         //Debug.Log(aiTrait.ReturnAgressionValue());
 
         if (currentAttackRange > distFromPlayer)
         {
             decisionVal += 2;
         }
-        foreach(GameObject i in coverPositions)
+        foreach (GameObject i in coverPositions)
         {
             float distFromCover = Vector3.Distance(stateManager.transform.position, i.transform.position);
-            if(distFromCover < coverDistance)
+            if (distFromCover < coverDistance)
             {
                 decisionVal--;
             }
         }
         Debug.Log("Enemy name: " + self.name + " Value: " + decisionVal);
-        stateManager.StartCoroutine(StoppingAI());
+        stateManager.StartCoroutine(commenMethods.StopMovement());
         stateManager.SetDecisionValue(decisionVal);
-        
+
         directorAI.AIAttackAddList(self);
         decisionVal = 0;
         stateManager.StartCoroutine(AITakingTooLong());
@@ -116,23 +95,11 @@ public class Sc_AggressionState : Sc_AIBaseState
 
     IEnumerator AITakingTooLong()
     {
-        yield return new WaitForSeconds(4.0f);
-        if (stateManager.currentState == stateManager.aggressionDesicionState)
+        yield return new WaitForSeconds(6.0f);
+        if (stateManager.currentSLState == stateManager.aggressionDesicionState)
         {
-            stateManager.SwitchState(stateManager.coverState);
+            stateManager.SwitchSLState(stateManager.coverState);
         }
-        yield return null;
-    }
-
-    //This method will have the AI stop moving towards any position that it might be going to. This is princippaly so that if the AI is transitioning from the patrol state then it will actually stop moving towards its patrol point and face the player.
-    IEnumerator StoppingAI()
-    {
-        yield return new WaitForSeconds(0.25f);
-        navMeshAgent.isStopped = true;
-        navMeshAgent.ResetPath();
-        navMeshAgent.SetDestination(stateManager.transform.position);
-        //Debug.Log(stateManager.name);
-        //Debug.Log(navMeshAgent.destination);
         yield return null;
     }
 }

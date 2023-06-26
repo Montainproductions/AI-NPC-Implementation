@@ -46,7 +46,7 @@ public class Sc_AttackState : Sc_AIBaseState
         CantSeePlayer(distPlayer, angleToPlayer);
         //state.transform.LookAt(playerPos);
 
-        stateManager.StartCoroutine(PlayerDistance());
+        stateManager.StartCoroutine(PlayerAttackDistance());
 
             /*if (newPosition != Vector3.zero)
             {
@@ -160,12 +160,12 @@ public class Sc_AttackState : Sc_AIBaseState
         yield return null;
     }
 
-    IEnumerator PlayerDistance()
+    IEnumerator PlayerAttackDistance()
     {
         float playerDist = Vector3.Distance(playerPos, self.transform.position);
         diffDistToAttack = playerDist - attackRange;
         yield return new WaitForSeconds(0.1f);
-        stateManager.StartCoroutine(PlayerDistance());
+        stateManager.StartCoroutine(PlayerAttackDistance());
         yield return null;
     }
 

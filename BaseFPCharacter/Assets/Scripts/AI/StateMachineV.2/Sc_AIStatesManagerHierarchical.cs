@@ -12,29 +12,29 @@ public class Sc_AIStatesManagerHierarchical : MonoBehaviour
     [HideInInspector]
     public Sc_AIBaseParentState currentFLState;
     [HideInInspector]
+    public Sc_NonCombatFLState nonCombatFLState = new Sc_NonCombatFLState();
+    [HideInInspector]
+    public Sc_AlertFLState alertFLState = new Sc_AlertFLState();
+    [HideInInspector]
     public Sc_CombatFLState combatFLState = new Sc_CombatFLState();
-    [HideInInspector]
-    public Sc_AlertFLState alertParentState = new Sc_AlertFLState();
-    [HideInInspector]
-    public Sc_NonCombatFLState nonCombatParentState = new Sc_NonCombatFLState();
 
     //All the current state the AI can be in
     [HideInInspector]
-    public Sc_AIBaseState currentSLState;
-    [HideInInspector]
-    public Sc_AttackState attackState = new Sc_AttackState();
-    [HideInInspector]
-    public Sc_IdleState idleState = new Sc_IdleState();
+    public Sc_AIBaseStateSL currentSLState;
     [HideInInspector]
     public Sc_PatrolingSLState patrolState = new Sc_PatrolingSLState();
     [HideInInspector]
-    public Sc_AggressionState aggressionDesicionState = new Sc_AggressionState();
+    public Sc_IdleSLState idleState = new Sc_IdleSLState();
     [HideInInspector]
-    public Sc_CoverState coverState = new Sc_CoverState();
+    public Sc_AlertedSLState alertedState = new Sc_AlertedSLState();
     [HideInInspector]
     public Sc_SearchState searchState = new Sc_SearchState();
     [HideInInspector]
-    public Sc_AlertedState alertedState = new Sc_AlertedState();
+    public Sc_AggressionSLState aggressionDesicionState = new Sc_AggressionSLState();
+    [HideInInspector]
+    public Sc_AttackState attackState = new Sc_AttackState();
+    [HideInInspector]
+    public Sc_CoverState coverState = new Sc_CoverState();
 
     //A script that contains a set of common methods that multiple states can call on
     [SerializeField]
@@ -55,8 +55,7 @@ public class Sc_AIStatesManagerHierarchical : MonoBehaviour
     public bool playerNoticed;
 
     [SerializeField]
-    private float visionRange, visionConeAngle, audioRange, alertedTimer, decisionTimer, idleTimer;
-    private float distPlayer, angleToPlayer;
+    private float visionRange, visionConeAngle, audioRange, alertedTimer, decisionTimer;
 
     //The value that the AI determines if they should go and attack the player or go to cover
     private float decisionValue = 0;
@@ -66,6 +65,10 @@ public class Sc_AIStatesManagerHierarchical : MonoBehaviour
     //All the patrol points the AI can walk to and from
     [SerializeField]
     private GameObject[] patrolPoints;
+
+    [Header("Idle")]
+    [SerializeField]
+    private float idleTimer;
 
     //All variables related to the attack state the player
     [Header("Attacking/Chasing")]
@@ -105,18 +108,23 @@ public class Sc_AIStatesManagerHierarchical : MonoBehaviour
     void Start()
     {
         //Set first layer state to Non-Combate
-        currentFLState = nonCombatParentState;
+        currentFLState = nonCombatFLState;
         //Sets starting state to patroling
         currentSLState = patrolState;
 
+        patrolState.PatrolStartStateInfo(commonMethods, patrolPoints);
+        idleState.IdleStartStateInfo(this, commonMethods, idleTimer);
+        aggressionDesicionState.AggressionStartStateInfo(this, directorAI, gameObject, player, currentWeapon, cover, coverDistance);
+        
+
         currentFLState.EnterState();
-        currentSLState.EnterState(playerNoticed);
+        currentSLState.EnterState();
     }
 
     // Update is called once per frame
     void Update()
     {
-        
+        currentSLState.UpdateState();
     }
 
     public void SwitchFLState(Sc_AIBaseParentState state)
@@ -125,10 +133,10 @@ public class Sc_AIStatesManagerHierarchical : MonoBehaviour
         currentFLState.EnterState();
     }
 
-    public void SwitchSLState(Sc_AIBaseState state)
+    public void SwitchSLState(Sc_AIBaseStateSL state)
     {
         currentSLState = state;
-        currentSLState.EnterState(playerNoticed);
+        currentSLState.EnterState();
     }
 
     public void SetUpTraits(Trait newAITrait, AudioClip[] audioClips)
@@ -136,7 +144,7 @@ public class Sc_AIStatesManagerHierarchical : MonoBehaviour
         this.aiTrait = newAITrait;
         //this.aiAudioClips = audioClips;
 
-        commonMethods.SetUpTrait(aiTrait);
+        commonMethods.SetUpTrait(aiTrait, audioClips);
         aggressionDesicionState.SetUpTrait(aiTrait);
     }
 

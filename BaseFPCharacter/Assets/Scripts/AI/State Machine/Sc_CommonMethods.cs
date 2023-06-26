@@ -68,8 +68,6 @@ public class Sc_CommonMethods : MonoBehaviour
                 walkingPosition = Vector3.zero;
                 if (currentState == "Cover")
                 {
-                    
-                    
                     StartCoroutine(stateManager.coverState.AtCover());
                 }
                 else if (currentState == "Attack")

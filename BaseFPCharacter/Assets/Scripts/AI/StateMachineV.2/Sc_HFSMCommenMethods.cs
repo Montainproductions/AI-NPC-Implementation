@@ -18,7 +18,6 @@ public class Sc_HFSMCommenMethods : MonoBehaviour
 
     private Sc_Player_Movement playerMovemenetScript;
 
-    [SerializeField]
     private string currentState;
 
     private Vector3 walkingPosition;
@@ -40,6 +39,13 @@ public class Sc_HFSMCommenMethods : MonoBehaviour
 
     private RaycastHit hit;
 
+    private AudioSource aiAudioSource;
+    private AudioClip[] aiAudioClips;
+
+    private int recentlyPlayedAudio;
+    private float lastAudioTimer;
+    private bool canPlayAudio;
+
     // Start is called before the first frame update
     void Start()
     {
@@ -57,25 +63,63 @@ public class Sc_HFSMCommenMethods : MonoBehaviour
         Vector3 direction = player.transform.position - transform.position;
         bool playerBehindWall = Physics.Raycast(transform.position, direction, out hit, visionRange - 5, layerMask);
 
-        if (stateManager.currentFLState == stateManager.nonCombatParentState || stateManager.currentFLState == stateManager.alertParentState)
+        if (stateManager.currentFLState == stateManager.nonCombatFLState || stateManager.currentFLState == stateManager.alertFLState)
         {
             StartCoroutine(CanSeePlayer(distPlayer, angleToPlayer, playerBehindWall));
         }
+
+        if (walkingPosition != Vector3.zero)
+        {
+            if (Vector3.Distance(self.transform.position, walkingPosition) > 1.1f)
+            {
+                //Debug.Log("Moving");
+                stateManager.SetCurrentAction("Going to " + currentState + " point");
+
+                direction = (walkingPosition - transform.position).normalized;
+                //Creates Quaternion version of the vector3 direction
+                Quaternion lookRotation = Quaternion.LookRotation(direction);
+                //Rotate Enemy over time according to speed until we are in the required rotation
+                //transform.rotation = Quaternion.Slerp(transform.rotation, lookRotation, Time.deltaTime * 0.25f);
+                transform.LookAt(lookingAtTransform, Vector3.up);
+                navMeshAgent.destination = walkingPosition;
+            }
+            else
+            {
+                //Debug.Log("At Cover");
+                //self.transform.localScale = new Vector3(1,0.75f,1);
+                walkingPosition = Vector3.zero;
+                if (currentState == "Cover")
+                {
+                    StartCoroutine(stateManager.coverState.AtCover());
+                }
+                else if (currentState == "Attack")
+                {
+                    stateManager.attackState.isMoving = false;
+                }
+                else if (currentState == "Patrolling")
+                {
+                    StopMovement();
+                    stateManager.patrolState.Patroling();
+                }
+            }
+        }
     }
 
-    public void CommenMethodSetUp(GameObject self, GameObject player, NavMeshAgent navMeshAgent, Sc_Player_Movement playerMovemenetScript, float visionRange, float visionConeAngle)
+    public void CommenMethodSetUp(Sc_Player_Movement playerMovemenetScript, GameObject self, GameObject player, NavMeshAgent navMeshAgent, AudioSource audioSource, float visionRange, float visionConeAngle)
     {
+        this.playerMovemenetScript = playerMovemenetScript;
         this.self = self;
         this.player = player;
         this.navMeshAgent = navMeshAgent;
-        this.playerMovemenetScript = playerMovemenetScript;
+        this.aiAudioSource = audioSource;
         this.visionRange = visionRange;
         this.visionConeAngle = visionConeAngle;
     }
 
-    public void SetUpTrait(Trait aiTrait)
+    public void SetUpTrait(Trait aiTrait, AudioClip[] audioClips)
     {
         this.aiTrait = aiTrait;
+        this.aiAudioClips = audioClips;
     }
 
     public void StartMovement(Vector3 position, string currentState, bool lookAtPlayer = false, Transform lookAt = null)
@@ -88,9 +132,15 @@ public class Sc_HFSMCommenMethods : MonoBehaviour
         lookingAtTransform = lookAt;
     }
 
-    public void StopMovement()
+    public IEnumerator StopMovement()
     {
-        walkingPosition = Vector3.zero;
+        yield return new WaitForSeconds(0.25f);
+        navMeshAgent.isStopped = true;
+        navMeshAgent.ResetPath();
+        navMeshAgent.SetDestination(stateManager.transform.position);
+        //Debug.Log(stateManager.name);
+        //Debug.Log(navMeshAgent.destination);
+        yield return null;
     }
 
     //Once the timer is finished the AI will return to the agression decision state and decide if its better to go to cover or continue attacking the player.
@@ -116,28 +166,35 @@ public class Sc_HFSMCommenMethods : MonoBehaviour
     {
 
         int alertedTimeLeft = 0;
+        bool playerSeenSecondCheck, playerSeenFirstCheck = PlayerInVision(distPlayer, angleToPlayer, playerBehindWall);
 
-        if (PlayerInVision(distPlayer, angleToPlayer, playerBehindWall) && stateManager.currentFLState == stateManager.nonCombatParentState && alertedTimeLeft <= 0)
+        if (playerSeenFirstCheck && stateManager.currentFLState == stateManager.nonCombatFLState)
         {
             //stateManager.StartCoroutine(stateManager.PlayAudioOneShot(6, 8));
             //directorAI.PlayerFound(state.gameObject);
             stateManager.playerNoticed = true;
-            stateManager.SwitchFLState(stateManager.alertParentState);
+            stateManager.SwitchFLState(stateManager.alertFLState);
             stateManager.SwitchSLState(stateManager.alertedState);
             Debug.Log("Player First Seen");
+        }else if (stateManager.currentFLState == stateManager.alertFLState)
+        {
             for (alertedTimeLeft = 2; alertedTimeLeft > 0; alertedTimeLeft--)
                 Debug.Log("Time Passed");
                 yield return null;
-        }else if (PlayerInVision(distPlayer, angleToPlayer, playerBehindWall) && stateManager.currentFLState == stateManager.alertParentState)
-        {
-            stateManager.SwitchFLState(stateManager.combatFLState);
-            stateManager.SwitchSLState(stateManager.aggressionDesicionState);
-            Debug.Log("Combat Started");
-        }else if (!PlayerInVision(distPlayer, angleToPlayer, playerBehindWall) && stateManager.currentFLState == stateManager.alertParentState && alertedTimeLeft <= 0)
-        {
-            stateManager.SwitchFLState(stateManager.nonCombatParentState);
-            stateManager.SwitchSLState(stateManager.idleState);
-            Debug.Log("Back to idling/patroling ");
+            playerSeenSecondCheck = PlayerInVision(distPlayer, angleToPlayer, playerBehindWall);
+
+            if (playerSeenSecondCheck)
+            {
+                stateManager.SwitchFLState(stateManager.combatFLState);
+                stateManager.SwitchSLState(stateManager.aggressionDesicionState);
+                Debug.Log("Combat Started");
+            }
+            else
+            {
+                stateManager.SwitchFLState(stateManager.nonCombatFLState);
+                stateManager.SwitchSLState(stateManager.idleState);
+                Debug.Log("Back to idling/patroling");
+            }
         }
         yield return null;
     }
@@ -151,5 +208,34 @@ public class Sc_HFSMCommenMethods : MonoBehaviour
             playerVisible = true;
         }
         return playerVisible;
+    }
+
+    public void PlayAudioOneShot(int audioPosition)
+    {
+        if (!aiAudioSource.isPlaying)
+        {
+            aiAudioSource.PlayOneShot(aiAudioClips[audioPosition]);
+        }
+    }
+
+    public IEnumerator PlayRandomAudioOneShot(int lowerLevelIncl, int higherLevelIncl)
+    {
+        Debug.Log("Playing audio");
+        if (!aiAudioSource.isPlaying && canPlayAudio)
+        {
+            int audioPosition = Random.Range(lowerLevelIncl, higherLevelIncl);
+
+            if (recentlyPlayedAudio != audioPosition)
+            {
+                recentlyPlayedAudio = audioPosition;
+                canPlayAudio = false;
+                //Debug.Log("PlayingAudio");
+                aiAudioSource.PlayOneShot(aiAudioClips[audioPosition]);
+                yield return new WaitForSeconds(lastAudioTimer);
+                canPlayAudio = true;
+            }
+        }
+
+        yield return null;
     }
 }
