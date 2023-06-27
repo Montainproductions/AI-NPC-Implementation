@@ -3,7 +3,7 @@ using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.AI;
 
-public class Sc_ShootingSLState : Sc_AIBaseStateSL
+public class Sc_ShootingSLState : Sc_AIBaseStateHierarchical
 {
     private Sc_AIStatesManagerHierarchical stateManager;
     private Sc_HFSMCommenMethods commonMethods;
@@ -26,11 +26,14 @@ public class Sc_ShootingSLState : Sc_AIBaseStateSL
 
         stateManager.StartCoroutine(AttackOrMove());
         stateManager.StartCoroutine(commonMethods.ReDecide());
+
+        stateManager.StartCoroutine(PlayerAttackDistance());
     }
 
     public override void UpdateState()
     {
-
+        playerPos = player.transform.position;
+        stateManager.transform.LookAt(playerPos);
     }
 
     public void AttackStartStateInfo(Sc_AIStatesManagerHierarchical stateManager, Sc_HFSMCommenMethods commonMethodsScript, GameObject self, GameObject player, GameObject currentWeapon)

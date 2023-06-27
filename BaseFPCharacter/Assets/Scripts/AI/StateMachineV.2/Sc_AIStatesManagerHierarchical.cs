@@ -8,9 +8,12 @@ public class Sc_AIStatesManagerHierarchical : MonoBehaviour
 {
     private Trait aiTrait;
 
+    [SerializeField]
+    private GameObject self;
+
     //All first layer states. First layer reperesents the bigger states that may contain multiple smaller states
     [HideInInspector]
-    public Sc_AIBaseParentState currentFLState;
+    public Sc_AIBaseStateHierarchical currentFLState;
     [HideInInspector]
     public Sc_NonCombatFLState nonCombatFLState = new Sc_NonCombatFLState();
     [HideInInspector]
@@ -18,9 +21,9 @@ public class Sc_AIStatesManagerHierarchical : MonoBehaviour
     [HideInInspector]
     public Sc_CombatFLState combatFLState = new Sc_CombatFLState();
 
-    //All the current state the AI can be in
+    //All the current states in the second layer of the HFSM which the AI can be in
     [HideInInspector]
-    public Sc_AIBaseStateSL currentSLState;
+    public Sc_AIBaseStateHierarchical currentSLState;
     [HideInInspector]
     public Sc_PatrolingSLState patrolState = new Sc_PatrolingSLState();
     [HideInInspector]
@@ -32,9 +35,9 @@ public class Sc_AIStatesManagerHierarchical : MonoBehaviour
     [HideInInspector]
     public Sc_AggressionSLState aggressionDesicionState = new Sc_AggressionSLState();
     [HideInInspector]
-    public Sc_AttackState attackState = new Sc_AttackState();
+    public Sc_ShootingSLState attackState = new Sc_ShootingSLState();
     [HideInInspector]
-    public Sc_CoverState coverState = new Sc_CoverState();
+    public Sc_CoverSLState coverState = new Sc_CoverSLState();
 
     //A script that contains a set of common methods that multiple states can call on
     [SerializeField]
@@ -115,7 +118,7 @@ public class Sc_AIStatesManagerHierarchical : MonoBehaviour
         patrolState.PatrolStartStateInfo(commonMethods, patrolPoints);
         idleState.IdleStartStateInfo(this, commonMethods, idleTimer);
         aggressionDesicionState.AggressionStartStateInfo(this, directorAI, gameObject, player, currentWeapon, cover, coverDistance);
-        
+        attackState.AttackStartStateInfo(this, commonMethods, self, player, currentWeapon);
 
         currentFLState.EnterState();
         currentSLState.EnterState();
@@ -127,13 +130,13 @@ public class Sc_AIStatesManagerHierarchical : MonoBehaviour
         currentSLState.UpdateState();
     }
 
-    public void SwitchFLState(Sc_AIBaseParentState state)
+    public void SwitchFLState(Sc_AIBaseStateHierarchical state)
     {
         currentFLState = state;
         currentFLState.EnterState();
     }
 
-    public void SwitchSLState(Sc_AIBaseStateSL state)
+    public void SwitchSLState(Sc_AIBaseStateHierarchical state)
     {
         currentSLState = state;
         currentSLState.EnterState();

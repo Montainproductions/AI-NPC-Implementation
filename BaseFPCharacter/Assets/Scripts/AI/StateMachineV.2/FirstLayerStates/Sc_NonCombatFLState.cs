@@ -3,14 +3,14 @@ using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.AI;
 
-public class Sc_NonCombatFLState : Sc_AIBaseParentState
+public class Sc_NonCombatFLState : Sc_AIBaseStateHierarchical
 {
     public override void EnterState()
     {
         
     }
 
-    public override void UpdateState(float distPlayer, float angleToPlayer, bool playerBehindWall)
+    public override void UpdateState()
     {
         
     }

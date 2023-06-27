@@ -2,7 +2,7 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
-public class Sc_IdleSLState : Sc_AIBaseStateSL
+public class Sc_IdleSLState : Sc_AIBaseStateHierarchical
 {
     private Sc_AIStatesManagerHierarchical stateManager;
     private Sc_HFSMCommenMethods commonMethods;

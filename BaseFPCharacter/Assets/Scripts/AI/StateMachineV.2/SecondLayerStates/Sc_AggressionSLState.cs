@@ -3,7 +3,7 @@ using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.AI;
 
-public class Sc_AggressionSLState : Sc_AIBaseStateSL
+public class Sc_AggressionSLState : Sc_AIBaseStateHierarchical
 {
     //The manager of the AI that controls all of the info and transitions of state for the AI.
     private Sc_AIStatesManagerHierarchical stateManager;
