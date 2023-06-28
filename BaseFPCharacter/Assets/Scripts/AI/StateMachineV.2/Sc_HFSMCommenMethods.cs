@@ -172,6 +172,7 @@ public class Sc_HFSMCommenMethods : MonoBehaviour
         {
             //stateManager.StartCoroutine(stateManager.PlayAudioOneShot(6, 8));
             //directorAI.PlayerFound(state.gameObject);
+            yield return new WaitForSeconds(0.75f);
             stateManager.playerNoticed = true;
             stateManager.SwitchFLState(stateManager.alertFLState);
             stateManager.SwitchSLState(stateManager.alertedState);
@@ -179,7 +180,12 @@ public class Sc_HFSMCommenMethods : MonoBehaviour
         }else if (stateManager.currentFLState == stateManager.alertFLState)
         {
             for (alertedTimeLeft = 2; alertedTimeLeft > 0; alertedTimeLeft--)
-                Debug.Log("Time Passed");
+                if (stateManager.playerNoticed)
+                {
+                    stateManager.SwitchFLState(stateManager.combatFLState);
+                    stateManager.SwitchSLState(stateManager.aggressionDesicionState);
+                    Debug.Log("Combat Started");
+                }
                 yield return null;
             playerSeenSecondCheck = PlayerInVision(distPlayer, angleToPlayer, playerBehindWall);
 
@@ -196,6 +202,11 @@ public class Sc_HFSMCommenMethods : MonoBehaviour
                 Debug.Log("Back to idling/patroling");
             }
         }
+        yield return null;
+    }
+
+    public IEnumerator CantSeePlayer(float distPlayer, float angleToPlayer, bool playerBehindWall)
+    {
         yield return null;
     }
 
