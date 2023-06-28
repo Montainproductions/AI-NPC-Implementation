@@ -10,7 +10,7 @@ using Unity.VisualScripting;
 public class Sc_CustomButton : MonoBehaviour, IPointerEnterHandler, IPointerExitHandler, IPointerDownHandler, IPointerClickHandler
 {
     [SerializeField]
-    private Sc_UIAnimations menuAnimations;
+    private Sc_UIMenuAnimation menuAnimations;
 
     [SerializeField]
     private string menuGroup;
@@ -66,10 +66,6 @@ public class Sc_CustomButton : MonoBehaviour, IPointerEnterHandler, IPointerExit
         else if (menuGroup == "Pause Menu")
         {
             StartCoroutine(menuAnimations.PauseMenuAnimation());
-        }
-        else if (menuGroup == "Level Selector Menu")
-        {
-            StartCoroutine(menuAnimations.LevelMenuAnimation());
         }
         OnEvent.Invoke();
         Debug.Log("UI Button Clicked");

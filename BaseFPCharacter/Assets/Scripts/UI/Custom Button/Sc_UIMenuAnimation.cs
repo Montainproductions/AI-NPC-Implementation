@@ -5,10 +5,10 @@ using UnityEngine;
 public class Sc_UIMenuAnimation : MonoBehaviour
 {
     [SerializeField]
-    private GameObject[] mainMenuButtons, pauseMenuButtons, levelSelectorMenu;
+    private GameObject[] mainMenuButtons, pauseMenuButtons;
 
     [SerializeField]
-    private Transform[] mainMenuOgTransform, pauseMenuOgTransform, levelMenuOgTranform;
+    private Transform[] mainMenuOgTransform, pauseMenuOgTransform;
 
     private int force, angle;
 
@@ -37,17 +37,6 @@ public class Sc_UIMenuAnimation : MonoBehaviour
             rb2D = pauseMenuButtons[i].AddComponent<Rigidbody2D>();
             AddingRandomForce(rb2D);
             StartCoroutine(ReturnButtons(pauseMenuButtons[i].transform, pauseMenuButtons[i].GetComponent<Rigidbody2D>(), pauseMenuOgTransform[i]));
-        }
-        yield return null;
-    }
-
-    public IEnumerator LevelMenuAnimation()
-    {
-        for (int i = 0; i < levelSelectorMenu.Length; i++)
-        {
-            rb2D = levelSelectorMenu[i].AddComponent<Rigidbody2D>();
-            AddingRandomForce(rb2D);
-            StartCoroutine(ReturnButtons(levelSelectorMenu[i].transform, levelSelectorMenu[i].GetComponent<Rigidbody2D>(), levelMenuOgTranform[i]));
         }
         yield return null;
     }
