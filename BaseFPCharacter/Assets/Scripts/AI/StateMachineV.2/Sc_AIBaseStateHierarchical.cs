@@ -4,7 +4,7 @@ using UnityEngine;
 
 public abstract class Sc_AIBaseStateHierarchical
 {
-    public abstract void EnterState();
+    public abstract void EnterState(Vector3 playerPosition);
 
     public abstract void UpdateState();
 }

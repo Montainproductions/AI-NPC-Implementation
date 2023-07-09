@@ -9,7 +9,7 @@ public class Sc_IdleSLState : Sc_AIBaseStateHierarchical
 
     private float idleTimer;
 
-    public override void EnterState()
+    public override void EnterState(Vector3 playerPosition)
     {
         commonMethods.StopMovement();
         stateManager.StartCoroutine(IdleTimer());
@@ -26,8 +26,12 @@ public class Sc_IdleSLState : Sc_AIBaseStateHierarchical
         
     IEnumerator IdleTimer()
     {
-        yield return new WaitForSeconds(idleTimer);
+        stateManager.SetIsIdling(true);
+        
+        commonMethods.LookRandomDirections(idleTimer);
+
         stateManager.SwitchSLState(stateManager.patrolState);
+        stateManager.SetIsIdling(false);
         yield return null;
     }
 }

@@ -46,6 +46,8 @@ public class Sc_HFSMCommenMethods : MonoBehaviour
     private float lastAudioTimer;
     private bool canPlayAudio;
 
+    private Vector3 randomLookDirection;
+
     // Start is called before the first frame update
     void Start()
     {
@@ -248,5 +250,18 @@ public class Sc_HFSMCommenMethods : MonoBehaviour
         }
 
         yield return null;
+    }
+
+    public IEnumerator LookRandomDirections(float idleTimer)
+    {
+        yield return new WaitForSeconds(idleTimer / 3);
+        randomLookDirection.x = Random.Range(0, 360);
+        randomLookDirection.z = Random.Range(0, 360);
+        stateManager.transform.LookAt(randomLookDirection);
+        yield return new WaitForSeconds(idleTimer / 3);
+        randomLookDirection.x = Random.Range(0, 360);
+        randomLookDirection.z = Random.Range(0, 360);
+        stateManager.transform.LookAt(randomLookDirection);
+        yield return new WaitForSeconds(idleTimer / 3);
     }
 }

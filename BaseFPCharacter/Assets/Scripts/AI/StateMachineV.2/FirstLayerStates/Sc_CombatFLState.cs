@@ -5,7 +5,7 @@ using UnityEngine.AI;
 
 public class Sc_CombatFLState : Sc_AIBaseStateHierarchical
 {
-    public override void EnterState()
+    public override void EnterState(Vector3 playerPosition)
     {
         
     }

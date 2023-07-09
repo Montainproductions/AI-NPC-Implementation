@@ -30,7 +30,7 @@ public class Sc_AggressionSLState : Sc_AIBaseStateHierarchical
     //The decision val of the AI
     private float decisionVal;
 
-    public override void EnterState()
+    public override void EnterState(Vector3 playerPosition)
     {
         decisionVal = 0;
         attackRange = baseGunScript.ReturnEffectiveRange();
@@ -57,7 +57,6 @@ public class Sc_AggressionSLState : Sc_AIBaseStateHierarchical
     public void SetUpTrait(Trait newAITrait)
     {
         this.aiTrait = newAITrait;
-        Debug.Log("" + aiTrait.ReturnAgressionValue());
     }
 
     /*This method determines the AIs decision value. If the AIs is close enough to the player and their weapons range is less then the distance then it will increase the value by 2.

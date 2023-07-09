@@ -11,7 +11,7 @@ public class Sc_PatrolingSLState : Sc_AIBaseStateHierarchical
 
     private Vector3 movePositionTransfrom;
 
-    public override void EnterState()
+    public override void EnterState(Vector3 playerPosition)
     {
         currentPos = 0;
         ChooseRandomPatrolPos();

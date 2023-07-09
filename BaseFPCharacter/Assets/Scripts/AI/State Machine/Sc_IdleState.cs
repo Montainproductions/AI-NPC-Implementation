@@ -8,7 +8,7 @@ public class Sc_IdleState : Sc_AIBaseState
     private Sc_AIStateManager stateManager;
     private Sc_Player_Movement playerMovementScript;
 
-    private float idleTimer, visionRange, visionConeAngle, audioRange;
+    private float idleTimer, visionRange, visionConeAngle;
 
     Vector3 randomLookDirection;
 
@@ -20,14 +20,13 @@ public class Sc_IdleState : Sc_AIBaseState
         CanSeePlayer(distPlayer, angleToPlayer, playerBehindWall);
     }
 
-    public void IdleStartStateInfo(Sc_AIStateManager stateManager, Sc_Player_Movement playerMovementScript, float idleTime, float distRange, float visionAngleRange, float audioDist)
+    public void IdleStartStateInfo(Sc_AIStateManager stateManager, Sc_Player_Movement playerMovementScript, float idleTime, float distRange, float visionAngleRange)
     {
         this.stateManager = stateManager;
         this.playerMovementScript = playerMovementScript;
         idleTimer = idleTime;
         visionRange = distRange;
         visionConeAngle = visionAngleRange;
-        audioRange = audioDist;
     }
 
     public void CanSeePlayer(float distPlayer, float angleToPlayer, bool playerBehindWall)

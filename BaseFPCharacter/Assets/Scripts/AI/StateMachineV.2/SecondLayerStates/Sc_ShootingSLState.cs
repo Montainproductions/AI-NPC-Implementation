@@ -19,7 +19,7 @@ public class Sc_ShootingSLState : Sc_AIBaseStateHierarchical
 
     private float attackRange, timeDelay, diffDistToAttack;
 
-    public override void EnterState()
+    public override void EnterState(Vector3 playerPosition)
     {
         stateManager.StartCoroutine(commonMethods.StopMovement());
         isMoving = false;

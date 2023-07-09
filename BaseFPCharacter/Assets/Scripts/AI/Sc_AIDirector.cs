@@ -11,13 +11,13 @@ public class Sc_AIDirector : MonoBehaviour
     public Sc_AIDirector Instance { get; set; }
 
     [HideInInspector]
-    public Trait Aggressive = new Trait("Aggressive", 12, 3, 2);
+    public Trait Aggressive = new Trait("Aggressive", 12, 3, 2, 4, -4, 2, -2, 1, 1);
     [HideInInspector]
-    public Trait Bold = new Trait("Bold", 6, 1.5f, 0.5f);
+    public Trait Bold = new Trait("Bold", 6, 1.5f, 0.5f, 4, -4, 2, -2, 1, 1);
     [HideInInspector]
-    public Trait Cautious = new Trait("Cautious", -6, -1.5f, -0.5f);
+    public Trait Cautious = new Trait("Cautious", -6, -1.5f, -0.5f, 4, -4, 2, -2, 1, 1);
     [HideInInspector]
-    public Trait Scared = new Trait("Scared", -12, -3, -2);
+    public Trait Scared = new Trait("Scared", -12, -3, -2, 4, -4, 2, -2, 1, 1);
 
     //Grabs the quick sort algorithem script
     [SerializeField]
@@ -321,14 +321,22 @@ public class Trait
     private float healthChange, agressionValue, approchPlayerChange;
     private AudioClip[] audioclips;
 
+    private float xMaxPosition, xMinPosition, yMaxPosition, yMinPosition, zMaxPosition, zMinPosition;
+
     public Trait(){}
 
-    public Trait(string traitName, float healthChange, float agressionValueChange, float approchPlayerChange)
+    public Trait(string traitName, float healthChange, float agressionValueChange, float approchPlayerChange, float xMaxPosition, float xMinPosition, float yMaxPosition, float yMinPosition, float zMaxPosition, float zMinPosition)
     {
         this.traitName = traitName;
         this.healthChange = healthChange;
         this.agressionValue = agressionValueChange;
         this.approchPlayerChange = approchPlayerChange;
+        this.xMaxPosition = xMaxPosition;
+        this.xMinPosition = xMinPosition;
+        this.yMaxPosition = yMaxPosition;
+        this.yMinPosition = yMinPosition;
+        this.zMaxPosition = zMaxPosition;
+        this.zMinPosition = zMinPosition;
     }
 
     public void SetUpName(string traitName)
@@ -351,6 +359,46 @@ public class Trait
         this.approchPlayerChange = approchPlayerChange;
     }
 
+    public void SetUpXMaxPosition(float xMaxPosition)
+    {
+        this.xMaxPosition = xMaxPosition;
+    }
+
+    public void SetUpXMinPosition(float xMinPosition)
+    {
+        this.xMinPosition = xMinPosition;
+    }
+
+    public void SetUpYMaxPosition(float yMaxPosition)
+    {
+        this.yMaxPosition = yMaxPosition;
+    }
+
+    public void SetUpYMinPosition(float yMinPosition)
+    {
+        this.yMinPosition = yMinPosition;
+    }
+
+    public void SetUpZMaxPosition(float zMaxPosition)
+    {
+        this.zMaxPosition = zMaxPosition;
+    }
+
+    public void SetUpZMinPosition(float zMinPosition)
+    {
+        this.zMinPosition = zMinPosition;
+    }
+
+    public void SetUpSearchArea(float xMaxPosition, float xMinPosition, float yMaxPosition, float yMinPosition, float zMaxPosition, float zMinPosition)
+    {
+        this.xMaxPosition = xMaxPosition;
+        this.xMinPosition = xMinPosition;
+        this.yMaxPosition = yMaxPosition;
+        this.yMinPosition = yMinPosition;
+        this.zMaxPosition = zMaxPosition;
+        this.zMinPosition = zMinPosition;
+    }
+
     public string ReturnName()
     {
         return traitName;
@@ -369,5 +417,45 @@ public class Trait
     public float ReturnApprochingPlayer()
     {
         return approchPlayerChange;
+    }
+
+    public float ReturnXMaxPosition()
+    {
+        return xMaxPosition;
+    }
+
+    public float ReturnXMinPosition()
+    {
+        return xMinPosition;
+    }
+
+    public float ReturnYMaxPosition()
+    {
+        return yMaxPosition;
+    }
+
+    public float ReturnYMinPosition()
+    {
+        return yMinPosition;
+    }
+
+    public float ReturnZMaxPosition()
+    {
+        return zMaxPosition;
+    }
+
+    public float ReturnZMinPosition()
+    {
+        return zMinPosition;
+    }
+
+    public void ReturnSearchArea(out float xMaxPosition, out float xMinPosition, out float yMaxPosition, out float yMinPosition, out float zMaxPosition, out float zMinPosition)
+    {
+        xMaxPosition = this.xMaxPosition;
+        xMinPosition = this.xMinPosition;
+        yMaxPosition = this.yMaxPosition;
+        yMinPosition = this.yMinPosition;
+        zMaxPosition = this.zMaxPosition;
+        zMinPosition = this.zMinPosition;
     }
 }

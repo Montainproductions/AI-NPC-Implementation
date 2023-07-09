@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using TMPro;
 using UnityEngine;
 using UnityEngine.AI;
+using UnityEngine.UIElements;
 
 public class Sc_AIStatesManagerHierarchical : MonoBehaviour
 {
@@ -31,7 +32,7 @@ public class Sc_AIStatesManagerHierarchical : MonoBehaviour
     [HideInInspector]
     public Sc_AlertedSLState alertedState = new Sc_AlertedSLState();
     [HideInInspector]
-    public Sc_SearchState searchState = new Sc_SearchState();
+    public Sc_SearchingSLState searchState = new Sc_SearchingSLState();
     [HideInInspector]
     public Sc_AggressionSLState aggressionDesicionState = new Sc_AggressionSLState();
     [HideInInspector]
@@ -54,6 +55,7 @@ public class Sc_AIStatesManagerHierarchical : MonoBehaviour
     //The player game object and weather they have been spotted
     [SerializeField]
     private GameObject player;
+    private Vector3 playerPosition;
     [HideInInspector]
     public bool playerNoticed;
 
@@ -119,9 +121,12 @@ public class Sc_AIStatesManagerHierarchical : MonoBehaviour
         idleState.IdleStartStateInfo(this, commonMethods, idleTimer);
         aggressionDesicionState.AggressionStartStateInfo(this, directorAI, gameObject, player, currentWeapon, cover, coverDistance);
         attackState.AttackStartStateInfo(this, commonMethods, self, player, currentWeapon);
+        coverState.CoverStartStateInfo(this, commonMethods, self, player, currentWeapon, cover);
 
-        currentFLState.EnterState();
-        currentSLState.EnterState();
+        playerPosition = player.transform.position;
+
+        currentFLState.EnterState(playerPosition);
+        currentSLState.EnterState(playerPosition);
     }
 
     // Update is called once per frame
@@ -132,14 +137,18 @@ public class Sc_AIStatesManagerHierarchical : MonoBehaviour
 
     public void SwitchFLState(Sc_AIBaseStateHierarchical state)
     {
+        playerPosition = player.transform.position;
+        
         currentFLState = state;
-        currentFLState.EnterState();
+        currentFLState.EnterState(playerPosition);
     }
 
     public void SwitchSLState(Sc_AIBaseStateHierarchical state)
     {
+        playerPosition = player.transform.position;
+        
         currentSLState = state;
-        currentSLState.EnterState();
+        currentSLState.EnterState(playerPosition);
     }
 
     public void SetUpTraits(Trait newAITrait, AudioClip[] audioClips)
@@ -148,6 +157,7 @@ public class Sc_AIStatesManagerHierarchical : MonoBehaviour
         //this.aiAudioClips = audioClips;
 
         commonMethods.SetUpTrait(aiTrait, audioClips);
+        searchState.SetUpTrait(aiTrait);
         aggressionDesicionState.SetUpTrait(aiTrait);
     }
 

@@ -4,8 +4,8 @@ using UnityEngine;
 
 public class Sc_CoverSLState : Sc_AIBaseStateHierarchical
 {
-    private Sc_AIStateManager stateManager;
-    private Sc_CommonMethods commonMethodsScript;
+    private Sc_AIStatesManagerHierarchical stateManager;
+    private Sc_HFSMCommenMethods commonMethodsScript;
 
     private GameObject self, player, closestCover, currentWeapon;
     private Vector3 playerPos, coverPosition;
@@ -14,7 +14,7 @@ public class Sc_CoverSLState : Sc_AIBaseStateHierarchical
 
     private float closestDist;
 
-    public override void EnterState()
+    public override void EnterState(Vector3 playerPosition)
     {
         closestDist = Mathf.Infinity;
         //Debug.Log("Going to cover Start");
@@ -30,7 +30,7 @@ public class Sc_CoverSLState : Sc_AIBaseStateHierarchical
     }
 
     //Recives important variables that are needed for the entire state to work properly.
-    public void CoverStartStateInfo(Sc_AIStateManager stateManager, Sc_CommonMethods commonMethodsScript, GameObject self, GameObject player, GameObject currentWeapon, GameObject[] allCover, float visionRange, float visionConeAngle)
+    public void CoverStartStateInfo(Sc_AIStatesManagerHierarchical stateManager, Sc_HFSMCommenMethods commonMethodsScript, GameObject self, GameObject player, GameObject currentWeapon, GameObject[] allCover)
     {
         this.stateManager = stateManager;
         this.commonMethodsScript = commonMethodsScript;
@@ -71,7 +71,7 @@ public class Sc_CoverSLState : Sc_AIBaseStateHierarchical
                 coverScript.beingUsed = true;
                 //Debug.Log("Cover position: " + coverPosition);
                 yield return new WaitForSeconds(1.0f);
-                stateManager.StartCoroutine(stateManager.PlayAudioOneShot(24, 26));
+                stateManager.StartCoroutine(commonMethodsScript.PlayRandomAudioOneShot(24, 26));
                 commonMethodsScript.StartMovement(coverPosition, "Cover", true);
                 break;
             }
@@ -113,7 +113,7 @@ public class Sc_CoverSLState : Sc_AIBaseStateHierarchical
         //Debug.Log("Shooting");
         stateManager.SetIsAttacking(true);
         yield return new WaitForSeconds(2.75f);
-        stateManager.StartCoroutine(stateManager.PlayAudioOneShot(18, 20));
+        stateManager.StartCoroutine(commonMethodsScript.PlayRandomAudioOneShot(18, 20));
         Sc_BaseGun gunScript = currentWeapon.GetComponent<Sc_BaseGun>();
         stateManager.StartCoroutine(gunScript.ShotFired());
         yield return new WaitForSeconds(1.25f);
