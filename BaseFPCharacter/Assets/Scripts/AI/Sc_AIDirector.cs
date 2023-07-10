@@ -11,13 +11,13 @@ public class Sc_AIDirector : MonoBehaviour
     public Sc_AIDirector Instance { get; set; }
 
     [HideInInspector]
-    public Trait Aggressive = new Trait("Aggressive", 12, 3, 2, 4, -4, 2, -2, 1, 1);
+    public Trait Aggressive = new Trait("Aggressive", 12, 3, 2, 4, -4, 1, 1, 2, -2);
     [HideInInspector]
-    public Trait Bold = new Trait("Bold", 6, 1.5f, 0.5f, 4, -4, 2, -2, 1, 1);
+    public Trait Bold = new Trait("Bold", 6, 1.5f, 0.5f, 4, -4, 1, 1, 2, -2);
     [HideInInspector]
-    public Trait Cautious = new Trait("Cautious", -6, -1.5f, -0.5f, 4, -4, 2, -2, 1, 1);
+    public Trait Cautious = new Trait("Cautious", -6, -1.5f, -0.5f, 4, -4, 1, 1, 2, -2);
     [HideInInspector]
-    public Trait Scared = new Trait("Scared", -12, -3, -2, 4, -4, 2, -2, 1, 1);
+    public Trait Scared = new Trait("Scared", -12, -3, -2, 4, -4, 1, 1, 2, -2);
 
     //Grabs the quick sort algorithem script
     [SerializeField]
@@ -44,8 +44,6 @@ public class Sc_AIDirector : MonoBehaviour
     private int maxSoundsPlaying, currentSoundsPlaying;
 
     private int[] arrayOfSoundsToPlay;
-
-    private int lastPlayedAudioGroup;
 
     //The specific enemy game object
     private GameObject enemy;

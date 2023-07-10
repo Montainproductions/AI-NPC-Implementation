@@ -14,17 +14,24 @@ public class Sc_HFSMCommenMethods : MonoBehaviour
 
     private GameObject self, player;
 
-    private NavMeshAgent navMeshAgent;
-
     private Sc_Player_Movement playerMovemenetScript;
+
+    private NavMeshAgent navMeshAgent;
 
     private string currentState;
 
-    private Vector3 walkingPosition;
-    private Vector3 direction;
+    private AudioSource aiAudioSource;
+    private AudioClip[] aiAudioClips;
+
+    private int recentlyPlayedAudio;
+    private float lastAudioTimer;
+    private bool canPlayAudio;
+
+    private Vector3 walkingPosition, direction;
 
     private Transform lookingAtTransform;
 
+    //AI vision
     private float visionRange, visionConeAngle;
 
     //Player info
@@ -33,18 +40,17 @@ public class Sc_HFSMCommenMethods : MonoBehaviour
     [SerializeField]
     private float decisionTimer;
 
+    //Timer amount for generic waitforseconds
+    private float waitTimer;
+
+    private GameObject[] allFoiliage;
+    private GameObject closestFoiliage;
+
     //To check if the player is being blocked by some objects.
     // Bit shift the index of the layer (9) to get a bit mask
     private int layerMask = 1 << 9;
 
     private RaycastHit hit;
-
-    private AudioSource aiAudioSource;
-    private AudioClip[] aiAudioClips;
-
-    private int recentlyPlayedAudio;
-    private float lastAudioTimer;
-    private bool canPlayAudio;
 
     private Vector3 randomLookDirection;
 
@@ -103,17 +109,23 @@ public class Sc_HFSMCommenMethods : MonoBehaviour
                     StopMovement();
                     stateManager.patrolState.Patroling();
                 }
+                else if (currentState == "Searching")
+                {
+                    stateManager.searchState.FinishedWalking();
+                }
             }
         }
     }
 
-    public void CommenMethodSetUp(Sc_Player_Movement playerMovemenetScript, GameObject self, GameObject player, NavMeshAgent navMeshAgent, AudioSource audioSource, float visionRange, float visionConeAngle)
+    public void CommenMethodSetUp(Sc_Player_Movement playerMovemenetScript, GameObject self, GameObject player, NavMeshAgent navMeshAgent, AudioSource audioSource, GameObject[] allFoiliage, float visionRange, float visionConeAngle)
     {
         this.playerMovemenetScript = playerMovemenetScript;
         this.self = self;
         this.player = player;
         this.navMeshAgent = navMeshAgent;
         this.aiAudioSource = audioSource;
+        this.waitTimer = waitTimer;
+        this.allFoiliage = allFoiliage;
         this.visionRange = visionRange;
         this.visionConeAngle = visionConeAngle;
     }
@@ -124,13 +136,16 @@ public class Sc_HFSMCommenMethods : MonoBehaviour
         this.aiAudioClips = audioClips;
     }
 
-    public void StartMovement(Vector3 position, string currentState, bool lookAtPlayer = false, Transform lookAt = null)
+    public void StartMovement(Vector3 position, string currentState, Transform lookAt = null)
     {
         walkingPosition = position;
         this.currentState = currentState;
-        //Debug.Log("Current action state: " + currentState);
-        //Debug.Log(this.currentState);
-        //lookingAtPlayer = lookAtPlayer;
+        lookingAtTransform = lookAt;
+    }
+
+    public void StartMovement(Vector3[] position, string currentState, Transform lookAt = null)
+    {
+        this.currentState = currentState;
         lookingAtTransform = lookAt;
     }
 
@@ -154,13 +169,31 @@ public class Sc_HFSMCommenMethods : MonoBehaviour
         yield return null;
     }
 
+    public IEnumerator CloseFoiliage()
+    {
+        float distanceToPlayer, closestFoiliageDistance = Mathf.Infinity;
+        for(int i = 0; i < allFoiliage.Length; i++)
+        {
+            distanceToPlayer = Vector3.Distance(gameObject.transform.position, allFoiliage[i].transform.position);
+            if(distanceToPlayer < closestFoiliageDistance)
+            {
+                closestFoiliageDistance = distanceToPlayer;
+                closestFoiliage = allFoiliage[i];
+            }
+        }
+
+        yield return new WaitForSeconds(waitTimer);
+        StartCoroutine(CloseFoiliage());
+        yield return null;
+    }
+
     public IEnumerator AttackingGettingCloser(Transform player, float diffDistToAttack)
     {
         float zDistance = Random.Range(diffDistToAttack + 1 + aiTrait.ReturnApprochingPlayer(), diffDistToAttack + 6 + aiTrait.ReturnApprochingPlayer());
         //Debug.Log(zDistance);
         //float yDistance = Random.Range(-diffDistToAttack, diffDistToAttack);
         Vector3 newPosition = stateManager.transform.position + stateManager.transform.forward * zDistance;
-        StartMovement(newPosition, "Approching", true, player);
+        StartMovement(newPosition, "Approching", player);
         yield return null;
     }
 
@@ -182,6 +215,7 @@ public class Sc_HFSMCommenMethods : MonoBehaviour
         }else if (stateManager.currentFLState == stateManager.alertFLState)
         {
             for (alertedTimeLeft = 2; alertedTimeLeft > 0; alertedTimeLeft--)
+            {
                 if (stateManager.playerNoticed)
                 {
                     stateManager.SwitchFLState(stateManager.combatFLState);
@@ -189,6 +223,7 @@ public class Sc_HFSMCommenMethods : MonoBehaviour
                     Debug.Log("Combat Started");
                 }
                 yield return null;
+            }
             playerSeenSecondCheck = PlayerInVision(distPlayer, angleToPlayer, playerBehindWall);
 
             if (playerSeenSecondCheck)
@@ -223,6 +258,19 @@ public class Sc_HFSMCommenMethods : MonoBehaviour
         return playerVisible;
     }
 
+    public IEnumerator LookRandomDirections(float lookTimer)
+    {
+        yield return new WaitForSeconds(lookTimer / 3);
+        randomLookDirection.x = Random.Range(0, 360);
+        randomLookDirection.z = Random.Range(0, 360);
+        stateManager.transform.LookAt(randomLookDirection);
+        yield return new WaitForSeconds(lookTimer / 3);
+        randomLookDirection.x = Random.Range(0, 360);
+        randomLookDirection.z = Random.Range(0, 360);
+        stateManager.transform.LookAt(randomLookDirection);
+        yield return new WaitForSeconds(lookTimer / 3);
+    }
+
     public void PlayAudioOneShot(int audioPosition)
     {
         if (!aiAudioSource.isPlaying)
@@ -250,18 +298,5 @@ public class Sc_HFSMCommenMethods : MonoBehaviour
         }
 
         yield return null;
-    }
-
-    public IEnumerator LookRandomDirections(float idleTimer)
-    {
-        yield return new WaitForSeconds(idleTimer / 3);
-        randomLookDirection.x = Random.Range(0, 360);
-        randomLookDirection.z = Random.Range(0, 360);
-        stateManager.transform.LookAt(randomLookDirection);
-        yield return new WaitForSeconds(idleTimer / 3);
-        randomLookDirection.x = Random.Range(0, 360);
-        randomLookDirection.z = Random.Range(0, 360);
-        stateManager.transform.LookAt(randomLookDirection);
-        yield return new WaitForSeconds(idleTimer / 3);
     }
 }

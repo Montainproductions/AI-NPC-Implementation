@@ -52,6 +52,6 @@ public class Sc_PatrolingSLState : Sc_AIBaseStateHierarchical
 
 
         movePositionTransfrom = patrolPoints[currentPos].transform.position;
-        aiCommonMethods.StartMovement(movePositionTransfrom, "Patrolling", false);
+        aiCommonMethods.StartMovement(movePositionTransfrom, "Patrolling");
     }
 }

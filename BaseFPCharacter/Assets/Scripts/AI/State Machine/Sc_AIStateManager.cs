@@ -126,7 +126,7 @@ public class Sc_AIStateManager : MonoBehaviour
         aggressionDesicionState.AggressionStartStateInfo(this, directorAI, gameObject, player, currentWeapon, cover, navMeshAgent, coverDistance);
         coverState.CoverStartStateInfo(this, commonMethods, player.GetComponent<Sc_Player_Movement>(), gameObject, player, currentWeapon, cover, visionRange, visionConeAngle);
         searchState.SearchStartStateInfo(this, player.GetComponent<Sc_Player_Movement>(), gameObject, player, searchFormats, navMeshAgent, visionRange, visionConeAngle);
-        idleState.IdleStartStateInfo(this, player.GetComponent<Sc_Player_Movement>(), idleTimer, visionRange, visionConeAngle, audioRange);
+        idleState.IdleStartStateInfo(this, player.GetComponent<Sc_Player_Movement>(), idleTimer, visionRange, visionConeAngle);
         
         currentState.EnterState(playerNoticed);
 

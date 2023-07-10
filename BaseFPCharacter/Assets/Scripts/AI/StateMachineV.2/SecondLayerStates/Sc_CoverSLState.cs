@@ -72,7 +72,7 @@ public class Sc_CoverSLState : Sc_AIBaseStateHierarchical
                 //Debug.Log("Cover position: " + coverPosition);
                 yield return new WaitForSeconds(1.0f);
                 stateManager.StartCoroutine(commonMethodsScript.PlayRandomAudioOneShot(24, 26));
-                commonMethodsScript.StartMovement(coverPosition, "Cover", true);
+                commonMethodsScript.StartMovement(coverPosition, "Cover", player.transform);
                 break;
             }
         }

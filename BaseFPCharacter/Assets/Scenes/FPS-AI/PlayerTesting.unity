@@ -3245,7 +3245,7 @@ GameObject:
   - component: {fileID: 1317197362}
   - component: {fileID: 1317197361}
   m_Layer: 0
-  m_Name: Cube
+  m_Name: HidingFoilage
   m_TagString: Foilage
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -7207,7 +7207,7 @@ Transform:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 3787160708366402545}
   m_LocalRotation: {x: 0, y: 1, z: 0, w: 0}
-  m_LocalPosition: {x: 15.42, y: 1, z: 27.33}
+  m_LocalPosition: {x: 11.62, y: 1, z: 27.33}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children:
@@ -7759,7 +7759,6 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   stateManager: {fileID: 6641649306634411060}
-  currentState: 
   decisionTimer: 3
 --- !u!114 &6641649306634411060
 MonoBehaviour:
@@ -7773,6 +7772,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 576243dce07704a49b2ab3fe06dd24e5, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  self: {fileID: 3787160708366402545}
   commonMethods: {fileID: 6641649306634411059}
   navMeshAgent: {fileID: 3787160708366402550}
   directorAI: {fileID: 1793999716}
@@ -7783,8 +7783,8 @@ MonoBehaviour:
   audioRange: 60
   alertedTimer: 30
   decisionTimer: 55
-  idleTimer: 20
   patrolPoints: []
+  idleTimer: 20
   currentWeapon: {fileID: 4341747266469830741}
   cover: []
   coverDistance: 20
