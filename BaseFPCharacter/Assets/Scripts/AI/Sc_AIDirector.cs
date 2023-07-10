@@ -10,6 +10,7 @@ public class Sc_AIDirector : MonoBehaviour
 {
     public Sc_AIDirector Instance { get; set; }
 
+    //Sets up the main current four traits
     [HideInInspector]
     public Trait Aggressive = new Trait("Aggressive", 12, 3, 2, 4, -4, 1, 1, 2, -2);
     [HideInInspector]
@@ -29,6 +30,7 @@ public class Sc_AIDirector : MonoBehaviour
     private List<GameObject> allCurrentEnemy =  new List<GameObject>();
     public static List<Sc_AIStateManager> allEnemyAIManagerScript = new List<Sc_AIStateManager>();
 
+    //All possible spawn locations for new AI
     [SerializeField]
     private GameObject[] spawnLocations;
 
@@ -37,9 +39,11 @@ public class Sc_AIDirector : MonoBehaviour
     private int maxAttacking, currentAttacking;
     private float average = 0;
 
+    //Various clips of audio to be played
     [SerializeField]
     private AudioClip[] agressiveAudioClips1, boldAudioClips1;
 
+    //Limits the amount of audio that all the AIs on the map can play to not overwhelm the player
     [SerializeField]
     private int maxSoundsPlaying, currentSoundsPlaying;
 
@@ -53,6 +57,7 @@ public class Sc_AIDirector : MonoBehaviour
 
     private bool playerSeen;
 
+    //Checks if the noise being made is in audio range
     [SerializeField]
     private float audioRange;
 
@@ -74,6 +79,7 @@ public class Sc_AIDirector : MonoBehaviour
         StartCoroutine(AIManagerScripts());
     }
 
+    //Bool determining if the limit of audios being played has reached its limit
     public bool PlayAudio(int audioPosition, Sc_AIStateManager statemanager)
     {
         if (currentSoundsPlaying < maxSoundsPlaying)
@@ -84,6 +90,7 @@ public class Sc_AIDirector : MonoBehaviour
         return false;
     }
 
+    //Increases the recently played audio counter
     public bool PlayAudio()
     {
         if(currentSoundsPlaying < maxSoundsPlaying)
@@ -105,6 +112,7 @@ public class Sc_AIDirector : MonoBehaviour
         yield return null;
     }
 
+    //Reduces the recently played audio counter
     public void NotPlayingAudio()
     {
         if (currentSoundsPlaying > 0)
@@ -113,6 +121,7 @@ public class Sc_AIDirector : MonoBehaviour
         }
     }
 
+    //Removes the game object from any lists that could contain it. Mostly done to help reduce null point exceptions when runing through the whole list and one is empty
     public void EnemyDied(GameObject enemyThatDied)
     {
         enemyAIToDecide.Remove(enemyThatDied);
@@ -313,6 +322,7 @@ public class Sc_AIDirector : MonoBehaviour
     }
 }
 
+//The class trait which helps give more personality and variance to the individual AIs. It is used to slightly change the outcome of certain desicions allowing the AI to seem like its doing its own desicions instead of the same one
 public class Trait
 {
     private string traitName;

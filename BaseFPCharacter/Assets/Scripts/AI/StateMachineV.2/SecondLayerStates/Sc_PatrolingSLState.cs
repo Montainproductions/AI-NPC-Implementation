@@ -4,13 +4,17 @@ using UnityEngine;
 
 public class Sc_PatrolingSLState : Sc_AIBaseStateHierarchical
 {
-    private Sc_HFSMCommenMethods aiCommonMethods;
+    //Common methods script
+    private Sc_HFSMCommenMethods commenMethods;
 
+    //Arrays containg all of the patrol points it can use and the current ones the AI is walking to.
     private GameObject[] allPatrolPoints, patrolPoints;
     private int currentPos;
 
+    //current position it will walk to
     private Vector3 movePositionTransfrom;
 
+    //When first starting the state it will run through this
     public override void EnterState(Vector3 playerPosition)
     {
         currentPos = 0;
@@ -22,12 +26,14 @@ public class Sc_PatrolingSLState : Sc_AIBaseStateHierarchical
 
     }
 
-    public void PatrolStartStateInfo(Sc_HFSMCommenMethods aiCommonMethods, GameObject[] allPatrolPoints)
+    //Sets up all important information given by the AI manager
+    public void PatrolStartStateInfo(Sc_HFSMCommenMethods commenMethods, GameObject[] allPatrolPoints)
     {
-        this.aiCommonMethods = aiCommonMethods;
+        this.commenMethods = commenMethods;
         this.allPatrolPoints = allPatrolPoints;
     }
 
+    //Chooses a random set of patrol points and places them in a seperate array
     public void ChooseRandomPatrolPos()
     {
 
@@ -39,6 +45,8 @@ public class Sc_PatrolingSLState : Sc_AIBaseStateHierarchical
         currentPos = 0;
         Patroling();
     }
+
+    //Has the AI patrol through all of the points it has selected. Might change since I have stared to work on a method that allows for entire arrays to be sent.
     public void Patroling()
     {
         if (currentPos >= patrolPoints.Length - 1)
@@ -52,6 +60,6 @@ public class Sc_PatrolingSLState : Sc_AIBaseStateHierarchical
 
 
         movePositionTransfrom = patrolPoints[currentPos].transform.position;
-        aiCommonMethods.StartMovement(movePositionTransfrom, "Patrolling");
+        commenMethods.StartMovement(movePositionTransfrom, "Patrolling");
     }
 }

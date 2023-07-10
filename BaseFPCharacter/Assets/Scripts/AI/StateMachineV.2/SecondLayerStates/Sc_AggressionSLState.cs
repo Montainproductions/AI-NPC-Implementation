@@ -7,17 +7,22 @@ public class Sc_AggressionSLState : Sc_AIBaseStateHierarchical
 {
     //The manager of the AI that controls all of the info and transitions of state for the AI.
     private Sc_AIStatesManagerHierarchical stateManager;
+    
     //The director AI to send inte desicion value
     private Sc_AIDirector directorAI;
+
+    //Script containing a varaity of commen methods
     public Sc_HFSMCommenMethods commenMethods;
 
+    //Current AI trait
     private Trait aiTrait;
+
+    //The player and the main AI game object
+    private GameObject self, player;
 
     //The script for the weapons
     private Sc_BaseGun baseGunScript;
 
-    //The player and the main AI game object
-    private GameObject player, self;
     //All the cover positions in the map
     private GameObject[] coverPositions;
 
@@ -30,6 +35,7 @@ public class Sc_AggressionSLState : Sc_AIBaseStateHierarchical
     //The decision val of the AI
     private float decisionVal;
 
+    //First frame that runs when the state is called for the first time
     public override void EnterState(Vector3 playerPosition)
     {
         decisionVal = 0;
@@ -37,12 +43,14 @@ public class Sc_AggressionSLState : Sc_AIBaseStateHierarchical
         WhenToAttack();
     }
 
+    //Runs every frame the state is active
     public override void UpdateState()
     {
         playerPos = player.transform.position;
         stateManager.transform.LookAt(playerPos);
     }
 
+    //Sets variables for important variable needed in the state
     public void AggressionStartStateInfo(Sc_AIStatesManagerHierarchical stateManager, Sc_AIDirector directorAI, GameObject self, GameObject player, GameObject currentWeapon, GameObject[] coverPos, float coverDist)
     {
         this.stateManager = stateManager;
@@ -54,6 +62,7 @@ public class Sc_AggressionSLState : Sc_AIBaseStateHierarchical
         this.coverDistance = coverDist;
     }
 
+    //Sets up the AI trait
     public void SetUpTrait(Trait newAITrait)
     {
         this.aiTrait = newAITrait;
@@ -92,6 +101,7 @@ public class Sc_AggressionSLState : Sc_AIBaseStateHierarchical
         stateManager.StartCoroutine(AITakingTooLong());
     }
 
+    //Forces the AI to change to the cover state if it takes to long to choose which state to change to.
     IEnumerator AITakingTooLong()
     {
         yield return new WaitForSeconds(6.0f);

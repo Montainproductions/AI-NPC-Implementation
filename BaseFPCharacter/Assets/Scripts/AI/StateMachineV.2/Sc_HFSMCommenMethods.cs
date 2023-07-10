@@ -31,20 +31,20 @@ public class Sc_HFSMCommenMethods : MonoBehaviour
 
     private Transform lookingAtTransform;
 
-    //AI vision
-    private float visionRange, visionConeAngle;
-
     //Player info
     private float distPlayer, angleToPlayer;
 
     [SerializeField]
     private float decisionTimer;
 
-    //Timer amount for generic waitforseconds
-    private float waitTimer;
-
     private GameObject[] allFoiliage;
     private GameObject closestFoiliage;
+
+    //AI vision
+    private float visionRange, visionConeAngle;
+
+    //Timer amount for generic waitforseconds
+    private float waitTimer;
 
     //To check if the player is being blocked by some objects.
     // Bit shift the index of the layer (9) to get a bit mask
@@ -117,7 +117,8 @@ public class Sc_HFSMCommenMethods : MonoBehaviour
         }
     }
 
-    public void CommenMethodSetUp(Sc_Player_Movement playerMovemenetScript, GameObject self, GameObject player, NavMeshAgent navMeshAgent, AudioSource audioSource, GameObject[] allFoiliage, float visionRange, float visionConeAngle)
+    //Setting up various variables that the script needs to operate
+    public void CommenMethodSetUp(GameObject self, GameObject player, Sc_Player_Movement playerMovemenetScript, NavMeshAgent navMeshAgent, AudioSource audioSource, GameObject[] allFoiliage, float visionRange, float visionConeAngle, float waitTimer)
     {
         this.playerMovemenetScript = playerMovemenetScript;
         this.self = self;
@@ -130,12 +131,14 @@ public class Sc_HFSMCommenMethods : MonoBehaviour
         this.visionConeAngle = visionConeAngle;
     }
 
+    //Sets up the trait and audio clips that the AI can use
     public void SetUpTrait(Trait aiTrait, AudioClip[] audioClips)
     {
         this.aiTrait = aiTrait;
         this.aiAudioClips = audioClips;
     }
 
+    //Changes the variables related to the movment and wether it should be looking at something
     public void StartMovement(Vector3 position, string currentState, Transform lookAt = null)
     {
         walkingPosition = position;
@@ -143,12 +146,14 @@ public class Sc_HFSMCommenMethods : MonoBehaviour
         lookingAtTransform = lookAt;
     }
 
+    //Has the AI walk through an array of vector3 
     public void StartMovement(Vector3[] position, string currentState, Transform lookAt = null)
     {
         this.currentState = currentState;
         lookingAtTransform = lookAt;
     }
 
+    //Has the AI stop moving in case it needs to change state or do some other task at that position
     public IEnumerator StopMovement()
     {
         yield return new WaitForSeconds(0.25f);
@@ -169,6 +174,7 @@ public class Sc_HFSMCommenMethods : MonoBehaviour
         yield return null;
     }
 
+    //Checks for the closest foiliage to itself. Used mostly for searching for the player if they are hidden
     public IEnumerator CloseFoiliage()
     {
         float distanceToPlayer, closestFoiliageDistance = Mathf.Infinity;
@@ -187,6 +193,7 @@ public class Sc_HFSMCommenMethods : MonoBehaviour
         yield return null;
     }
 
+    //Will choose a closer position to the player then start walking there. Used in the attack state.
     public IEnumerator AttackingGettingCloser(Transform player, float diffDistToAttack)
     {
         float zDistance = Random.Range(diffDistToAttack + 1 + aiTrait.ReturnApprochingPlayer(), diffDistToAttack + 6 + aiTrait.ReturnApprochingPlayer());
@@ -197,6 +204,7 @@ public class Sc_HFSMCommenMethods : MonoBehaviour
         yield return null;
     }
 
+    //Used to check if the AI can currently see the player and changes to the alerted state and if still being spoted then will change to attaking the player
     public IEnumerator CanSeePlayer(float distPlayer, float angleToPlayer, bool playerBehindWall)
     {
 
@@ -242,22 +250,24 @@ public class Sc_HFSMCommenMethods : MonoBehaviour
         yield return null;
     }
 
+    //Checks if the AI has stoped looking at the player and will regresivly go from attacking to alerted/searching and then back to patroling
     public IEnumerator CantSeePlayer(float distPlayer, float angleToPlayer, bool playerBehindWall)
     {
         yield return null;
     }
 
+    //actually determins if the player is visibale
     public bool PlayerInVision(float distPlayer, float angleToPlayer, bool playerBehindWall)
     {
-        bool playerVisible = false;
         bool playerHidden = playerMovemenetScript.ReturnIsHidden();
         if ((distPlayer <= visionRange - 15 && angleToPlayer <= visionConeAngle - 15) && !playerHidden && !playerBehindWall)
         {
-            playerVisible = true;
+            return true;
         }
-        return playerVisible;
+        return false;
     }
 
+    //Periodicly look around its surrounding
     public IEnumerator LookRandomDirections(float lookTimer)
     {
         yield return new WaitForSeconds(lookTimer / 3);
@@ -271,6 +281,7 @@ public class Sc_HFSMCommenMethods : MonoBehaviour
         yield return new WaitForSeconds(lookTimer / 3);
     }
 
+    //Play a single audio
     public void PlayAudioOneShot(int audioPosition)
     {
         if (!aiAudioSource.isPlaying)
@@ -279,6 +290,7 @@ public class Sc_HFSMCommenMethods : MonoBehaviour
         }
     }
 
+    //Will randomly choose an audio from a range and play it
     public IEnumerator PlayRandomAudioOneShot(int lowerLevelIncl, int higherLevelIncl)
     {
         Debug.Log("Playing audio");

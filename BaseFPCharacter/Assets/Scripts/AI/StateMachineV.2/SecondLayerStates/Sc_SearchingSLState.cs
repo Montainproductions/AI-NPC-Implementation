@@ -6,34 +6,37 @@ using UnityEngine.UIElements;
 
 public class Sc_SearchingSLState : Sc_AIBaseStateHierarchical
 {
+    //State manager script
     private Sc_AIStatesManagerHierarchical stateManager;
-    private Sc_HFSMCommenMethods commonMethods;
-    private Sc_Player_Movement playerMovementScript;
 
-    private GameObject self, player, chosenSearchPath;
-    private GameObject[] searchPathOptions;
+    //Commen methods script.
+    private Sc_HFSMCommenMethods commenMethods;
 
-    private NavMeshAgent navMeshAgent;
-
+    //Last known location of the player and the position the AI wants to walk to
     private Vector3 playerLastLocation, chosenPosition;
 
     //Area where a walking position can be determined
     private float xPosition, xMaxPosition, xMinPosition, yPosition, yMaxPosition, yMinPosition, zPosition, zMaxPosition, zMinPosition;
 
+    //Collection of positions that the AI wants to walk to
     private Vector3[] walkingPositions = new Vector3[3];
+    //Variables used to keep count of amount of positions created and any variance the search patter will have
     private int positionsCreated, searchFormat;
 
+    //Bool checking if new position is in range of any objects
     private bool inRange;
 
+    //An asortment of variables used for the size of the radius check, time the AI should spend searching an area for the player and its distance to the last known location of the player
     private float radiusSpawnCheck, searchTimer, distToLastPlayerPosition;
 
+    //Initial method that runs on the first frame it enters the state
     public override void EnterState(Vector3 playerPosition)
     {
         playerLastLocation = playerPosition;
         positionsCreated = 0;
         ChooseSearchPath();
 
-        stateManager.StartCoroutine(commonMethods.CloseFoiliage());
+        stateManager.StartCoroutine(commenMethods.CloseFoiliage());
     }
 
     public override void UpdateState()
@@ -41,19 +44,16 @@ public class Sc_SearchingSLState : Sc_AIBaseStateHierarchical
 
     }
 
-    public void SearchStartStateInfo(Sc_AIStatesManagerHierarchical stateManager, Sc_HFSMCommenMethods commonMethods, Sc_Player_Movement playerMovementScript, GameObject self, GameObject player, GameObject[] searchPathOptions, NavMeshAgent navMeshAgent, float radiusSpawnCheck, float searchTimer)
+    //Setting up important variables the state needs to operate
+    public void SearchStartStateInfo(Sc_AIStatesManagerHierarchical stateManager, Sc_HFSMCommenMethods commenMethods, float radiusSpawnCheck, float searchTimer)
     {
         this.stateManager = stateManager;
-        this.commonMethods = commonMethods;
-        this.playerMovementScript = playerMovementScript;
-        this.self = self;
-        this.player = player;
-        this.searchPathOptions = searchPathOptions;
-        this.navMeshAgent = navMeshAgent;
+        this.commenMethods = commenMethods;
         this.radiusSpawnCheck = radiusSpawnCheck;
         this.searchTimer = searchTimer;
     }
 
+    //Sets up the trait information
     public void SetUpTrait(Trait aiTrait)
     {
         xMaxPosition = aiTrait.ReturnXMaxPosition();
@@ -65,6 +65,7 @@ public class Sc_SearchingSLState : Sc_AIBaseStateHierarchical
 
     }
 
+    //Determines how straight forward or not should the AI search for the player. Helps give more variance to hte way the AI is searching and reacting to the player for the player
     public void ChooseSearchPath()
     {
         //zigzag, straight, middle, to closest hiding spot
@@ -89,6 +90,8 @@ public class Sc_SearchingSLState : Sc_AIBaseStateHierarchical
         }
     }
 
+    //Chooses a position and checks if it is somewhere that it can walk to or if it is colliding with anything.
+    //Side Note: I am first testing that it works on a flat serface and then will add and test if the AI can also move when elevation is at play. That is why currently its only create a new position and changing 2 out of the 3 directions.
     public void ChoosePosition(float xMaxPositionUpd, float xMinPositionUpd, float zMaxPositionUpd, float zMinPositionUpd)
     {
 
@@ -108,29 +111,34 @@ public class Sc_SearchingSLState : Sc_AIBaseStateHierarchical
             }
         }
 
-        commonMethods.StartMovement(walkingPositions, "Searching");
+        commenMethods.StartMovement(walkingPositions, "Searching");
         RestartChoosenPosition();
     }
 
+    //Will look around its current position as if searchng for the player. 
     IEnumerator LookAround()
     {
-        commonMethods.LookRandomDirections(searchTimer);
+        commenMethods.LookRandomDirections(searchTimer);
         yield return new WaitForSeconds(searchTimer);
         stateManager.SwitchFLState(stateManager.nonCombatFLState);
         stateManager.SwitchSLState(stateManager.patrolState);
         yield return null;
     }
-    
-    public void GoToClosestHidingLocation()
-    {
 
-    }
-
+    //Once it has finished walking through all of its positions it will look around.
     public void FinishedWalking()
     {
         stateManager.StartCoroutine(LookAround());
     }
 
+
+    //Will check close by foiliage and cover positions of note in case the player has hidden in them. This would make them seem like they are eliminating all places they player could be hidden
+    public void GoToClosestLocation()
+    {
+
+    }
+
+    //Restarts all of the positions in the array. More for future cases if one isnt changes.
     public void RestartChoosenPosition()
     {
         chosenPosition = Vector3.zero;
@@ -141,6 +149,7 @@ public class Sc_SearchingSLState : Sc_AIBaseStateHierarchical
         positionsCreated = 0;
     }
 
+    //Checks if anything colides with the object
     public bool RadiusCheck(Vector3 walkingPos)
     {
         inRange = Physics.CheckSphere(walkingPos, radiusSpawnCheck);

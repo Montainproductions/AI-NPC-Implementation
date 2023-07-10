@@ -4,25 +4,39 @@ using UnityEngine;
 
 public class Sc_CoverSLState : Sc_AIBaseStateHierarchical
 {
+    //State manager script
     private Sc_AIStatesManagerHierarchical stateManager;
-    private Sc_HFSMCommenMethods commonMethodsScript;
 
-    private GameObject self, player, closestCover, currentWeapon;
+    //Commen methods script containing various commen methods
+    private Sc_HFSMCommenMethods commenMethods;
+
+    //The AI gameobject, the player gameobject and the chossen closest cover gameobject
+    private GameObject self, player, closestCover;
+
+    //The vector3 position of the player and the closest cover point
     private Vector3 playerPos, coverPosition;
 
+    //Array containing all the possible cover points
     private GameObject[] allCover;
 
+    //Script that controls the AIs gun
+    private Sc_BaseGun gunScript;
+
+    //Distance to the closest cover point
     private float closestDist;
 
+
+    //Enter state thats run when initially entering the cover state script
     public override void EnterState(Vector3 playerPosition)
     {
         closestDist = Mathf.Infinity;
         //Debug.Log("Going to cover Start");
         coverPosition = Vector3.zero;
         stateManager.StartCoroutine(ChoosingCover());
-        stateManager.StartCoroutine(commonMethodsScript.ReDecide());
+        stateManager.StartCoroutine(commenMethods.ReDecide());
     }
 
+    //Updates each frame the state script is active
     public override void UpdateState()
     {
         playerPos = player.transform.position;
@@ -33,10 +47,10 @@ public class Sc_CoverSLState : Sc_AIBaseStateHierarchical
     public void CoverStartStateInfo(Sc_AIStatesManagerHierarchical stateManager, Sc_HFSMCommenMethods commonMethodsScript, GameObject self, GameObject player, GameObject currentWeapon, GameObject[] allCover)
     {
         this.stateManager = stateManager;
-        this.commonMethodsScript = commonMethodsScript;
+        this.commenMethods = commonMethodsScript;
         this.self = self;
         this.player = player;
-        this.currentWeapon = currentWeapon;
+        gunScript = currentWeapon.GetComponent<Sc_BaseGun>();
         this.allCover = allCover;
     }
 
@@ -71,8 +85,8 @@ public class Sc_CoverSLState : Sc_AIBaseStateHierarchical
                 coverScript.beingUsed = true;
                 //Debug.Log("Cover position: " + coverPosition);
                 yield return new WaitForSeconds(1.0f);
-                stateManager.StartCoroutine(commonMethodsScript.PlayRandomAudioOneShot(24, 26));
-                commonMethodsScript.StartMovement(coverPosition, "Cover", player.transform);
+                stateManager.StartCoroutine(commenMethods.PlayRandomAudioOneShot(24, 26));
+                commenMethods.StartMovement(coverPosition, "Cover", player.transform);
                 break;
             }
         }
@@ -108,13 +122,13 @@ public class Sc_CoverSLState : Sc_AIBaseStateHierarchical
         yield return null;
     }
 
+    //Will stand up and shoot with their weapon towards the player.
     IEnumerator AttackingWithGun()
     {
         //Debug.Log("Shooting");
         stateManager.SetIsAttacking(true);
         yield return new WaitForSeconds(2.75f);
-        stateManager.StartCoroutine(commonMethodsScript.PlayRandomAudioOneShot(18, 20));
-        Sc_BaseGun gunScript = currentWeapon.GetComponent<Sc_BaseGun>();
+        stateManager.StartCoroutine(commenMethods.PlayRandomAudioOneShot(18, 20));
         stateManager.StartCoroutine(gunScript.ShotFired());
         yield return new WaitForSeconds(1.25f);
         stateManager.SetIsAttacking(false);

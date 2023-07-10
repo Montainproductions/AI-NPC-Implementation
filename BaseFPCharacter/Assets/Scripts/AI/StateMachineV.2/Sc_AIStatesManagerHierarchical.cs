@@ -12,7 +12,7 @@ public class Sc_AIStatesManagerHierarchical : MonoBehaviour
     [SerializeField]
     private GameObject self;
 
-    //All first layer states. First layer reperesents the bigger states that may contain multiple smaller states
+    //All first layer states. First layer reperesents the bigger states that may contain multiple smaller states. This first layer is meant to represent general activites that the AI is trying to complete. The non combate state contains the patroling and idle states, the alerted first layer state contains the alerted and search states, finally the first layer combat state contains the aggression desicion, attack and cover states. 
     [HideInInspector]
     public Sc_AIBaseStateHierarchical currentFLState;
     [HideInInspector]
@@ -59,6 +59,7 @@ public class Sc_AIStatesManagerHierarchical : MonoBehaviour
     [HideInInspector]
     public bool playerNoticed;
 
+    //Timers and basic ranges
     [SerializeField]
     private float visionRange, visionConeAngle, audioRange, alertedTimer, decisionTimer;
 
@@ -112,19 +113,22 @@ public class Sc_AIStatesManagerHierarchical : MonoBehaviour
     // Start is called before the first frame update
     void Start()
     {
-        //Set first layer state to Non-Combate
-        currentFLState = nonCombatFLState;
-        //Sets starting state to patroling
-        currentSLState = patrolState;
-
+        //Sending important variables and objects to all of the states
         patrolState.PatrolStartStateInfo(commonMethods, patrolPoints);
         idleState.IdleStartStateInfo(this, commonMethods, idleTimer);
         aggressionDesicionState.AggressionStartStateInfo(this, directorAI, gameObject, player, currentWeapon, cover, coverDistance);
         attackState.AttackStartStateInfo(this, commonMethods, self, player, currentWeapon);
         coverState.CoverStartStateInfo(this, commonMethods, self, player, currentWeapon, cover);
 
+        //The current player position for when entering a state
         playerPosition = player.transform.position;
 
+        //Set first layer state to Non-Combate
+        currentFLState = nonCombatFLState;
+        //Sets starting state to patroling
+        currentSLState = patrolState;
+
+        //Starts the enter state of the current first layer and second layer of the state machine
         currentFLState.EnterState(playerPosition);
         currentSLState.EnterState(playerPosition);
     }
@@ -135,6 +139,7 @@ public class Sc_AIStatesManagerHierarchical : MonoBehaviour
         currentSLState.UpdateState();
     }
 
+    //Switches the first layer in the HFSM
     public void SwitchFLState(Sc_AIBaseStateHierarchical state)
     {
         playerPosition = player.transform.position;
@@ -143,6 +148,7 @@ public class Sc_AIStatesManagerHierarchical : MonoBehaviour
         currentFLState.EnterState(playerPosition);
     }
 
+    //Switches the second layer in the HFSM
     public void SwitchSLState(Sc_AIBaseStateHierarchical state)
     {
         playerPosition = player.transform.position;
@@ -151,6 +157,7 @@ public class Sc_AIStatesManagerHierarchical : MonoBehaviour
         currentSLState.EnterState(playerPosition);
     }
 
+    //Once the traits have been distributed and recived by the state manager then is passed to the required scripts
     public void SetUpTraits(Trait newAITrait, AudioClip[] audioClips)
     {
         this.aiTrait = newAITrait;
@@ -161,6 +168,7 @@ public class Sc_AIStatesManagerHierarchical : MonoBehaviour
         aggressionDesicionState.SetUpTrait(aiTrait);
     }
 
+    //Changes state if it was recently hit by a bullet/damaged
     public void RecentlyHit()
     {
         if (currentFLState != combatFLState)
@@ -200,11 +208,13 @@ public class Sc_AIStatesManagerHierarchical : MonoBehaviour
         return isAttacking;
     }
 
+    //Sets if the AI is currently reloading
     public void SetIsReloading(bool isReloading)
     {
         this.isReloading = isReloading;
     }
 
+    //Returns if the AI is currently reloading
     public bool ReturnIsReloading()
     {
         return isReloading;
