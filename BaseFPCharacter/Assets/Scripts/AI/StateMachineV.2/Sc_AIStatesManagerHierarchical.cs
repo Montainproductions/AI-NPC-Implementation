@@ -42,7 +42,7 @@ public class Sc_AIStatesManagerHierarchical : MonoBehaviour
 
     //A script that contains a set of common methods that multiple states can call on
     [SerializeField]
-    private Sc_HFSMCommenMethods commonMethods;
+    private Sc_HFSMCommenMethods commenMethods;
 
     //The navigation agent of the AI
     [SerializeField]
@@ -58,6 +58,10 @@ public class Sc_AIStatesManagerHierarchical : MonoBehaviour
     private Vector3 playerPosition;
     [HideInInspector]
     public bool playerNoticed;
+
+    //Audio Source
+    [SerializeField]
+    private AudioSource audioSource;
 
     //Timers and basic ranges
     [SerializeField]
@@ -91,6 +95,9 @@ public class Sc_AIStatesManagerHierarchical : MonoBehaviour
     [SerializeField]
     private float coverDistance;
 
+    [Header("Foiliage")]
+    private GameObject[] allFoiliage;
+
     //Animation information
     private bool isAttacking, isReloading, isIdling, isWalking;
 
@@ -113,12 +120,13 @@ public class Sc_AIStatesManagerHierarchical : MonoBehaviour
     // Start is called before the first frame update
     void Start()
     {
+        commenMethods.CommenMethodSetUp(navMeshAgent, player.GetComponent<Sc_Player_Movement>(), gameObject, player, audioSource, allFoiliage, visionRange, visionConeAngle, decisionTimer);
         //Sending important variables and objects to all of the states
-        patrolState.PatrolStartStateInfo(commonMethods, patrolPoints);
-        idleState.IdleStartStateInfo(this, commonMethods, idleTimer);
-        aggressionDesicionState.AggressionStartStateInfo(this, directorAI, gameObject, player, currentWeapon, cover, coverDistance);
-        attackState.AttackStartStateInfo(this, commonMethods, self, player, currentWeapon);
-        coverState.CoverStartStateInfo(this, commonMethods, self, player, currentWeapon, cover);
+        patrolState.PatrolStartStateInfo(commenMethods, patrolPoints);
+        idleState.IdleStartStateInfo(this, commenMethods, idleTimer);
+        aggressionDesicionState.AggressionStartStateInfo(this, commenMethods, directorAI, gameObject, player, currentWeapon, cover, coverDistance);
+        attackState.AttackStartStateInfo(this, commenMethods, self, player, currentWeapon);
+        coverState.CoverStartStateInfo(this, commenMethods, self, player, currentWeapon, cover);
 
         //The current player position for when entering a state
         playerPosition = player.transform.position;
@@ -163,7 +171,7 @@ public class Sc_AIStatesManagerHierarchical : MonoBehaviour
         this.aiTrait = newAITrait;
         //this.aiAudioClips = audioClips;
 
-        commonMethods.SetUpTrait(aiTrait, audioClips);
+        commenMethods.SetUpTrait(aiTrait, audioClips);
         searchState.SetUpTrait(aiTrait);
         aggressionDesicionState.SetUpTrait(aiTrait);
     }
@@ -176,6 +184,11 @@ public class Sc_AIStatesManagerHierarchical : MonoBehaviour
             SwitchFLState(combatFLState);
             SwitchSLState(aggressionDesicionState);
         }
+    }
+
+    public void PlayRandomAudioOneShot(int lowerLevelIncl, int higherLevelIncl)
+    {
+        commenMethods.PlayRandomAudioOneShot(lowerLevelIncl, higherLevelIncl);
     }
 
     //Sets the AIs decision value

@@ -1,12 +1,9 @@
 using System.Collections;
 using System.Collections.Generic;
-using Unity.IO.LowLevel.Unsafe;
-using UnityEngine;
 using System.Linq;
+using UnityEngine;
 
-/* The Sc_AIDirector is the main script that grabs all of the current NPCs in the map and will decide how many AI NPCS can do certain tasks. This helps control the NPCs so that there arent to many enemies attack the player at the same time 
- */
-public class Sc_AIDirector : MonoBehaviour
+public class Sc_AIDirectorHFSM : MonoBehaviour
 {
     public Sc_AIDirector Instance { get; set; }
 
@@ -27,8 +24,8 @@ public class Sc_AIDirector : MonoBehaviour
     //All current enemis in the map
     public static List<GameObject> enemyAIToDecide = new List<GameObject>();
     [SerializeField]
-    private List<GameObject> allCurrentEnemy =  new List<GameObject>();
-    public static List<Sc_AIStateManager> allEnemyAIManagerScript = new List<Sc_AIStateManager>();
+    private List<GameObject> allCurrentEnemy = new List<GameObject>();
+    public static List<Sc_AIStatesManagerHierarchical> allEnemyAIManagerScript = new List<Sc_AIStatesManagerHierarchical>();
 
     //All possible spawn locations for new AI
     [SerializeField]
@@ -93,7 +90,7 @@ public class Sc_AIDirector : MonoBehaviour
     //Increases the recently played audio counter
     public bool PlayAudio()
     {
-        if(currentSoundsPlaying < maxSoundsPlaying)
+        if (currentSoundsPlaying < maxSoundsPlaying)
         {
             currentSoundsPlaying++;
             return true;
@@ -101,12 +98,12 @@ public class Sc_AIDirector : MonoBehaviour
         return false;
     }
 
-    IEnumerator PlayAudioLaterTimer(Sc_AIStateManager stateManager, int audioPosition, int arrayOfSoundsPosition)
+    IEnumerator PlayAudioLaterTimer(Sc_HFSMCommenMethods commenMethods, int audioPosition, int arrayOfSoundsPosition)
     {
         yield return new WaitForSeconds(1.5f);
-        if (stateManager != null)
+        if (commenMethods != null)
         {
-            stateManager.PlayAudioOneShot(audioPosition);
+            commenMethods.PlayAudioOneShot(audioPosition);
         }
         arrayOfSoundsToPlay[arrayOfSoundsPosition] = -1;
         yield return null;
@@ -126,7 +123,7 @@ public class Sc_AIDirector : MonoBehaviour
     {
         enemyAIToDecide.Remove(enemyThatDied);
         allCurrentEnemy.Remove(enemyThatDied);
-        allEnemyAIManagerScript.Remove(enemyThatDied.GetComponent<Sc_AIStateManager>());
+        allEnemyAIManagerScript.Remove(enemyThatDied.GetComponent<Sc_AIStatesManagerHierarchical>());
     }
 
     /*
@@ -173,8 +170,8 @@ public class Sc_AIDirector : MonoBehaviour
     {
         foreach (GameObject i in allCurrentEnemy)
         {
-            allEnemyAIManagerScript.Add(i.GetComponent<Sc_AIStateManager>());
-            Sc_AIStateManager stateManager = allEnemyAIManagerScript.Last();
+            allEnemyAIManagerScript.Add(i.GetComponent<Sc_AIStatesManagerHierarchical>());
+            Sc_AIStatesManagerHierarchical stateManager = allEnemyAIManagerScript.Last();
             float randomValue = Random.Range(0.0f, 1.0f);
             if (randomValue >= 0.75f)
             {
@@ -213,7 +210,8 @@ public class Sc_AIDirector : MonoBehaviour
                 if (!allEnemyAIManagerScript[i].playerNoticed)
                 {
                     allEnemyAIManagerScript[i].playerNoticed = true;
-                    allEnemyAIManagerScript[i].SwitchState(allEnemyAIManagerScript[i].aggressionDesicionState);
+                    allEnemyAIManagerScript[i].SwitchFLState(allEnemyAIManagerScript[i].alertFLState);
+                    allEnemyAIManagerScript[i].SwitchSLState(allEnemyAIManagerScript[i].aggressionDesicionState);
                 }
                 //stateManager = null;
             }
@@ -233,28 +231,30 @@ public class Sc_AIDirector : MonoBehaviour
         {
             float v = Random.Range(1.0f, 10.0f);
 
-            Sc_AIStateManager aiScript = enemyAIToDecide[i].GetComponent<Sc_AIStateManager>();
+            Sc_AIStatesManagerHierarchical aiScript = enemyAIToDecide[i].GetComponent<Sc_AIStatesManagerHierarchical>();
+
+            aiScript.SwitchFLState(aiScript.combatFLState);
 
             //If too many enemy AIs are attacking the player then the current one will go to the cover state
             if (currentAttacking >= maxAttacking)
             {
-                aiScript.SwitchState(allEnemyAIManagerScript[i].coverState);
+                aiScript.SwitchSLState(aiScript.coverState);
             }
             //If the current desicion value of the enemy is greater than the average value of all enemies then the enemy will have a 75% chance of going to the attack state or a 25% chance to go to the cover state.
             //This is meant to help
             else if (aiScript.ReturnDecisionValue() >= valueLimit)
             {
-                if(v >= 2.5f) //2.5f
+                if (v >= 2.5f) //2.5f
                 {
                     //Debug.Log("Attacking");
                     //stateManager.SwitchState(stateManager.attackState);
-                    aiScript.SwitchState(aiScript.attackState);
+                    aiScript.SwitchSLState(aiScript.attackState);
                     currentAttacking++;
                 }
                 else
                 {
                     //Debug.Log("Lower");
-                    aiScript.SwitchState(aiScript.coverState);
+                    aiScript.SwitchSLState(aiScript.coverState);
                 }
             }
             else
@@ -263,13 +263,13 @@ public class Sc_AIDirector : MonoBehaviour
                 {
                     //Debug.Log("Attacking part 2");
                     //stateManager.SwitchState(stateManager.attackState);
-                    aiScript.SwitchState(aiScript.attackState);
+                    aiScript.SwitchSLState(aiScript.attackState);
                     currentAttacking++;
                 }
                 else
                 {
                     //Debug.Log("Lower Part 2");
-                    aiScript.SwitchState(aiScript.coverState);
+                    aiScript.SwitchSLState(aiScript.coverState);
                 }
             }
         }
@@ -304,165 +304,21 @@ public class Sc_AIDirector : MonoBehaviour
     public IEnumerator ShotFired(Vector3 positionOfShot)
     {
 
-        for(int i = 0; i < allCurrentEnemy.Count; i++)
+        for (int i = 0; i < allCurrentEnemy.Count; i++)
         {
             if (allCurrentEnemy[i] == null) { continue; }
             //yield return new WaitForSeconds(1.0f);
             //Debug.Log(allCurrentEnemy[i]);
-            if (Vector3.Distance(allCurrentEnemy[i].transform.position, positionOfShot) < audioRange && (allEnemyAIManagerScript[i].currentState == allEnemyAIManagerScript[i].idleState || allEnemyAIManagerScript[i].currentState == allEnemyAIManagerScript[i].patrolState))
+            Sc_AIStatesManagerHierarchical enemyObjScipt = allEnemyAIManagerScript[i];
+            if (Vector3.Distance(allCurrentEnemy[i].transform.position, positionOfShot) < audioRange && enemyObjScipt.currentFLState == enemyObjScipt.nonCombatFLState)
             {
-                StartCoroutine(allEnemyAIManagerScript[i].PlayAudioOneShot(6, 8));
+                enemyObjScipt.PlayRandomAudioOneShot(6, 8);
                 //Debug.Log("Player Heard");
-                allEnemyAIManagerScript[i].playerNoticed = true;
-                allEnemyAIManagerScript[i].SwitchState(allEnemyAIManagerScript[i].aggressionDesicionState);
+                enemyObjScipt.playerNoticed = true;
+                enemyObjScipt.SwitchFLState(enemyObjScipt.combatFLState);
+                enemyObjScipt.SwitchSLState(enemyObjScipt.aggressionDesicionState);
             }
         }
         yield return null;
-    }
-}
-
-//The class trait which helps give more personality and variance to the individual AIs. It is used to slightly change the outcome of certain desicions allowing the AI to seem like its doing its own desicions instead of the same one
-public class Trait
-{
-    private string traitName;
-    private float healthChange, agressionValue, approchPlayerChange;
-    private AudioClip[] audioclips;
-
-    private float xMaxPosition, xMinPosition, yMaxPosition, yMinPosition, zMaxPosition, zMinPosition;
-
-    public Trait(){}
-
-    public Trait(string traitName, float healthChange, float agressionValueChange, float approchPlayerChange, float xMaxPosition, float xMinPosition, float yMaxPosition, float yMinPosition, float zMaxPosition, float zMinPosition)
-    {
-        this.traitName = traitName;
-        this.healthChange = healthChange;
-        this.agressionValue = agressionValueChange;
-        this.approchPlayerChange = approchPlayerChange;
-        this.xMaxPosition = xMaxPosition;
-        this.xMinPosition = xMinPosition;
-        this.yMaxPosition = yMaxPosition;
-        this.yMinPosition = yMinPosition;
-        this.zMaxPosition = zMaxPosition;
-        this.zMinPosition = zMinPosition;
-    }
-
-    public void SetUpName(string traitName)
-    {
-        this.traitName = traitName;
-    }
-
-    public void SetUpHealthChange(float healthChange)
-    {
-        this.healthChange = healthChange;
-    }
-
-    public void SetUpAgressionValue(float agressionValue)
-    {
-        this.agressionValue = agressionValue;
-    }
-
-    public void SetUpApprochingPlayer(float approchPlayerChange)
-    {
-        this.approchPlayerChange = approchPlayerChange;
-    }
-
-    public void SetUpXMaxPosition(float xMaxPosition)
-    {
-        this.xMaxPosition = xMaxPosition;
-    }
-
-    public void SetUpXMinPosition(float xMinPosition)
-    {
-        this.xMinPosition = xMinPosition;
-    }
-
-    public void SetUpYMaxPosition(float yMaxPosition)
-    {
-        this.yMaxPosition = yMaxPosition;
-    }
-
-    public void SetUpYMinPosition(float yMinPosition)
-    {
-        this.yMinPosition = yMinPosition;
-    }
-
-    public void SetUpZMaxPosition(float zMaxPosition)
-    {
-        this.zMaxPosition = zMaxPosition;
-    }
-
-    public void SetUpZMinPosition(float zMinPosition)
-    {
-        this.zMinPosition = zMinPosition;
-    }
-
-    public void SetUpSearchArea(float xMaxPosition, float xMinPosition, float yMaxPosition, float yMinPosition, float zMaxPosition, float zMinPosition)
-    {
-        this.xMaxPosition = xMaxPosition;
-        this.xMinPosition = xMinPosition;
-        this.yMaxPosition = yMaxPosition;
-        this.yMinPosition = yMinPosition;
-        this.zMaxPosition = zMaxPosition;
-        this.zMinPosition = zMinPosition;
-    }
-
-    public string ReturnName()
-    {
-        return traitName;
-    }
-
-    public float ReturnHealthChange()
-    {
-        return healthChange;
-    }
-
-    public float ReturnAgressionValue()
-    {
-        return agressionValue;
-    }
-
-    public float ReturnApprochingPlayer()
-    {
-        return approchPlayerChange;
-    }
-
-    public float ReturnXMaxPosition()
-    {
-        return xMaxPosition;
-    }
-
-    public float ReturnXMinPosition()
-    {
-        return xMinPosition;
-    }
-
-    public float ReturnYMaxPosition()
-    {
-        return yMaxPosition;
-    }
-
-    public float ReturnYMinPosition()
-    {
-        return yMinPosition;
-    }
-
-    public float ReturnZMaxPosition()
-    {
-        return zMaxPosition;
-    }
-
-    public float ReturnZMinPosition()
-    {
-        return zMinPosition;
-    }
-
-    public void ReturnSearchArea(out float xMaxPosition, out float xMinPosition, out float yMaxPosition, out float yMinPosition, out float zMaxPosition, out float zMinPosition)
-    {
-        xMaxPosition = this.xMaxPosition;
-        xMinPosition = this.xMinPosition;
-        yMaxPosition = this.yMaxPosition;
-        yMinPosition = this.yMinPosition;
-        zMaxPosition = this.zMaxPosition;
-        zMinPosition = this.zMinPosition;
     }
 }

@@ -63,8 +63,9 @@ public class Sc_HFSMCommenMethods : MonoBehaviour
     // Update is called once per frame
     void Update()
     {
+        Debug.Log(player.transform.position);
         //Calculates the distance and angle to the player. Used mostly to determine if the player is in view. Currently planning on changing so that the player is deteced by a game object collider.
-        distPlayer = Vector3.Distance(transform.position, player.transform.position);
+        distPlayer = Vector3.Distance(player.transform.position, transform.position);
         angleToPlayer = Vector3.Angle(transform.forward, player.transform.position - transform.position);
 
         //Determines if the player is currently behind a wall. Currently being used to check if the AI can see the player while it is patroling but will be also used to check if the AI can shoot directly at the player
@@ -118,12 +119,12 @@ public class Sc_HFSMCommenMethods : MonoBehaviour
     }
 
     //Setting up various variables that the script needs to operate
-    public void CommenMethodSetUp(GameObject self, GameObject player, Sc_Player_Movement playerMovemenetScript, NavMeshAgent navMeshAgent, AudioSource audioSource, GameObject[] allFoiliage, float visionRange, float visionConeAngle, float waitTimer)
+    public void CommenMethodSetUp(NavMeshAgent navMeshAgent, Sc_Player_Movement playerMovemenetScript, GameObject self, GameObject player, AudioSource audioSource, GameObject[] allFoiliage, float visionRange, float visionConeAngle, float waitTimer)
     {
+        this.navMeshAgent = navMeshAgent;
         this.playerMovemenetScript = playerMovemenetScript;
         this.self = self;
         this.player = player;
-        this.navMeshAgent = navMeshAgent;
         this.aiAudioSource = audioSource;
         this.waitTimer = waitTimer;
         this.allFoiliage = allFoiliage;

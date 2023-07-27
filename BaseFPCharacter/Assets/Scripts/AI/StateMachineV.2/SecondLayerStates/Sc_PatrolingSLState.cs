@@ -8,7 +8,7 @@ public class Sc_PatrolingSLState : Sc_AIBaseStateHierarchical
     private Sc_HFSMCommenMethods commenMethods;
 
     //Arrays containg all of the patrol points it can use and the current ones the AI is walking to.
-    private GameObject[] allPatrolPoints, patrolPoints;
+    private GameObject[] allPatrolPoints, patrolPoints = new GameObject[5];
     private int currentPos;
 
     //current position it will walk to

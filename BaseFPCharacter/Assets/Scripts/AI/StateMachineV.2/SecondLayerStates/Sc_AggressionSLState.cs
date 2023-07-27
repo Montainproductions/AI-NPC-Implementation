@@ -51,9 +51,10 @@ public class Sc_AggressionSLState : Sc_AIBaseStateHierarchical
     }
 
     //Sets variables for important variable needed in the state
-    public void AggressionStartStateInfo(Sc_AIStatesManagerHierarchical stateManager, Sc_AIDirector directorAI, GameObject self, GameObject player, GameObject currentWeapon, GameObject[] coverPos, float coverDist)
+    public void AggressionStartStateInfo(Sc_AIStatesManagerHierarchical stateManager, Sc_HFSMCommenMethods commenMethods, Sc_AIDirector directorAI, GameObject self, GameObject player, GameObject currentWeapon, GameObject[] coverPos, float coverDist)
     {
         this.stateManager = stateManager;
+        this.commenMethods = commenMethods;
         this.directorAI = directorAI;
         this.self = self;
         this.player = player;

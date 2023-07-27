@@ -2052,11 +2052,11 @@ PrefabInstance:
     m_Modifications:
     - target: {fileID: 1104893534535105958, guid: 321288f039be29840b9076a8a23566c6, type: 3}
       propertyPath: m_AnchorMax.x
-      value: 0
+      value: 1
       objectReference: {fileID: 0}
     - target: {fileID: 1104893534535105958, guid: 321288f039be29840b9076a8a23566c6, type: 3}
       propertyPath: m_AnchorMax.y
-      value: 0
+      value: 1
       objectReference: {fileID: 0}
     - target: {fileID: 1104893534535105958, guid: 321288f039be29840b9076a8a23566c6, type: 3}
       propertyPath: m_AnchorMin.x
@@ -2073,6 +2073,10 @@ PrefabInstance:
     - target: {fileID: 5355143908986894841, guid: 321288f039be29840b9076a8a23566c6, type: 3}
       propertyPath: m_Name
       value: BaseEnemy
+      objectReference: {fileID: 0}
+    - target: {fileID: 5355143908986894841, guid: 321288f039be29840b9076a8a23566c6, type: 3}
+      propertyPath: m_IsActive
+      value: 0
       objectReference: {fileID: 0}
     - target: {fileID: 5355143908986894844, guid: 321288f039be29840b9076a8a23566c6, type: 3}
       propertyPath: player
@@ -7778,15 +7782,36 @@ MonoBehaviour:
   directorAI: {fileID: 1793999716}
   player: {fileID: 884952683}
   playerNoticed: 0
+  audioSource: {fileID: 0}
   visionRange: 55
   visionConeAngle: 180
   audioRange: 60
   alertedTimer: 30
   decisionTimer: 55
-  patrolPoints: []
+  patrolPoints:
+  - {fileID: 1435768226}
+  - {fileID: 144707001}
+  - {fileID: 1377086480}
+  - {fileID: 65096525}
+  - {fileID: 153782399}
+  - {fileID: 1921915414}
   idleTimer: 20
   currentWeapon: {fileID: 4341747266469830741}
-  cover: []
+  cover:
+  - {fileID: 322979980}
+  - {fileID: 1700432392}
+  - {fileID: 1442327710}
+  - {fileID: 2043737196}
+  - {fileID: 1142113417}
+  - {fileID: 293362685}
+  - {fileID: 1288396511}
+  - {fileID: 1534551748}
+  - {fileID: 1646770636}
+  - {fileID: 1147609107}
+  - {fileID: 328637837}
+  - {fileID: 162614757}
+  - {fileID: 617676819}
+  - {fileID: 2044661824}
   coverDistance: 20
   showActions: 1
   actionUIText: {fileID: 5306766099730199149}
@@ -7869,7 +7894,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 6646797674794803048, guid: 81ce49f96577d844ab806a3654e6ae19, type: 3}
       propertyPath: m_LocalPosition.x
-      value: 1.8
+      value: 15.35
       objectReference: {fileID: 0}
     - target: {fileID: 6646797674794803048, guid: 81ce49f96577d844ab806a3654e6ae19, type: 3}
       propertyPath: m_LocalPosition.y
@@ -7877,7 +7902,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 6646797674794803048, guid: 81ce49f96577d844ab806a3654e6ae19, type: 3}
       propertyPath: m_LocalPosition.z
-      value: -68.4
+      value: 8.55
       objectReference: {fileID: 0}
     - target: {fileID: 6646797674794803048, guid: 81ce49f96577d844ab806a3654e6ae19, type: 3}
       propertyPath: m_LocalRotation.w

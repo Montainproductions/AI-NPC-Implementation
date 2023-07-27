@@ -196,7 +196,7 @@ public class Sc_AIStateManager : MonoBehaviour
         {
             int audioPosition = Random.Range(lowerLevelIncl, higherLevelIncl);
             
-            if (directorAI.PlayAudio(audioPosition, this) && recentlyPlayedAudio != audioPosition)
+            if (directorAI.PlayAudio() && recentlyPlayedAudio != audioPosition)
             {
                 recentlyPlayedAudio = audioPosition;
                 canPlayAudio = false;
