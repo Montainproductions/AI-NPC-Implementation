@@ -7777,7 +7777,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   self: {fileID: 3787160708366402545}
-  commonMethods: {fileID: 6641649306634411059}
+  commenMethods: {fileID: 6641649306634411059}
   navMeshAgent: {fileID: 3787160708366402550}
   directorAI: {fileID: 1793999716}
   player: {fileID: 884952683}

@@ -10,6 +10,8 @@ using UnityEngine;
  */
 public class Sc_QuickSort : MonoBehaviour
 {
+    private static bool isHFSM;
+
     // A utility function to swap two elements
     static void Swap(List<GameObject> mainArr, int i, int j)
     {
@@ -27,7 +29,16 @@ public class Sc_QuickSort : MonoBehaviour
     {
 
         // pivot
-        float pivot = arrayObjects[highEnd].GetComponent<Sc_AIStateManager>().ReturnDecisionValue();
+        float pivot;
+
+        if (!isHFSM)
+        {
+            pivot = arrayObjects[highEnd].GetComponent<Sc_AIStateManager>().ReturnDecisionValue();
+        }
+        else
+        {
+            pivot = arrayObjects[highEnd].GetComponent<Sc_AIStatesManagerHierarchical>().ReturnDecisionValue();
+        }
 
         // Index of smaller element and
         // indicates the right position
@@ -39,7 +50,7 @@ public class Sc_QuickSort : MonoBehaviour
 
             // If current element is smaller
             // than the pivot
-            if (arrayObjects[j].GetComponent<Sc_AIStateManager>().ReturnDecisionValue() < pivot)
+            if ((arrayObjects[j].GetComponent<Sc_AIStateManager>().ReturnDecisionValue() < pivot && !isHFSM) || ((arrayObjects[j].GetComponent<Sc_AIStatesManagerHierarchical>().ReturnDecisionValue() < pivot && isHFSM)))
             {
 
                 // Increment index of
@@ -83,9 +94,11 @@ public class Sc_QuickSort : MonoBehaviour
     }
 
     // Driver Code
-    public void Main(List<GameObject> arrayObjects)
+    public void Main(List<GameObject> arrayObjects, bool isHFSMNew)
     {
         int length = arrayObjects.Count;
+
+        isHFSM = isHFSMNew;
 
         QuickSort(arrayObjects, 0, length - 1);
         Console.Write("Sorted array: ");

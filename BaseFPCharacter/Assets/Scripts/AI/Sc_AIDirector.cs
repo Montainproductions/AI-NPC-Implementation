@@ -10,6 +10,9 @@ public class Sc_AIDirector : MonoBehaviour
 {
     public Sc_AIDirector Instance { get; set; }
 
+    [SerializeField]
+    private bool isHFSM;
+
     //Sets up the main current four traits
     [HideInInspector]
     public Trait Aggressive = new Trait("Aggressive", 12, 3, 2, 4, -4, 1, 1, 2, -2);
@@ -29,6 +32,7 @@ public class Sc_AIDirector : MonoBehaviour
     [SerializeField]
     private List<GameObject> allCurrentEnemy =  new List<GameObject>();
     public static List<Sc_AIStateManager> allEnemyAIManagerScript = new List<Sc_AIStateManager>();
+    public static List<Sc_AIStatesManagerHierarchical> allEnemyAIManagerScriptHFSM = new List<Sc_AIStatesManagerHierarchical>();
 
     //All possible spawn locations for new AI
     [SerializeField]
@@ -126,7 +130,14 @@ public class Sc_AIDirector : MonoBehaviour
     {
         enemyAIToDecide.Remove(enemyThatDied);
         allCurrentEnemy.Remove(enemyThatDied);
-        allEnemyAIManagerScript.Remove(enemyThatDied.GetComponent<Sc_AIStateManager>());
+        if (isHFSM)
+        {
+            allEnemyAIManagerScriptHFSM.Remove(enemyThatDied.GetComponent<Sc_AIStatesManagerHierarchical>());
+        }
+        else
+        {
+            allEnemyAIManagerScript.Remove(enemyThatDied.GetComponent<Sc_AIStateManager>());
+        }
     }
 
     /*
@@ -173,28 +184,57 @@ public class Sc_AIDirector : MonoBehaviour
     {
         foreach (GameObject i in allCurrentEnemy)
         {
-            allEnemyAIManagerScript.Add(i.GetComponent<Sc_AIStateManager>());
-            Sc_AIStateManager stateManager = allEnemyAIManagerScript.Last();
-            float randomValue = Random.Range(0.0f, 1.0f);
-            if (randomValue >= 0.75f)
+            if (isHFSM)
             {
-                //Debug.Log(Aggressive.ReturnAgressionValue());
-                stateManager.SetUpTraits(Aggressive, agressiveAudioClips1);
-            }
-            else if (0.75f > randomValue && randomValue >= 0.5f)
-            {
-                //Debug.Log(Bold.ReturnAgressionValue());
-                stateManager.SetUpTraits(Bold, agressiveAudioClips1);
-            }
-            else if (0.5f > randomValue && randomValue >= 0.25f)
-            {
-                //Debug.Log(Cautious.ReturnAgressionValue());
-                stateManager.SetUpTraits(Cautious, agressiveAudioClips1);
+                allEnemyAIManagerScriptHFSM.Add(i.GetComponent<Sc_AIStatesManagerHierarchical>());
+                Sc_AIStatesManagerHierarchical stateManagerHFSM = allEnemyAIManagerScriptHFSM.Last();
+                float randomValue = Random.Range(0.0f, 1.0f);
+                if (randomValue >= 0.75f)
+                {
+                    //Debug.Log(Aggressive.ReturnAgressionValue());
+                    stateManagerHFSM.SetUpTraits(Aggressive, agressiveAudioClips1);
+                }
+                else if (0.75f > randomValue && randomValue >= 0.5f)
+                {
+                    //Debug.Log(Bold.ReturnAgressionValue());
+                    stateManagerHFSM.SetUpTraits(Bold, agressiveAudioClips1);
+                }
+                else if (0.5f > randomValue && randomValue >= 0.25f)
+                {
+                    //Debug.Log(Cautious.ReturnAgressionValue());
+                    stateManagerHFSM.SetUpTraits(Cautious, agressiveAudioClips1);
+                }
+                else
+                {
+                    //Debug.Log(Scared.ReturnAgressionValue());
+                    stateManagerHFSM.SetUpTraits(Scared, agressiveAudioClips1);
+                }
             }
             else
             {
-                //Debug.Log(Scared.ReturnAgressionValue());
-                stateManager.SetUpTraits(Scared, agressiveAudioClips1);
+                allEnemyAIManagerScript.Add(i.GetComponent<Sc_AIStateManager>());
+                Sc_AIStateManager stateManager = allEnemyAIManagerScript.Last();
+                float randomValue = Random.Range(0.0f, 1.0f);
+                if (randomValue >= 0.75f)
+                {
+                    //Debug.Log(Aggressive.ReturnAgressionValue());
+                    stateManager.SetUpTraits(Aggressive, agressiveAudioClips1);
+                }
+                else if (0.75f > randomValue && randomValue >= 0.5f)
+                {
+                    //Debug.Log(Bold.ReturnAgressionValue());
+                    stateManager.SetUpTraits(Bold, agressiveAudioClips1);
+                }
+                else if (0.5f > randomValue && randomValue >= 0.25f)
+                {
+                    //Debug.Log(Cautious.ReturnAgressionValue());
+                    stateManager.SetUpTraits(Cautious, agressiveAudioClips1);
+                }
+                else
+                {
+                    //Debug.Log(Scared.ReturnAgressionValue());
+                    stateManager.SetUpTraits(Scared, agressiveAudioClips1);
+                }
             }
         }
         yield return null;
@@ -225,7 +265,7 @@ public class Sc_AIDirector : MonoBehaviour
     //After that it will go through the list and then it will check if the limit of enemies attacking the player has been meet and if so will have the enemy run to cover. If the limit of attacking enemies hasnt been reached and the current value is greater then 
     IEnumerator WhatToDo(float valueLimit)
     {
-        quickSort.Main(enemyAIToDecide);
+        quickSort.Main(enemyAIToDecide, isHFSM);
         //Debug.Log(enemyAIDesicionValue.Count);
         //Debug.Log("Ready to decide");
 
@@ -233,43 +273,93 @@ public class Sc_AIDirector : MonoBehaviour
         {
             float v = Random.Range(1.0f, 10.0f);
 
-            Sc_AIStateManager aiScript = enemyAIToDecide[i].GetComponent<Sc_AIStateManager>();
+            if (isHFSM)
+            {
+                Sc_AIStatesManagerHierarchical aiScript = enemyAIToDecide[i].GetComponent<Sc_AIStatesManagerHierarchical>();
 
-            //If too many enemy AIs are attacking the player then the current one will go to the cover state
-            if (currentAttacking >= maxAttacking)
-            {
-                aiScript.SwitchState(allEnemyAIManagerScript[i].coverState);
-            }
-            //If the current desicion value of the enemy is greater than the average value of all enemies then the enemy will have a 75% chance of going to the attack state or a 25% chance to go to the cover state.
-            //This is meant to help
-            else if (aiScript.ReturnDecisionValue() >= valueLimit)
-            {
-                if(v >= 2.5f) //2.5f
+                //If too many enemy AIs are attacking the player then the current one will go to the cover state
+                if (currentAttacking >= maxAttacking)
                 {
-                    //Debug.Log("Attacking");
-                    //stateManager.SwitchState(stateManager.attackState);
-                    aiScript.SwitchState(aiScript.attackState);
-                    currentAttacking++;
+                    aiScript.SwitchFLState(aiScript.combatFLState);
+                    aiScript.SwitchSLState(aiScript.coverState);
+                }
+                //If the current desicion value of the enemy is greater than the average value of all enemies then the enemy will have a 75% chance of going to the attack state or a 25% chance to go to the cover state.
+                //This is meant to help
+                else if (aiScript.ReturnDecisionValue() >= valueLimit)
+                {
+                    if (v >= 2.5f) //2.5f
+                    {
+                        //Debug.Log("Attacking");
+                        //stateManager.SwitchState(stateManager.attackState);
+                        aiScript.SwitchFLState(aiScript.combatFLState);
+                        aiScript.SwitchSLState(aiScript.attackState);
+                        currentAttacking++;
+                    }
+                    else
+                    {
+                        //Debug.Log("Lower");
+                        aiScript.SwitchFLState(aiScript.combatFLState);
+                        aiScript.SwitchSLState(aiScript.coverState);
+                    }
                 }
                 else
                 {
-                    //Debug.Log("Lower");
-                    aiScript.SwitchState(aiScript.coverState);
+                    if (v >= 7.5f) //7.5f
+                    {
+                        //Debug.Log("Attacking part 2");
+                        //stateManager.SwitchState(stateManager.attackState);
+                        aiScript.SwitchFLState(aiScript.combatFLState);
+                        aiScript.SwitchSLState(aiScript.attackState);
+                        currentAttacking++;
+                    }
+                    else
+                    {
+                        //Debug.Log("Lower Part 2");
+                        aiScript.SwitchFLState(aiScript.combatFLState);
+                        aiScript.SwitchSLState(aiScript.coverState);
+                    }
                 }
             }
             else
             {
-                if (v >= 7.5f) //7.5f
+                Sc_AIStateManager aiScript = enemyAIToDecide[i].GetComponent<Sc_AIStateManager>();
+
+                //If too many enemy AIs are attacking the player then the current one will go to the cover state
+                if (currentAttacking >= maxAttacking)
                 {
-                    //Debug.Log("Attacking part 2");
-                    //stateManager.SwitchState(stateManager.attackState);
-                    aiScript.SwitchState(aiScript.attackState);
-                    currentAttacking++;
+                    aiScript.SwitchState(aiScript.coverState);
+                }
+                //If the current desicion value of the enemy is greater than the average value of all enemies then the enemy will have a 75% chance of going to the attack state or a 25% chance to go to the cover state.
+                //This is meant to help
+                else if (aiScript.ReturnDecisionValue() >= valueLimit)
+                {
+                    if (v >= 2.5f) //2.5f
+                    {
+                        //Debug.Log("Attacking");
+                        //stateManager.SwitchState(stateManager.attackState);
+                        aiScript.SwitchState(aiScript.attackState);
+                        currentAttacking++;
+                    }
+                    else
+                    {
+                        //Debug.Log("Lower");
+                        aiScript.SwitchState(aiScript.coverState);
+                    }
                 }
                 else
                 {
-                    //Debug.Log("Lower Part 2");
-                    aiScript.SwitchState(aiScript.coverState);
+                    if (v >= 7.5f) //7.5f
+                    {
+                        //Debug.Log("Attacking part 2");
+                        //stateManager.SwitchState(stateManager.attackState);
+                        aiScript.SwitchState(aiScript.attackState);
+                        currentAttacking++;
+                    }
+                    else
+                    {
+                        //Debug.Log("Lower Part 2");
+                        aiScript.SwitchState(aiScript.coverState);
+                    }
                 }
             }
         }
@@ -284,8 +374,16 @@ public class Sc_AIDirector : MonoBehaviour
     {
         for (int i = 0; i < enemyAIToDecide.Count; i++)
         {
-            Sc_AIStateManager aiScript = enemyAIToDecide[i].GetComponent<Sc_AIStateManager>();
-            average += aiScript.ReturnDecisionValue();
+            if (isHFSM)
+            {
+                Sc_AIStatesManagerHierarchical aiScript = enemyAIToDecide[i].GetComponent<Sc_AIStatesManagerHierarchical>();
+                average += aiScript.ReturnDecisionValue();
+            }
+            else
+            {
+                Sc_AIStateManager aiScript = enemyAIToDecide[i].GetComponent<Sc_AIStateManager>();
+                average += aiScript.ReturnDecisionValue();
+            }
         }
         average = average / enemyAIToDecide.Count;
         yield return null;
