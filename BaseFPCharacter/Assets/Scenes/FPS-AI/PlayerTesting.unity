@@ -6911,6 +6911,10 @@ PrefabInstance:
       value: 0
       objectReference: {fileID: 0}
     - target: {fileID: 2460812123129524718, guid: 9a1b04fd93715f84585c30af5c65b4ea, type: 3}
+      propertyPath: isHFSM
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 2460812123129524718, guid: 9a1b04fd93715f84585c30af5c65b4ea, type: 3}
       propertyPath: audioRange
       value: 75
       objectReference: {fileID: 0}

@@ -50,13 +50,25 @@ public class Sc_QuickSort : MonoBehaviour
 
             // If current element is smaller
             // than the pivot
-            if ((arrayObjects[j].GetComponent<Sc_AIStateManager>().ReturnDecisionValue() < pivot && !isHFSM) || ((arrayObjects[j].GetComponent<Sc_AIStatesManagerHierarchical>().ReturnDecisionValue() < pivot && isHFSM)))
+            if (isHFSM)
             {
-
-                // Increment index of
-                // smaller element
-                i++;
-                Swap(arrayObjects, i, j);
+                if(arrayObjects[j].GetComponent<Sc_AIStatesManagerHierarchical>().ReturnDecisionValue() < pivot)
+                {
+                    // Increment index of
+                    // smaller element
+                    i++;
+                    Swap(arrayObjects, i, j);
+                }
+            }
+            else
+            {
+                if(arrayObjects[j].GetComponent<Sc_AIStateManager>().ReturnDecisionValue() < pivot)
+                {
+                    // Increment index of
+                    // smaller element
+                    i++;
+                    Swap(arrayObjects, i, j);
+                }
             }
         }
         Swap(arrayObjects, i + 1, highEnd);
