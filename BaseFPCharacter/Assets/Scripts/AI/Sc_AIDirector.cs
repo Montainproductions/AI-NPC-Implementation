@@ -82,18 +82,6 @@ public class Sc_AIDirector : MonoBehaviour
         StartCoroutine(AIManagerScripts());
     }
 
-    /*
-    //Bool determining if the limit of audios being played has reached its limit
-    public bool PlayAudio(int audioPosition, Sc_AIStateManager statemanager)
-    {
-        if (currentSoundsPlaying < maxSoundsPlaying)
-        {
-            currentSoundsPlaying++;
-            return true;
-        }
-        return false;
-    }*/
-
     //Increases the recently played audio counter
     public bool PlayAudio()
     {

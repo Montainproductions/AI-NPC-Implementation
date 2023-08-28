@@ -10,6 +10,8 @@ public class Sc_AIAnimatorController : MonoBehaviour
 
     [SerializeField]
     private Sc_AIStateManager aiManager;
+    [SerializeField]
+    private Sc_AIStatesManagerHierarchical aiHFSMManager;
 
     private bool isIdling, isAttacking;
     private string AITeam;
@@ -37,8 +39,17 @@ public class Sc_AIAnimatorController : MonoBehaviour
     // Update is called once per frame
     void Update()
     {
-        animator.SetBool("IsIdling", aiManager.ReturnIsIdling());
-        animator.SetBool("IsAttacking", aiManager.ReturnIsAttacking());
-        animator.SetBool("IsWalking", aiManager.ReturnIsWalking());
+        if (aiManager != null)
+        {
+            animator.SetBool("IsIdling", aiManager.ReturnIsIdling());
+            animator.SetBool("IsAttacking", aiManager.ReturnIsAttacking());
+            animator.SetBool("IsWalking", aiManager.ReturnIsWalking());
+        }
+        else if(aiHFSMManager != null)
+        {
+            animator.SetBool("IsIdling", aiHFSMManager.ReturnIsIdling());
+            animator.SetBool("IsAttacking", aiHFSMManager.ReturnIsAttacking());
+            animator.SetBool("IsWalking", aiHFSMManager.ReturnIsWalking());
+        }
     }
 }

@@ -168,6 +168,7 @@ public class Sc_AIStatesManagerHierarchical : MonoBehaviour
     //Once the traits have been distributed and recived by the state manager then is passed to the required scripts
     public void SetUpTraits(Trait newAITrait, AudioClip[] audioClips)
     {
+
         this.aiTrait = newAITrait;
         //this.aiAudioClips = audioClips;
 

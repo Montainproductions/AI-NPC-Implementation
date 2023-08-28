@@ -40,9 +40,6 @@ public class Sc_HFSMCommenMethods : MonoBehaviour
     private GameObject[] allFoiliage;
     private GameObject closestFoiliage;
 
-    //AI vision
-    private float visionRange, visionConeAngle;
-
     //Timer amount for generic waitforseconds
     private float waitTimer;
 
@@ -68,13 +65,8 @@ public class Sc_HFSMCommenMethods : MonoBehaviour
         angleToPlayer = Vector3.Angle(transform.forward, player.transform.position - transform.position);
 
         //Determines if the player is currently behind a wall. Currently being used to check if the AI can see the player while it is patroling but will be also used to check if the AI can shoot directly at the player
-        Vector3 direction = player.transform.position - transform.position;
-        bool playerBehindWall = Physics.Raycast(transform.position, direction, out hit, visionRange - 5, layerMask);
-
-        if (stateManager.currentFLState == stateManager.nonCombatFLState || stateManager.currentFLState == stateManager.alertFLState)
-        {
-            StartCoroutine(CanSeePlayer(distPlayer, angleToPlayer, playerBehindWall));
-        }
+        //Vector3 direction = player.transform.position - transform.position;
+        //bool playerBehindWall = Physics.Raycast(transform.position, direction, out hit, visionRange - 5, layerMask);
 
         if (walkingPosition != Vector3.zero)
         {
@@ -127,8 +119,6 @@ public class Sc_HFSMCommenMethods : MonoBehaviour
         this.aiAudioSource = audioSource;
         this.waitTimer = waitTimer;
         this.allFoiliage = allFoiliage;
-        this.visionRange = visionRange;
-        this.visionConeAngle = visionConeAngle;
     }
 
     //Sets up the trait and audio clips that the AI can use
@@ -209,18 +199,8 @@ public class Sc_HFSMCommenMethods : MonoBehaviour
     {
 
         int alertedTimeLeft = 0;
-        bool playerSeenSecondCheck, playerSeenFirstCheck = PlayerInVision(distPlayer, angleToPlayer, playerBehindWall);
-
-        if (playerSeenFirstCheck && stateManager.currentFLState == stateManager.nonCombatFLState)
-        {
-            //stateManager.StartCoroutine(stateManager.PlayAudioOneShot(6, 8));
-            //directorAI.PlayerFound(state.gameObject);
-            yield return new WaitForSeconds(0.75f);
-            stateManager.playerNoticed = true;
-            stateManager.SwitchFLState(stateManager.alertFLState);
-            stateManager.SwitchSLState(stateManager.alertedState);
-            Debug.Log("Player First Seen");
-        }else if (stateManager.currentFLState == stateManager.alertFLState)
+        bool playerSeenSecondCheck = true;
+        if (stateManager.currentFLState == stateManager.alertFLState)
         {
             for (alertedTimeLeft = 2; alertedTimeLeft > 0; alertedTimeLeft--)
             {
@@ -232,7 +212,6 @@ public class Sc_HFSMCommenMethods : MonoBehaviour
                 }
                 yield return null;
             }
-            playerSeenSecondCheck = PlayerInVision(distPlayer, angleToPlayer, playerBehindWall);
 
             if (playerSeenSecondCheck)
             {
@@ -248,23 +227,6 @@ public class Sc_HFSMCommenMethods : MonoBehaviour
             }
         }
         yield return null;
-    }
-
-    //Checks if the AI has stoped looking at the player and will regresivly go from attacking to alerted/searching and then back to patroling
-    public IEnumerator CantSeePlayer(float distPlayer, float angleToPlayer, bool playerBehindWall)
-    {
-        yield return null;
-    }
-
-    //actually determins if the player is visibale
-    public bool PlayerInVision(float distPlayer, float angleToPlayer, bool playerBehindWall)
-    {
-        bool playerHidden = playerMovemenetScript.ReturnIsHidden();
-        if ((distPlayer <= visionRange - 15 && angleToPlayer <= visionConeAngle - 15) && !playerHidden && !playerBehindWall)
-        {
-            return true;
-        }
-        return false;
     }
 
     //Periodicly look around its surrounding
