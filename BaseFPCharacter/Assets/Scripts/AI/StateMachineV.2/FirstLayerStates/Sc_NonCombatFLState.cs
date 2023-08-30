@@ -21,6 +21,15 @@ public class Sc_NonCombatFLState : Sc_AIBaseStateHierarchical
     private float visionRange, visionConeAngle;
 
     private bool playerSeen;
+
+    //Check if Behindwall
+    private bool playerBehindWall;
+    private RaycastHit hit;
+    private Vector3 direction;
+    //To check if the player is being blocked by some objects.
+    // Bit shift the index of the layer (9) to get a bit mask
+    private int layerMask = 1 << 9;
+
     public override void EnterState(Vector3 playerPosition)
     {
         
@@ -30,7 +39,9 @@ public class Sc_NonCombatFLState : Sc_AIBaseStateHierarchical
     {
         distPlayer = Vector3.Distance(player.transform.position, aitransform.position);
         angleToPlayer = Vector3.Angle(aitransform.forward, player.transform.position - aitransform.position);
-        bool playerBehindWall = Physics.Raycast(aitransform.position, direction, out hit, visionRange - 5, layerMask);
+
+        direction = player.transform.position - aitransform.position;
+        playerBehindWall = Physics.Raycast(aitransform.position, direction, out hit, visionRange - 5, layerMask);
 
         CanSeePlayer();
     }

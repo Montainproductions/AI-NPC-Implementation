@@ -120,7 +120,7 @@ public class Sc_AIStatesManagerHierarchical : MonoBehaviour
     // Start is called before the first frame update
     void Start()
     {
-        commenMethods.CommenMethodSetUp(navMeshAgent, player.GetComponent<Sc_Player_Movement>(), gameObject, player, audioSource, allFoiliage, visionRange, visionConeAngle, decisionTimer);
+        commenMethods.CommenMethodSetUp(navMeshAgent, gameObject, player, audioSource, allFoiliage, visionRange, visionConeAngle, decisionTimer);
         //Sending important variables and objects to all of the states
         patrolState.PatrolStartStateInfo(commenMethods, patrolPoints);
         idleState.IdleStartStateInfo(this, commenMethods, idleTimer);

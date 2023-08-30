@@ -37,7 +37,7 @@ public class Sc_Bullet : MonoBehaviour{
     }
 
     public void OnTriggerEnter(Collider other){
-        Debug.Log(other.gameObject);
+        //Debug.Log(other.gameObject);
         //Damages an enemy if it has health
 
         if (other.gameObject.tag == "Enemy" && playerGun) {

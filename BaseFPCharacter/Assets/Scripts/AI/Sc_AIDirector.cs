@@ -395,12 +395,26 @@ public class Sc_AIDirector : MonoBehaviour
             if (allCurrentEnemy[i] == null) { continue; }
             //yield return new WaitForSeconds(1.0f);
             //Debug.Log(allCurrentEnemy[i]);
-            if (Vector3.Distance(allCurrentEnemy[i].transform.position, positionOfShot) < audioRange && (allEnemyAIManagerScript[i].currentState == allEnemyAIManagerScript[i].idleState || allEnemyAIManagerScript[i].currentState == allEnemyAIManagerScript[i].patrolState))
+            if (isHFSM)
             {
-                StartCoroutine(allEnemyAIManagerScript[i].PlayAudioOneShot(6, 8));
-                //Debug.Log("Player Heard");
-                allEnemyAIManagerScript[i].playerNoticed = true;
-                allEnemyAIManagerScript[i].SwitchState(allEnemyAIManagerScript[i].aggressionDesicionState);
+                if (Vector3.Distance(allCurrentEnemy[i].transform.position, positionOfShot) < audioRange && (allEnemyAIManagerScriptHFSM[i].currentFLState == allEnemyAIManagerScriptHFSM[i].nonCombatFLState || allEnemyAIManagerScriptHFSM[i].currentFLState == allEnemyAIManagerScriptHFSM[i].alertFLState))
+                {
+                    allEnemyAIManagerScriptHFSM[i].PlayRandomAudioOneShot(6, 8);
+                    //Debug.Log("Player Heard");
+                    allEnemyAIManagerScriptHFSM[i].playerNoticed = true;
+                    allEnemyAIManagerScriptHFSM[i].SwitchFLState(allEnemyAIManagerScriptHFSM[i].combatFLState);
+                    allEnemyAIManagerScriptHFSM[i].SwitchSLState(allEnemyAIManagerScriptHFSM[i].combatFLState);
+                }
+            }
+            else
+            {
+                if (Vector3.Distance(allCurrentEnemy[i].transform.position, positionOfShot) < audioRange && (allEnemyAIManagerScript[i].currentState == allEnemyAIManagerScript[i].idleState || allEnemyAIManagerScript[i].currentState == allEnemyAIManagerScript[i].patrolState))
+                {
+                    StartCoroutine(allEnemyAIManagerScript[i].PlayAudioOneShot(6, 8));
+                    //Debug.Log("Player Heard");
+                    allEnemyAIManagerScript[i].playerNoticed = true;
+                    allEnemyAIManagerScript[i].SwitchState(allEnemyAIManagerScript[i].aggressionDesicionState);
+                }
             }
         }
         yield return null;

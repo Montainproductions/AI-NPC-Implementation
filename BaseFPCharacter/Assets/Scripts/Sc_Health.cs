@@ -34,6 +34,9 @@ public class Sc_Health : MonoBehaviour{
     [SerializeField]
     private bool updateHealthUI;
 
+    [SerializeField]
+    private bool isHFSM;
+
     // Start is called before the first frame update
     void Start(){
         currentHealth = maxHealth;
@@ -50,7 +53,10 @@ public class Sc_Health : MonoBehaviour{
         }
         
             Healing();
-        
+        if (currentHealth <= 1)
+        { 
+            Debug.Log("No more health");
+        }
     }
 
     //Heal over time at a certain amount of hp per second
@@ -84,9 +90,12 @@ public class Sc_Health : MonoBehaviour{
         recentlyHit = true;
         lastTimeHitTimer = 0.0f;
 
-        if (!isPlayer && gameObject.tag == "Enemy")
+        if (!isPlayer && !isHFSM)
         {
             gameObject.GetComponent<Sc_AIStateManager>().RecentlyHit();
+        }else if (isHFSM)
+        {
+            gameObject.GetComponent<Sc_AIStatesManagerHierarchical>().RecentlyHit();
         }
 
         if (updateHealthUI)

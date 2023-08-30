@@ -14,8 +14,6 @@ public class Sc_HFSMCommenMethods : MonoBehaviour
 
     private GameObject self, player;
 
-    private Sc_Player_Movement playerMovemenetScript;
-
     private NavMeshAgent navMeshAgent;
 
     private string currentState;
@@ -42,12 +40,6 @@ public class Sc_HFSMCommenMethods : MonoBehaviour
 
     //Timer amount for generic waitforseconds
     private float waitTimer;
-
-    //To check if the player is being blocked by some objects.
-    // Bit shift the index of the layer (9) to get a bit mask
-    private int layerMask = 1 << 9;
-
-    private RaycastHit hit;
 
     private Vector3 randomLookDirection;
 
@@ -110,10 +102,9 @@ public class Sc_HFSMCommenMethods : MonoBehaviour
     }
 
     //Setting up various variables that the script needs to operate
-    public void CommenMethodSetUp(NavMeshAgent navMeshAgent, Sc_Player_Movement playerMovemenetScript, GameObject self, GameObject player, AudioSource audioSource, GameObject[] allFoiliage, float visionRange, float visionConeAngle, float waitTimer)
+    public void CommenMethodSetUp(NavMeshAgent navMeshAgent, GameObject self, GameObject player, AudioSource audioSource, GameObject[] allFoiliage, float visionRange, float visionConeAngle, float waitTimer)
     {
         this.navMeshAgent = navMeshAgent;
-        this.playerMovemenetScript = playerMovemenetScript;
         this.self = self;
         this.player = player;
         this.aiAudioSource = audioSource;
