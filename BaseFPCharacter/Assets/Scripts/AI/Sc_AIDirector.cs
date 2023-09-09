@@ -403,7 +403,7 @@ public class Sc_AIDirector : MonoBehaviour
                     //Debug.Log("Player Heard");
                     allEnemyAIManagerScriptHFSM[i].playerNoticed = true;
                     allEnemyAIManagerScriptHFSM[i].SwitchFLState(allEnemyAIManagerScriptHFSM[i].combatFLState);
-                    allEnemyAIManagerScriptHFSM[i].SwitchSLState(allEnemyAIManagerScriptHFSM[i].combatFLState);
+                    allEnemyAIManagerScriptHFSM[i].SwitchSLState(allEnemyAIManagerScriptHFSM[i].aggressionDesicionState);
                 }
             }
             else

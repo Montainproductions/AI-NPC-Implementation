@@ -102,6 +102,7 @@ public class Sc_ShootingSLState : Sc_AIBaseStateHierarchical
     //Will reload the current weapon if out of ammo. There is also wait timer so that it seams like the person is taking time to realize that they are out of ammo.
     IEnumerator Reloading()
     {
+        stateManager.SetIsReloading(true);
         stateManager.SetCurrentAction("Reloading");
         //Debug.Log("Shooting");
         stateManager.StartCoroutine(commenMethods.PlayRandomAudioOneShot(9, 11));

@@ -4,6 +4,8 @@ using UnityEngine;
 
 public class Sc_PatrolingSLState : Sc_AIBaseStateHierarchical
 {
+    private Sc_AIStatesManagerHierarchical stateManager;
+
     //Common methods script
     private Sc_HFSMCommenMethods commenMethods;
 
@@ -27,8 +29,9 @@ public class Sc_PatrolingSLState : Sc_AIBaseStateHierarchical
     }
 
     //Sets up all important information given by the AI manager
-    public void PatrolStartStateInfo(Sc_HFSMCommenMethods commenMethods, GameObject[] allPatrolPoints)
+    public void PatrolStartStateInfo(Sc_AIStatesManagerHierarchical stateManager, Sc_HFSMCommenMethods commenMethods, GameObject[] allPatrolPoints)
     {
+        this.stateManager = stateManager;
         this.commenMethods = commenMethods;
         this.allPatrolPoints = allPatrolPoints;
     }
@@ -49,6 +52,7 @@ public class Sc_PatrolingSLState : Sc_AIBaseStateHierarchical
     //Has the AI patrol through all of the points it has selected. Might change since I have stared to work on a method that allows for entire arrays to be sent.
     public void Patroling()
     {
+        stateManager.SetIsWalking(true);
         if (currentPos >= patrolPoints.Length - 1)
         {
             currentPos = 0;

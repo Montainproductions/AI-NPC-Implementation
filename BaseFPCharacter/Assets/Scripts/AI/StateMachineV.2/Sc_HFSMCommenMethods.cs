@@ -29,9 +29,6 @@ public class Sc_HFSMCommenMethods : MonoBehaviour
 
     private Transform lookingAtTransform;
 
-    //Player info
-    private float distPlayer, angleToPlayer;
-
     [SerializeField]
     private float decisionTimer;
 
@@ -46,15 +43,15 @@ public class Sc_HFSMCommenMethods : MonoBehaviour
     // Start is called before the first frame update
     void Start()
     {
-        
+        canPlayAudio = true;
     }
 
     // Update is called once per frame
     void Update()
     {
         //Calculates the distance and angle to the player. Used mostly to determine if the player is in view. Currently planning on changing so that the player is deteced by a game object collider.
-        distPlayer = Vector3.Distance(player.transform.position, transform.position);
-        angleToPlayer = Vector3.Angle(transform.forward, player.transform.position - transform.position);
+        //distPlayer = Vector3.Distance(player.transform.position, transform.position);
+        //angleToPlayer = Vector3.Angle(transform.forward, player.transform.position - transform.position);
 
         //Determines if the player is currently behind a wall. Currently being used to check if the AI can see the player while it is patroling but will be also used to check if the AI can shoot directly at the player
         //Vector3 direction = player.transform.position - transform.position;
@@ -102,14 +99,15 @@ public class Sc_HFSMCommenMethods : MonoBehaviour
     }
 
     //Setting up various variables that the script needs to operate
-    public void CommenMethodSetUp(NavMeshAgent navMeshAgent, GameObject self, GameObject player, AudioSource audioSource, GameObject[] allFoiliage, float visionRange, float visionConeAngle, float waitTimer)
+    public void CommenMethodSetUp(NavMeshAgent navMeshAgent, GameObject self, GameObject player, AudioSource audioSource, GameObject[] allFoiliage, float lastAudioTimer, float waitTimer)
     {
         this.navMeshAgent = navMeshAgent;
         this.self = self;
         this.player = player;
         this.aiAudioSource = audioSource;
-        this.waitTimer = waitTimer;
         this.allFoiliage = allFoiliage;
+        this.lastAudioTimer = lastAudioTimer;
+        this.waitTimer = waitTimer;
     }
 
     //Sets up the trait and audio clips that the AI can use

@@ -63,6 +63,9 @@ public class Sc_AIStatesManagerHierarchical : MonoBehaviour
     [SerializeField]
     private AudioSource audioSource;
 
+    [SerializeField]
+    private float lastAudioTimer;
+
     //Timers and basic ranges
     [SerializeField]
     private float visionRange, visionConeAngle, audioRange, alertedTimer, decisionTimer;
@@ -120,9 +123,11 @@ public class Sc_AIStatesManagerHierarchical : MonoBehaviour
     // Start is called before the first frame update
     void Start()
     {
-        commenMethods.CommenMethodSetUp(navMeshAgent, gameObject, player, audioSource, allFoiliage, visionRange, visionConeAngle, decisionTimer);
+        nonCombatFLState.NonCombatSetUp(this, directorAI, player, gameObject.transform);
+
+        commenMethods.CommenMethodSetUp(navMeshAgent, gameObject, player, audioSource, allFoiliage, lastAudioTimer, decisionTimer);
         //Sending important variables and objects to all of the states
-        patrolState.PatrolStartStateInfo(commenMethods, patrolPoints);
+        patrolState.PatrolStartStateInfo(this, commenMethods, patrolPoints);
         idleState.IdleStartStateInfo(this, commenMethods, idleTimer);
         aggressionDesicionState.AggressionStartStateInfo(this, commenMethods, directorAI, gameObject, player, currentWeapon, cover, coverDistance);
         attackState.AttackStartStateInfo(this, commenMethods, self, player, currentWeapon);
@@ -144,7 +149,10 @@ public class Sc_AIStatesManagerHierarchical : MonoBehaviour
     // Update is called once per frame
     void Update()
     {
+        currentFLState.UpdateState();
         currentSLState.UpdateState();
+
+        Debug.Log(currentFLState + " " + currentSLState);
     }
 
     //Switches the first layer in the HFSM
@@ -160,7 +168,9 @@ public class Sc_AIStatesManagerHierarchical : MonoBehaviour
     public void SwitchSLState(Sc_AIBaseStateHierarchical state)
     {
         playerPosition = player.transform.position;
-        
+
+        commenMethods.StopMovement();
+
         currentSLState = state;
         currentSLState.EnterState(playerPosition);
     }
@@ -180,6 +190,8 @@ public class Sc_AIStatesManagerHierarchical : MonoBehaviour
     //Changes state if it was recently hit by a bullet/damaged
     public void RecentlyHit()
     {
+        PlayRandomAudioOneShot(0, 2);
+        Debug.Log("Speaking");
         if (currentFLState != combatFLState)
         {
             SwitchFLState(combatFLState);
@@ -189,7 +201,7 @@ public class Sc_AIStatesManagerHierarchical : MonoBehaviour
 
     public void PlayRandomAudioOneShot(int lowerLevelIncl, int higherLevelIncl)
     {
-        commenMethods.PlayRandomAudioOneShot(lowerLevelIncl, higherLevelIncl);
+        StartCoroutine(commenMethods.PlayRandomAudioOneShot(lowerLevelIncl, higherLevelIncl));
     }
 
     //Sets the AIs decision value

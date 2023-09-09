@@ -11235,6 +11235,10 @@ PrefabInstance:
   m_Modification:
     m_TransformParent: {fileID: 0}
     m_Modifications:
+    - target: {fileID: 1663460903601836386, guid: 81ce49f96577d844ab806a3654e6ae19, type: 3}
+      propertyPath: m_IsActive
+      value: 1
+      objectReference: {fileID: 0}
     - target: {fileID: 1663460903601836387, guid: 81ce49f96577d844ab806a3654e6ae19, type: 3}
       propertyPath: m_IgnoreReversedGraphics
       value: 1

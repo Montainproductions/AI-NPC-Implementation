@@ -7,10 +7,11 @@ using UnityEngine.UIElements;
 
 public class Sc_NonCombatFLState : Sc_AIBaseStateHierarchical
 {
-    private GameObject player;
-
     private Sc_AIStatesManagerHierarchical stateManager;
 
+    private Sc_AIDirector directorAI;
+
+    private GameObject player;
     private Sc_Player_Movement playerMovemenetScript;
 
     private Transform aitransform;
@@ -32,7 +33,7 @@ public class Sc_NonCombatFLState : Sc_AIBaseStateHierarchical
 
     public override void EnterState(Vector3 playerPosition)
     {
-        
+        stateManager.StartCoroutine(CanSeePlayer());
     }
 
     public override void UpdateState()
@@ -42,26 +43,31 @@ public class Sc_NonCombatFLState : Sc_AIBaseStateHierarchical
 
         direction = player.transform.position - aitransform.position;
         playerBehindWall = Physics.Raycast(aitransform.position, direction, out hit, visionRange - 5, layerMask);
-
-        CanSeePlayer();
     }
 
-    public void NonCombatSetUp(Sc_Player_Movement playerMovemenetScript)
+    public void NonCombatSetUp(Sc_AIStatesManagerHierarchical stateManager, Sc_AIDirector directorAI, GameObject player, Transform aitransform)
     {
-        this.playerMovemenetScript = playerMovemenetScript;
+        this.stateManager = stateManager;
+        this.directorAI = directorAI;
+        this.player = player;
+        playerMovemenetScript = player.GetComponent<Sc_Player_Movement>();
+        this.aitransform = aitransform;
     }
 
     IEnumerator CanSeePlayer()
     {
         playerSeen = PlayerInVision(distPlayer, angleToPlayer, playerBehindWall);
 
-        //stateManager.StartCoroutine(stateManager.PlayAudioOneShot(6, 8));
-        //directorAI.PlayerFound(state.gameObject);
-        yield return new WaitForSeconds(0.75f);
-        stateManager.playerNoticed = true;
-        stateManager.SwitchFLState(stateManager.alertFLState);
-        stateManager.SwitchSLState(stateManager.alertedState);
-        Debug.Log("Player First Seen");
+        if (playerSeen)
+        {
+            yield return new WaitForSeconds(0.75f);
+            stateManager.PlayRandomAudioOneShot(6, 8);
+            directorAI.PlayerFound(stateManager.gameObject);
+            stateManager.playerNoticed = true;
+            stateManager.SwitchFLState(stateManager.alertFLState);
+            stateManager.SwitchSLState(stateManager.alertedState);
+            Debug.Log("Player First Seen");
+        }
         yield return null;
     }
 
