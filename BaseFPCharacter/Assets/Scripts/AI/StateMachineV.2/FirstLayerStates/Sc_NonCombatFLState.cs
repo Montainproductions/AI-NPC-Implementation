@@ -61,13 +61,15 @@ public class Sc_NonCombatFLState : Sc_AIBaseStateHierarchical
         if (playerSeen)
         {
             yield return new WaitForSeconds(0.75f);
-            stateManager.PlayRandomAudioOneShot(6, 8);
+            stateManager.PlayRandomAudioOneShot(20, 22);
             directorAI.PlayerFound(stateManager.gameObject);
             stateManager.playerNoticed = true;
             stateManager.SwitchFLState(stateManager.alertFLState);
             stateManager.SwitchSLState(stateManager.alertedState);
             Debug.Log("Player First Seen");
         }
+        yield return new WaitForSeconds(0.25f);
+        stateManager.StartCoroutine(CanSeePlayer());
         yield return null;
     }
 

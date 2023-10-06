@@ -153,6 +153,12 @@ public class Sc_AIStatesManagerHierarchical : MonoBehaviour
         currentSLState.UpdateState();
 
         Debug.Log(currentFLState + " " + currentSLState);
+
+        //If the UI text should be updated
+        if (showActions)
+        {
+            stateText.SetText(currentFLState.ToString() + " " + currentSLState.ToString() + "   " + currentAction);
+        }
     }
 
     //Switches the first layer in the HFSM
