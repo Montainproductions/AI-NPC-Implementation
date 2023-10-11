@@ -38,6 +38,7 @@ public class Sc_AggressionSLState : Sc_AIBaseStateHierarchical
     //First frame that runs when the state is called for the first time
     public override void EnterState(Vector3 playerPosition)
     {
+        Debug.Log("Desicion SL");
         decisionVal = 0;
         attackRange = baseGunScript.ReturnEffectiveRange();
         WhenToAttack();

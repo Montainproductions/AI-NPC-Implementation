@@ -11,6 +11,8 @@ public class Sc_NonCombatFLState : Sc_AIBaseStateHierarchical
 
     private Sc_AIDirector directorAI;
 
+    private Sc_HFSMCommenMethods commenMethods;
+
     private GameObject player;
     private Sc_Player_Movement playerMovemenetScript;
 
@@ -33,6 +35,7 @@ public class Sc_NonCombatFLState : Sc_AIBaseStateHierarchical
 
     public override void EnterState(Vector3 playerPosition)
     {
+        Debug.Log("Noncombat FL");
         stateManager.StartCoroutine(CanSeePlayer());
     }
 
@@ -45,28 +48,33 @@ public class Sc_NonCombatFLState : Sc_AIBaseStateHierarchical
         playerBehindWall = Physics.Raycast(aitransform.position, direction, out hit, visionRange - 5, layerMask);
     }
 
-    public void NonCombatSetUp(Sc_AIStatesManagerHierarchical stateManager, Sc_AIDirector directorAI, GameObject player, Transform aitransform)
+    public void NonCombatSetUp(Sc_AIStatesManagerHierarchical stateManager, Sc_AIDirector directorAI, Sc_HFSMCommenMethods commenMethods, GameObject player, Transform aitransform, float visionRange, float visionConeAngle)
     {
         this.stateManager = stateManager;
         this.directorAI = directorAI;
+        this.commenMethods = commenMethods;
         this.player = player;
         playerMovemenetScript = player.GetComponent<Sc_Player_Movement>();
         this.aitransform = aitransform;
+        this.visionRange = visionRange;
+        this.visionConeAngle = visionConeAngle;
     }
 
     IEnumerator CanSeePlayer()
     {
+        //Debug.Log("Check player");
         playerSeen = PlayerInVision(distPlayer, angleToPlayer, playerBehindWall);
-
         if (playerSeen)
         {
+            stateManager.StartCoroutine(commenMethods.StopMovement());
             yield return new WaitForSeconds(0.75f);
-            stateManager.PlayRandomAudioOneShot(20, 22);
+            stateManager.PlayRandomAudioOneShot(6, 8);
             directorAI.PlayerFound(stateManager.gameObject);
             stateManager.playerNoticed = true;
             stateManager.SwitchFLState(stateManager.alertFLState);
             stateManager.SwitchSLState(stateManager.alertedState);
-            Debug.Log("Player First Seen");
+            stateManager.StartCoroutine(commenMethods.StopMovement(player.transform));
+            //Debug.Log("Player First Seen");
         }
         yield return new WaitForSeconds(0.25f);
         stateManager.StartCoroutine(CanSeePlayer());

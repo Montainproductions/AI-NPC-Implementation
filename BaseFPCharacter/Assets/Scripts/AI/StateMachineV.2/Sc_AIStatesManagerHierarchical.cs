@@ -123,7 +123,8 @@ public class Sc_AIStatesManagerHierarchical : MonoBehaviour
     // Start is called before the first frame update
     void Start()
     {
-        nonCombatFLState.NonCombatSetUp(this, directorAI, player, gameObject.transform);
+        nonCombatFLState.NonCombatSetUp(this, directorAI, commenMethods, player, gameObject.transform, visionRange, visionConeAngle);
+        alertFLState.AlertSetUp(this, directorAI, player, gameObject.transform);
 
         commenMethods.CommenMethodSetUp(navMeshAgent, gameObject, player, audioSource, allFoiliage, lastAudioTimer, decisionTimer);
         //Sending important variables and objects to all of the states

@@ -12,7 +12,7 @@ public class Sc_AlertedSLState : Sc_AIBaseStateHierarchical
     /// </summary>
     public override void EnterState(Vector3 playerPosition)
     {
-
+        Debug.Log("Alerted SL");
     }
 
     public override void UpdateState()

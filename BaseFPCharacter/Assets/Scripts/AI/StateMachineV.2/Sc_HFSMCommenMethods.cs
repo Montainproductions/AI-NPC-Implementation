@@ -133,13 +133,12 @@ public class Sc_HFSMCommenMethods : MonoBehaviour
     }
 
     //Has the AI stop moving in case it needs to change state or do some other task at that position
-    public IEnumerator StopMovement()
+    public IEnumerator StopMovement(Transform lookAt = null)
     {
-        yield return new WaitForSeconds(0.25f);
-        navMeshAgent.isStopped = true;
-        navMeshAgent.ResetPath();
-        navMeshAgent.SetDestination(stateManager.transform.position);
-        //Debug.Log(stateManager.name);
+        //yield return new WaitForSeconds(0.25f);
+        walkingPosition = Vector3.zero;
+        lookingAtTransform = lookAt;
+        Debug.Log("NPC Stopped");
         //Debug.Log(navMeshAgent.destination);
         yield return null;
     }
@@ -183,41 +182,6 @@ public class Sc_HFSMCommenMethods : MonoBehaviour
         yield return null;
     }
 
-    //Used to check if the AI can currently see the player and changes to the alerted state and if still being spoted then will change to attaking the player
-    public IEnumerator CanSeePlayer(float distPlayer, float angleToPlayer, bool playerBehindWall)
-    {
-
-        int alertedTimeLeft = 0;
-        bool playerSeenSecondCheck = true;
-        if (stateManager.currentFLState == stateManager.alertFLState)
-        {
-            for (alertedTimeLeft = 2; alertedTimeLeft > 0; alertedTimeLeft--)
-            {
-                if (stateManager.playerNoticed)
-                {
-                    stateManager.SwitchFLState(stateManager.combatFLState);
-                    stateManager.SwitchSLState(stateManager.aggressionDesicionState);
-                    Debug.Log("Combat Started");
-                }
-                yield return null;
-            }
-
-            if (playerSeenSecondCheck)
-            {
-                stateManager.SwitchFLState(stateManager.combatFLState);
-                stateManager.SwitchSLState(stateManager.aggressionDesicionState);
-                Debug.Log("Combat Started");
-            }
-            else
-            {
-                stateManager.SwitchFLState(stateManager.nonCombatFLState);
-                stateManager.SwitchSLState(stateManager.idleState);
-                Debug.Log("Back to idling/patroling");
-            }
-        }
-        yield return null;
-    }
-
     //Periodicly look around its surrounding
     public IEnumerator LookRandomDirections(float lookTimer)
     {
@@ -244,7 +208,7 @@ public class Sc_HFSMCommenMethods : MonoBehaviour
     //Will randomly choose an audio from a range and play it
     public IEnumerator PlayRandomAudioOneShot(int lowerLevelIncl, int higherLevelIncl)
     {
-        Debug.Log("Playing audio");
+        //Debug.Log("Playing audio");
         if (!aiAudioSource.isPlaying && canPlayAudio)
         {
             int audioPosition = Random.Range(lowerLevelIncl, higherLevelIncl);

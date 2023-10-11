@@ -14,6 +14,8 @@ public class Sc_AlertFLState : Sc_AIBaseStateHierarchical
 
     private Transform aitransform;
 
+    private float checkTimer;
+
     private float distPlayer, angleToPlayer;
 
     //AI vision
@@ -31,6 +33,16 @@ public class Sc_AlertFLState : Sc_AIBaseStateHierarchical
 
     public override void EnterState(Vector3 playerPosition)
     {
+        /*if(stateManager.currentSLState == stateManager.alertedState)
+        {
+            checkTimer = 1.25f;
+        }
+        else if(stateManager.currentSLState == stateManager.searchState)
+        {
+            checkTimer = 6;
+        }*/
+
+        Debug.Log("Alerted FL");
         stateManager.StartCoroutine(CanSeePlayer());
     }
 
@@ -54,14 +66,14 @@ public class Sc_AlertFLState : Sc_AIBaseStateHierarchical
 
     IEnumerator CanSeePlayer()
     {
-        yield return new WaitForSeconds(1.25f);
+        //yield return new WaitForSeconds(0.25f);
 
         playerSeen = PlayerInVision(distPlayer, angleToPlayer, playerBehindWall);
-
+        Debug.Log(playerSeen);
         if (playerSeen)
         {
             yield return new WaitForSeconds(0.75f);
-            stateManager.PlayRandomAudioOneShot(6, 8);
+            //stateManager.PlayRandomAudioOneShot(6, 8);
             directorAI.PlayerFound(stateManager.gameObject);
             stateManager.playerNoticed = true;
             stateManager.SwitchFLState(stateManager.combatFLState);
@@ -81,6 +93,9 @@ public class Sc_AlertFLState : Sc_AIBaseStateHierarchical
     public bool PlayerInVision(float distPlayer, float angleToPlayer, bool playerBehindWall)
     {
         bool playerHidden = playerMovemenetScript.ReturnIsHidden();
+        Debug.Log("In vision cone: " + (distPlayer <= visionRange - 15 && angleToPlayer <= visionConeAngle - 15));
+        Debug.Log("Player Hidden: " + playerHidden);
+        Debug.Log("Player Behind Wall: " + playerBehindWall);
         if ((distPlayer <= visionRange - 15 && angleToPlayer <= visionConeAngle - 15) && !playerHidden && !playerBehindWall)
         {
             return true;
