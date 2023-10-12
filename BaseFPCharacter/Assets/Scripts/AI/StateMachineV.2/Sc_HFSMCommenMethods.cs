@@ -152,6 +152,7 @@ public class Sc_HFSMCommenMethods : MonoBehaviour
     {
         float newDecisionTimer = Random.Range(waitTimer - 2, waitTimer + 2);
         yield return new WaitForSeconds(newDecisionTimer);
+        Debug.Log("Redecide");
         stateManager.SwitchFLState(stateManager.combatFLState);
         stateManager.SwitchSLState(stateManager.aggressionDesicionState);
         yield return null;

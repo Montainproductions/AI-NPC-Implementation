@@ -75,6 +75,7 @@ public class Sc_NonCombatFLState : Sc_AIBaseStateHierarchical
             stateManager.SwitchFLState(stateManager.alertFLState);
             stateManager.SwitchSLState(stateManager.alertedState);
             //Debug.Log("Player First Seen");
+            yield break;
         }
         yield return new WaitForSeconds(0.25f);
         stateManager.StartCoroutine(CanSeePlayer());
