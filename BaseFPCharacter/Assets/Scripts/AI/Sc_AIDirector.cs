@@ -238,11 +238,31 @@ public class Sc_AIDirector : MonoBehaviour
             if (allCurrentEnemy[i] != enemyObject && (Vector3.Distance(allCurrentEnemy[i].transform.position, enemyObject.transform.position)) < audioRange)
             {
                 yield return new WaitForSeconds(1.25f);
-                if (!allEnemyAIManagerScript[i].playerNoticed)
+                if (!allEnemyAIManagerScriptHFSM[i].playerNoticed)
                 {
-                    allEnemyAIManagerScript[i].playerNoticed = true;
-                    allEnemyAIManagerScript[i].SwitchState(allEnemyAIManagerScript[i].aggressionDesicionState);
+                    allEnemyAIManagerScriptHFSM[i].playerNoticed = true;
+
+                    allEnemyAIManagerScriptHFSM[i].SwitchFLState(allEnemyAIManagerScriptHFSM[i].combatFLState);
+                    allEnemyAIManagerScriptHFSM[i].SwitchSLState(allEnemyAIManagerScriptHFSM[i].aggressionDesicionState);
                 }
+                //stateManager = null;
+            }
+        }
+        yield return null;
+    }
+
+    public IEnumerator PlayerFoundHFSM(GameObject enemyObject)
+    {
+        for (int i = 0; i < allCurrentEnemy.Count; i++)
+        {
+            //Debug.Log(allCurrentEnemy[i]);
+            //Debug.Log(enemyObject);
+            if (allCurrentEnemy[i] != enemyObject && !allEnemyAIManagerScript[i].playerNoticed && (Vector3.Distance(allCurrentEnemy[i].transform.position, enemyObject.transform.position)) < audioRange)
+            {
+                yield return new WaitForSeconds(1.25f);
+                allEnemyAIManagerScript[i].playerNoticed = true;
+
+                allEnemyAIManagerScript[i].SwitchState(allEnemyAIManagerScript[i].aggressionDesicionState);
                 //stateManager = null;
             }
         }

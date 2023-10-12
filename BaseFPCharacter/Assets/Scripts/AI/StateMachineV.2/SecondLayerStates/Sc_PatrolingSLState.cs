@@ -19,7 +19,7 @@ public class Sc_PatrolingSLState : Sc_AIBaseStateHierarchical
     //When first starting the state it will run through this
     public override void EnterState(Vector3 playerPosition)
     {
-        Debug.Log("Patrolling SL");
+        //Debug.Log("Patrolling SL");
         currentPos = 0;
         ChooseRandomPatrolPos();
     }

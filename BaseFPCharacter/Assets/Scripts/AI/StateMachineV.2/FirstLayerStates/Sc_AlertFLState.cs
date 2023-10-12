@@ -9,6 +9,8 @@ public class Sc_AlertFLState : Sc_AIBaseStateHierarchical
 
     private Sc_AIDirector directorAI;
 
+    private Sc_HFSMCommenMethods commenMethods;
+
     private GameObject player;
     private Sc_Player_Movement playerMovemenetScript;
 
@@ -55,30 +57,38 @@ public class Sc_AlertFLState : Sc_AIBaseStateHierarchical
         playerBehindWall = Physics.Raycast(aitransform.position, direction, out hit, visionRange - 5, layerMask);
     }
 
-    public void AlertSetUp(Sc_AIStatesManagerHierarchical stateManager, Sc_AIDirector directorAI, GameObject player, Transform aitransform)
+    public void AlertSetUp(Sc_AIStatesManagerHierarchical stateManager, Sc_AIDirector directorAI, Sc_HFSMCommenMethods commenMethods, GameObject player, Transform aitransform, float visionRange, float visionConeAngle)
     {
         this.stateManager = stateManager;
         this.directorAI = directorAI;
+        this.commenMethods = commenMethods;
         this.player = player;
         playerMovemenetScript = player.GetComponent<Sc_Player_Movement>();
         this.aitransform = aitransform;
+        this.visionRange = visionRange;
+        this.visionConeAngle = visionConeAngle;
     }
 
     IEnumerator CanSeePlayer()
     {
         //yield return new WaitForSeconds(0.25f);
-
+        stateManager.StartCoroutine(commenMethods.StopMovement(player.transform));
+        
         playerSeen = PlayerInVision(distPlayer, angleToPlayer, playerBehindWall);
+        
         Debug.Log(playerSeen);
         if (playerSeen)
         {
             yield return new WaitForSeconds(0.75f);
             //stateManager.PlayRandomAudioOneShot(6, 8);
-            directorAI.PlayerFound(stateManager.gameObject);
-            stateManager.playerNoticed = true;
+            if (!stateManager.playerNoticed)
+            {
+                stateManager.playerNoticed = true;
+                directorAI.PlayerFoundHFSM(stateManager.gameObject);
+            }
             stateManager.SwitchFLState(stateManager.combatFLState);
             stateManager.SwitchSLState(stateManager.aggressionDesicionState);
-            Debug.Log("Player First Seen");
+            //Debug.Log("Player First Seen");
         }
         else
         {
@@ -93,9 +103,9 @@ public class Sc_AlertFLState : Sc_AIBaseStateHierarchical
     public bool PlayerInVision(float distPlayer, float angleToPlayer, bool playerBehindWall)
     {
         bool playerHidden = playerMovemenetScript.ReturnIsHidden();
-        Debug.Log("In vision cone: " + (distPlayer <= visionRange - 15 && angleToPlayer <= visionConeAngle - 15));
-        Debug.Log("Player Hidden: " + playerHidden);
-        Debug.Log("Player Behind Wall: " + playerBehindWall);
+        //Debug.Log("In vision cone: " + (distPlayer <= visionRange - 15 && angleToPlayer <= visionConeAngle - 15));
+        //Debug.Log("Player Hidden: " + playerHidden);
+        //Debug.Log("Player Behind Wall: " + playerBehindWall);
         if ((distPlayer <= visionRange - 15 && angleToPlayer <= visionConeAngle - 15) && !playerHidden && !playerBehindWall)
         {
             return true;

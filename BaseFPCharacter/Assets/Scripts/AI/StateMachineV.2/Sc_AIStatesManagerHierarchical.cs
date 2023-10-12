@@ -124,7 +124,7 @@ public class Sc_AIStatesManagerHierarchical : MonoBehaviour
     void Start()
     {
         nonCombatFLState.NonCombatSetUp(this, directorAI, commenMethods, player, gameObject.transform, visionRange, visionConeAngle);
-        alertFLState.AlertSetUp(this, directorAI, player, gameObject.transform);
+        alertFLState.AlertSetUp(this, directorAI, commenMethods, player, gameObject.transform, visionRange, visionConeAngle);
 
         commenMethods.CommenMethodSetUp(navMeshAgent, gameObject, player, audioSource, allFoiliage, lastAudioTimer, decisionTimer);
         //Sending important variables and objects to all of the states
@@ -198,7 +198,7 @@ public class Sc_AIStatesManagerHierarchical : MonoBehaviour
     public void RecentlyHit()
     {
         PlayRandomAudioOneShot(0, 2);
-        Debug.Log("Speaking");
+        //Debug.Log("Speaking");
         if (currentFLState != combatFLState)
         {
             SwitchFLState(combatFLState);

@@ -78,7 +78,7 @@ public class Sc_Health : MonoBehaviour{
             recentlyHit = false;
         }else if (!recentlyHit && healingOverTimeAllowed)
         { //If it can heal then start healing
-            Debug.Log("Healing");
+            //Debug.Log("Healing");
             lastTimeHitTimer = 0;
             currentHealth += healingRate * Time.deltaTime;
         }

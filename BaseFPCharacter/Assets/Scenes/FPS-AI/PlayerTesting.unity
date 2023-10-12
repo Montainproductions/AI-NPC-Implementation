@@ -7795,7 +7795,7 @@ MonoBehaviour:
   visionConeAngle: 180
   audioRange: 60
   alertedTimer: 30
-  decisionTimer: 55
+  decisionTimer: 50
   patrolPoints:
   - {fileID: 1435768226}
   - {fileID: 144707001}

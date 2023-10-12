@@ -57,6 +57,8 @@ public class Sc_HFSMCommenMethods : MonoBehaviour
         //Vector3 direction = player.transform.position - transform.position;
         //bool playerBehindWall = Physics.Raycast(transform.position, direction, out hit, visionRange - 5, layerMask);
 
+        transform.LookAt(lookingAtTransform, Vector3.up);
+
         if (walkingPosition != Vector3.zero)
         {
             if (Vector3.Distance(self.transform.position, walkingPosition) > 1.1f)
@@ -120,6 +122,7 @@ public class Sc_HFSMCommenMethods : MonoBehaviour
     //Changes the variables related to the movment and wether it should be looking at something
     public void StartMovement(Vector3 position, string currentState, Transform lookAt = null)
     {
+        navMeshAgent.isStopped = false;
         walkingPosition = position;
         this.currentState = currentState;
         lookingAtTransform = lookAt;
@@ -128,6 +131,7 @@ public class Sc_HFSMCommenMethods : MonoBehaviour
     //Has the AI walk through an array of vector3 
     public void StartMovement(Vector3[] position, string currentState, Transform lookAt = null)
     {
+        navMeshAgent.isStopped = false;
         this.currentState = currentState;
         lookingAtTransform = lookAt;
     }
@@ -135,10 +139,10 @@ public class Sc_HFSMCommenMethods : MonoBehaviour
     //Has the AI stop moving in case it needs to change state or do some other task at that position
     public IEnumerator StopMovement(Transform lookAt = null)
     {
-        //yield return new WaitForSeconds(0.25f);
-        walkingPosition = Vector3.zero;
+        yield return new WaitForSeconds(0.25f);
+        navMeshAgent.isStopped = true;
         lookingAtTransform = lookAt;
-        Debug.Log("NPC Stopped");
+        //Debug.Log("NPC Stopped");
         //Debug.Log(navMeshAgent.destination);
         yield return null;
     }
@@ -146,8 +150,9 @@ public class Sc_HFSMCommenMethods : MonoBehaviour
     //Once the timer is finished the AI will return to the agression decision state and decide if its better to go to cover or continue attacking the player.
     public IEnumerator ReDecide()
     {
-        float newDecisionTimer = Random.Range(decisionTimer - 5, decisionTimer + 5);
+        float newDecisionTimer = Random.Range(waitTimer - 2, waitTimer + 2);
         yield return new WaitForSeconds(newDecisionTimer);
+        stateManager.SwitchFLState(stateManager.combatFLState);
         stateManager.SwitchSLState(stateManager.aggressionDesicionState);
         yield return null;
     }

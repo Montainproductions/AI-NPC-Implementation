@@ -35,7 +35,7 @@ public class Sc_NonCombatFLState : Sc_AIBaseStateHierarchical
 
     public override void EnterState(Vector3 playerPosition)
     {
-        Debug.Log("Noncombat FL");
+        //Debug.Log("Noncombat FL");
         stateManager.StartCoroutine(CanSeePlayer());
     }
 
@@ -66,14 +66,14 @@ public class Sc_NonCombatFLState : Sc_AIBaseStateHierarchical
         playerSeen = PlayerInVision(distPlayer, angleToPlayer, playerBehindWall);
         if (playerSeen)
         {
-            stateManager.StartCoroutine(commenMethods.StopMovement());
+            stateManager.StartCoroutine(commenMethods.StopMovement(player.transform));
             yield return new WaitForSeconds(0.75f);
             stateManager.PlayRandomAudioOneShot(6, 8);
             directorAI.PlayerFound(stateManager.gameObject);
             stateManager.playerNoticed = true;
+            
             stateManager.SwitchFLState(stateManager.alertFLState);
             stateManager.SwitchSLState(stateManager.alertedState);
-            stateManager.StartCoroutine(commenMethods.StopMovement(player.transform));
             //Debug.Log("Player First Seen");
         }
         yield return new WaitForSeconds(0.25f);

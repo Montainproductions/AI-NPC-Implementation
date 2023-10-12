@@ -87,6 +87,7 @@ public class Sc_ShootingSLState : Sc_AIBaseStateHierarchical
         stateManager.SetCurrentAction("Shooting player");
         stateManager.SetIsAttacking(true);
         stateManager.SetIsWalking(false);
+
         //Debug.Log("Shooting");
         timeDelay = Random.Range(1.5f, 2.5f);
         yield return new WaitForSeconds(timeDelay);
