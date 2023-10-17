@@ -130,7 +130,7 @@ public class Sc_AIStatesManagerHierarchical : MonoBehaviour
         //Sending important variables and objects to all of the states
         patrolState.PatrolStartStateInfo(this, commenMethods, patrolPoints);
         idleState.IdleStartStateInfo(this, commenMethods, idleTimer);
-        aggressionDesicionState.AggressionStartStateInfo(this, commenMethods, directorAI, gameObject, player, currentWeapon, cover, coverDistance);
+        aggressionDesicionState.AggressionStartStateInfo(this, commenMethods, directorAI, gameObject, player, currentWeapon, cover, aiTrait, coverDistance);
         attackState.AttackStartStateInfo(this, commenMethods, self, player, currentWeapon);
         coverState.CoverStartStateInfo(this, commenMethods, self, player, currentWeapon, cover);
 

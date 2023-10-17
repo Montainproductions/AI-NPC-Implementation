@@ -150,7 +150,7 @@ public class Sc_HFSMCommenMethods : MonoBehaviour
     //Once the timer is finished the AI will return to the agression decision state and decide if its better to go to cover or continue attacking the player.
     public IEnumerator ReDecide()
     {
-        float newDecisionTimer = Random.Range(waitTimer - 2, waitTimer + 2);
+        float newDecisionTimer = Random.Range(waitTimer - 3, waitTimer + 2);
         yield return new WaitForSeconds(newDecisionTimer);
         Debug.Log("Redecide");
         stateManager.SwitchFLState(stateManager.combatFLState);

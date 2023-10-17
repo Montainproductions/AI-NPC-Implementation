@@ -52,7 +52,7 @@ public class Sc_AggressionSLState : Sc_AIBaseStateHierarchical
     }
 
     //Sets variables for important variable needed in the state
-    public void AggressionStartStateInfo(Sc_AIStatesManagerHierarchical stateManager, Sc_HFSMCommenMethods commenMethods, Sc_AIDirector directorAI, GameObject self, GameObject player, GameObject currentWeapon, GameObject[] coverPos, float coverDist)
+    public void AggressionStartStateInfo(Sc_AIStatesManagerHierarchical stateManager, Sc_HFSMCommenMethods commenMethods, Sc_AIDirector directorAI, GameObject self, GameObject player, GameObject currentWeapon, GameObject[] coverPos, Trait aiTrait, float coverDist)
     {
         this.stateManager = stateManager;
         this.commenMethods = commenMethods;
@@ -60,6 +60,7 @@ public class Sc_AggressionSLState : Sc_AIBaseStateHierarchical
         this.self = self;
         this.player = player;
         baseGunScript = currentWeapon.GetComponent<Sc_BaseGun>();
+        this.aiTrait = aiTrait;
         this.coverPositions = coverPos;
         this.coverDistance = coverDist;
     }
@@ -94,6 +95,9 @@ public class Sc_AggressionSLState : Sc_AIBaseStateHierarchical
                 decisionVal--;
             }
         }
+
+        decisionVal += aiTrait.ReturnAgressionValue();
+
         Debug.Log("Enemy name: " + self.name + " Value: " + decisionVal);
         stateManager.StartCoroutine(commenMethods.StopMovement());
         stateManager.SetDecisionValue(decisionVal);

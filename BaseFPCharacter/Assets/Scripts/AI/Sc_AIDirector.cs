@@ -449,7 +449,6 @@ public class Trait
 {
     private string traitName;
     private float healthChange, agressionValue, approchPlayerChange;
-    private AudioClip[] audioclips;
 
     private float xMaxPosition, xMinPosition, yMaxPosition, yMinPosition, zMaxPosition, zMinPosition;
 
