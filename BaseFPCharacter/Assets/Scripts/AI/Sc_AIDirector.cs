@@ -279,7 +279,6 @@ public class Sc_AIDirector : MonoBehaviour
 
         for (int i = 0; i < enemyAIToDecide.Count; i++)
         {
-            float v = Random.Range(1.0f, 10.0f);
 
             if (isHFSM)
             {
@@ -295,6 +294,7 @@ public class Sc_AIDirector : MonoBehaviour
                 //This is meant to help
                 else if (aiScript.ReturnDecisionValue() >= valueLimit)
                 {
+                    float v = Random.Range(1.0f, 10.0f);
                     if (v >= 2.5f) //2.5f
                     {
                         //Debug.Log("Attacking");
@@ -312,6 +312,7 @@ public class Sc_AIDirector : MonoBehaviour
                 }
                 else
                 {
+                    float v = Random.Range(1.0f, 10.0f);
                     if (v >= 7.5f) //7.5f
                     {
                         //Debug.Log("Attacking part 2");
@@ -341,6 +342,7 @@ public class Sc_AIDirector : MonoBehaviour
                 //This is meant to help
                 else if (aiScript.ReturnDecisionValue() >= valueLimit)
                 {
+                    float v = Random.Range(1.0f, 10.0f);
                     if (v >= 2.5f) //2.5f
                     {
                         //Debug.Log("Attacking");
@@ -356,6 +358,7 @@ public class Sc_AIDirector : MonoBehaviour
                 }
                 else
                 {
+                    float v = Random.Range(1.0f, 10.0f);
                     if (v >= 7.5f) //7.5f
                     {
                         //Debug.Log("Attacking part 2");
@@ -400,7 +403,7 @@ public class Sc_AIDirector : MonoBehaviour
     //Timer for how often to get all the enemies waiting for a desicion to start again
     IEnumerator WhatToDoTimer()
     {
-        yield return new WaitForSeconds(2);
+        yield return new WaitForSeconds(1.5f);
         StartCoroutine(WhatToDo(average));
         StartCoroutine(WhatToDoTimer());
         yield return null;

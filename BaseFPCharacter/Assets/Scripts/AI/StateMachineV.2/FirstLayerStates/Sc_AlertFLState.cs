@@ -74,7 +74,7 @@ public class Sc_AlertFLState : Sc_AIBaseStateHierarchical
         //yield return new WaitForSeconds(0.25f);
         stateManager.StartCoroutine(commenMethods.StopMovement(player.transform));
 
-        yield return new WaitForSeconds(0.75f);
+        yield return new WaitForSeconds(0.5f);
 
         playerSeen = PlayerInVision(distPlayer, angleToPlayer, playerBehindWall);
         
