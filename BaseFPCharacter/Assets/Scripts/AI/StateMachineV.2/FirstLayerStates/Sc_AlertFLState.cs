@@ -74,7 +74,7 @@ public class Sc_AlertFLState : Sc_AIBaseStateHierarchical
         //yield return new WaitForSeconds(0.25f);
         stateManager.StartCoroutine(commenMethods.StopMovement(player.transform));
 
-        yield return new WaitForSeconds(0.5f);
+        yield return new WaitForSeconds(0.6f);
 
         playerSeen = PlayerInVision(distPlayer, angleToPlayer, playerBehindWall);
         
@@ -108,7 +108,7 @@ public class Sc_AlertFLState : Sc_AIBaseStateHierarchical
         //Debug.Log("In vision cone: " + (distPlayer <= visionRange - 15 && angleToPlayer <= visionConeAngle - 15));
         //Debug.Log("Player Hidden: " + playerHidden);
         //Debug.Log("Player Behind Wall: " + playerBehindWall);
-        if ((distPlayer <= visionRange - 15 && angleToPlayer <= visionConeAngle - 15) && !playerHidden && !playerBehindWall)
+        if ((distPlayer <= visionRange - 7.5f && angleToPlayer <= visionConeAngle - 7.5f) && !playerHidden && !playerBehindWall)
         {
             return true;
         }
