@@ -46,6 +46,7 @@ public class Sc_GameManager : MonoBehaviour
         Instantiate(deathCanves, spawnLocation, Quaternion.identity);
     }
 
+
     public void ChangeLevel(int newLevel)
     {
         SceneManager.LoadScene(newLevel);

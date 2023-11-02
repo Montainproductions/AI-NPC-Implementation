@@ -35,6 +35,7 @@ public class Sc_CombatFLState : Sc_AIBaseStateHierarchical
 
     public override void EnterState(Vector3 playerPosition)
     {
+        Debug.Log(stateManager);
         stateManager.StartCoroutine(CantSeePlayer());
     }
 

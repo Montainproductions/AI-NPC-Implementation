@@ -125,6 +125,7 @@ public class Sc_AIStatesManagerHierarchical : MonoBehaviour
     {
         nonCombatFLState.NonCombatSetUp(this, directorAI, commenMethods, player, gameObject.transform, visionRange, visionConeAngle);
         alertFLState.AlertSetUp(this, directorAI, commenMethods, player, gameObject.transform, visionRange, visionConeAngle);
+        combatFLState.CombatFLSetUp(this, directorAI, commenMethods, player, gameObject.transform, visionRange, visionConeAngle);
 
         commenMethods.CommenMethodSetUp(navMeshAgent, gameObject, player, audioSource, allFoiliage, lastAudioTimer, decisionTimer);
         //Sending important variables and objects to all of the states
