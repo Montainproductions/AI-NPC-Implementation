@@ -46,6 +46,10 @@ public class Sc_GameManager : MonoBehaviour
         Instantiate(deathCanves, spawnLocation, Quaternion.identity);
     }
 
+     public void AIType(bool isHFSM)
+    {
+
+    }
 
     public void ChangeLevel(int newLevel)
     {
