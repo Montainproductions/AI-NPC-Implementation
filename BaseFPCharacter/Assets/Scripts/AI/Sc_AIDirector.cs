@@ -11,7 +11,8 @@ public class Sc_AIDirector : MonoBehaviour
     public Sc_AIDirector Instance { get; set; }
 
     [SerializeField]
-    private bool isHFSM;
+    private TypeOfAIToSpawn sco_HFSM;
+    private bool hasHFSM;
 
     //Sets up the main current four traits
     [HideInInspector]
@@ -37,6 +38,10 @@ public class Sc_AIDirector : MonoBehaviour
     //All possible spawn locations for new AI
     [SerializeField]
     private GameObject[] spawnLocations;
+
+    //The two types of AI (FSM, HFSM)
+    [SerializeField]
+    private GameObject[] aiTypes;
 
     //Numbers of enemies that are allowed and are currently attacking the player
     [SerializeField]
@@ -79,6 +84,7 @@ public class Sc_AIDirector : MonoBehaviour
         //Starts the timer coroutine so that each time it will grab the current set of AIs that have seen the Player and chosses which state they go to.
         StartCoroutine(WhatToDoTimer());
         //Debug.Log("Active? " + gameObject.activeInHierarchy);
+        hasHFSM = sco_HFSM.isHFSM;
         StartCoroutine(AIManagerScripts());
     }
 
@@ -118,7 +124,7 @@ public class Sc_AIDirector : MonoBehaviour
     {
         enemyAIToDecide.Remove(enemyThatDied);
         allCurrentEnemy.Remove(enemyThatDied);
-        if (isHFSM)
+        if (hasHFSM)
         {
             allEnemyAIManagerScriptHFSM.Remove(enemyThatDied.GetComponent<Sc_AIStatesManagerHierarchical>());
         }
@@ -170,11 +176,13 @@ public class Sc_AIDirector : MonoBehaviour
     //Grabs all of the manager scripts from the AI
     IEnumerator AIManagerScripts()
     {
-        foreach (GameObject i in allCurrentEnemy)
+        foreach (GameObject i in spawnLocations)
         {
-            if (isHFSM)
+            if (hasHFSM)
             {
-                allEnemyAIManagerScriptHFSM.Add(i.GetComponent<Sc_AIStatesManagerHierarchical>());
+                GameObject newAI = Instantiate(aiTypes[1], i.transform);
+                allCurrentEnemy.Add(newAI);
+                allEnemyAIManagerScriptHFSM.Add(newAI.GetComponent<Sc_AIStatesManagerHierarchical>());
                 Sc_AIStatesManagerHierarchical stateManagerHFSM = allEnemyAIManagerScriptHFSM.Last();
                 float randomValue = Random.Range(0.0f, 1.0f);
                 if (randomValue >= 0.75f)
@@ -200,7 +208,9 @@ public class Sc_AIDirector : MonoBehaviour
             }
             else
             {
-                allEnemyAIManagerScript.Add(i.GetComponent<Sc_AIStateManager>());
+                GameObject newAI = Instantiate(aiTypes[0], i.transform);
+                allCurrentEnemy.Add(newAI);
+                allEnemyAIManagerScript.Add(newAI.GetComponent<Sc_AIStateManager>());
                 Sc_AIStateManager stateManager = allEnemyAIManagerScript.Last();
                 float randomValue = Random.Range(0.0f, 1.0f);
                 if (randomValue >= 0.75f)
@@ -273,14 +283,14 @@ public class Sc_AIDirector : MonoBehaviour
     //After that it will go through the list and then it will check if the limit of enemies attacking the player has been meet and if so will have the enemy run to cover. If the limit of attacking enemies hasnt been reached and the current value is greater then 
     IEnumerator WhatToDo(float valueLimit)
     {
-        quickSort.Main(enemyAIToDecide, isHFSM);
+        quickSort.Main(enemyAIToDecide, hasHFSM);
         //Debug.Log(enemyAIDesicionValue.Count);
         //Debug.Log("Ready to decide");
 
         for (int i = 0; i < enemyAIToDecide.Count; i++)
         {
 
-            if (isHFSM)
+            if (hasHFSM)
             {
                 Sc_AIStatesManagerHierarchical aiScript = enemyAIToDecide[i].GetComponent<Sc_AIStatesManagerHierarchical>();
 
@@ -385,7 +395,7 @@ public class Sc_AIDirector : MonoBehaviour
     {
         for (int i = 0; i < enemyAIToDecide.Count; i++)
         {
-            if (isHFSM)
+            if (hasHFSM)
             {
                 Sc_AIStatesManagerHierarchical aiScript = enemyAIToDecide[i].GetComponent<Sc_AIStatesManagerHierarchical>();
                 average += aiScript.ReturnDecisionValue();
@@ -418,7 +428,7 @@ public class Sc_AIDirector : MonoBehaviour
             if (allCurrentEnemy[i] == null) { continue; }
             //yield return new WaitForSeconds(1.0f);
             //Debug.Log(allCurrentEnemy[i]);
-            if (isHFSM)
+            if (hasHFSM)
             {
                 if (Vector3.Distance(allCurrentEnemy[i].transform.position, positionOfShot) < audioRange && (allEnemyAIManagerScriptHFSM[i].currentFLState == allEnemyAIManagerScriptHFSM[i].nonCombatFLState || allEnemyAIManagerScriptHFSM[i].currentFLState == allEnemyAIManagerScriptHFSM[i].alertFLState))
                 {

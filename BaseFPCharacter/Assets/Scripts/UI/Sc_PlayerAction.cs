@@ -59,7 +59,7 @@ public class Sc_PlayerAction : MonoBehaviour
                 turnOnTimer = 0;
                 if (gameObject.tag == "LevelChange")
                 {
-                    Sc_GameManager.Instance.ChangeLevel(2);
+                    Sc_GameManager.Instance.ChangeLevel(0);
                 }
                 else
                 {

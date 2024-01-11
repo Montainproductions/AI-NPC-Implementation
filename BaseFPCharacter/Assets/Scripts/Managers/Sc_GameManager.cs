@@ -17,6 +17,9 @@ public class Sc_GameManager : MonoBehaviour
     private GameObject pauseMenu;
     private bool pauseActivated;
 
+    [SerializeField]
+    private TypeOfAIToSpawn sco_HFSM;
+
     private void Awake()
     {
         if (Instance != null)
@@ -46,14 +49,14 @@ public class Sc_GameManager : MonoBehaviour
         Instantiate(deathCanves, spawnLocation, Quaternion.identity);
     }
 
-     public void AIType(bool isHFSM)
+    public void HasHFSM(bool hasHFSM)
     {
-
+        sco_HFSM.isHFSM = hasHFSM;
     }
 
     public void ChangeLevel(int newLevel)
     {
-        SceneManager.LoadScene(newLevel);
+        SceneManager.LoadSceneAsync(newLevel);
     }
 
     public void QuitGame()

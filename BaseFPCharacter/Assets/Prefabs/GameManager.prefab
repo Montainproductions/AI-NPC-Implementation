@@ -46,3 +46,4 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   deathCanves: {fileID: 7798589139152866302, guid: 73d4f3c3e74997b41af242ff2bd64d86, type: 3}
   pauseMenu: {fileID: 0}
+  sco_HFSM: {fileID: 11400000, guid: b4c9eeb10d5142344bb8bd1ae38f407b, type: 2}

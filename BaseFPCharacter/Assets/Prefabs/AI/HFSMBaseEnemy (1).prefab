@@ -1765,7 +1765,7 @@ Transform:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 4352401733236440282}
   m_LocalRotation: {x: 0, y: 1, z: 0, w: 0}
-  m_LocalPosition: {x: 12.32, y: 1, z: 29.51}
+  m_LocalPosition: {x: 0, y: 1, z: 0}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children:
@@ -1792,8 +1792,8 @@ MonoBehaviour:
   self: {fileID: 4352401733236440282}
   commenMethods: {fileID: 6107870738269397784}
   navMeshAgent: {fileID: 4352401733236440285}
-  directorAI: {fileID: 0}
-  player: {fileID: 0}
+  directorAI: {fileID: 2460812123129524718, guid: 9a1b04fd93715f84585c30af5c65b4ea, type: 3}
+  player: {fileID: 6646797674794803052, guid: 81ce49f96577d844ab806a3654e6ae19, type: 3}
   playerNoticed: 0
   audioSource: {fileID: 6107870738269397790}
   lastAudioTimer: 4.5

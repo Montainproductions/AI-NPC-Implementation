@@ -45,6 +45,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 84d591fa569722944abe2eccdb965693, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  sco_HFSM: {fileID: 11400000, guid: b4c9eeb10d5142344bb8bd1ae38f407b, type: 2}
   quickSort: {fileID: 2460812123129524719}
   allCurrentEnemy:
   - {fileID: 0}
@@ -52,6 +53,7 @@ MonoBehaviour:
   - {fileID: 0}
   - {fileID: 0}
   spawnLocations: []
+  aiTypes: []
   maxAttacking: 3
   currentAttacking: 0
   agressiveAudioClips1:
