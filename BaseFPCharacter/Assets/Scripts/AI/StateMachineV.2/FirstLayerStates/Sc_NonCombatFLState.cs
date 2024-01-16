@@ -36,7 +36,6 @@ public class Sc_NonCombatFLState : Sc_AIBaseStateHierarchical
     public override void EnterState(Vector3 playerPosition)
     {
         //Debug.Log("Noncombat FL");
-        stateManager.StartCoroutine(CanSeePlayer());
     }
 
     public override void UpdateState()
@@ -48,16 +47,24 @@ public class Sc_NonCombatFLState : Sc_AIBaseStateHierarchical
         playerBehindWall = Physics.Raycast(aitransform.position, direction, out hit, visionRange - 5, layerMask);
     }
 
-    public void NonCombatSetUp(Sc_AIStatesManagerHierarchical stateManager, Sc_AIDirector directorAI, Sc_HFSMCommenMethods commenMethods, GameObject player, Transform aitransform, float visionRange, float visionConeAngle)
+    public void NonCombatSetUp(Sc_AIStatesManagerHierarchical stateManager, Sc_AIDirector directorAI, Sc_HFSMCommenMethods commenMethods, Transform aitransform, float visionRange, float visionConeAngle)
     {
         this.stateManager = stateManager;
         this.directorAI = directorAI;
         this.commenMethods = commenMethods;
-        this.player = player;
-        playerMovemenetScript = player.GetComponent<Sc_Player_Movement>();
         this.aitransform = aitransform;
         this.visionRange = visionRange;
         this.visionConeAngle = visionConeAngle;
+    }
+
+    public IEnumerator RecivePlayerGO(GameObject player)
+    {
+        this.player = player;
+        playerMovemenetScript = player.GetComponent<Sc_Player_Movement>();
+        yield return new WaitForSeconds(0.00001f);
+        Debug.Log(stateManager);
+        stateManager.StartCoroutine(CanSeePlayer());
+        yield return null;
     }
 
     IEnumerator CanSeePlayer()

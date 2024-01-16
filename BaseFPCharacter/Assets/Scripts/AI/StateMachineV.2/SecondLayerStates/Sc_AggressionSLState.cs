@@ -41,7 +41,7 @@ public class Sc_AggressionSLState : Sc_AIBaseStateHierarchical
         Debug.Log("Desicion SL");
         decisionVal = 0;
         attackRange = baseGunScript.ReturnEffectiveRange();
-        WhenToAttack();
+        stateManager.StartCoroutine(WhenToAttack());
     }
 
     //Runs every frame the state is active
@@ -52,7 +52,7 @@ public class Sc_AggressionSLState : Sc_AIBaseStateHierarchical
     }
 
     //Sets variables for important variable needed in the state
-    public void AggressionStartStateInfo(Sc_AIStatesManagerHierarchical stateManager, Sc_HFSMCommenMethods commenMethods, Sc_AIDirector directorAI, GameObject self, GameObject player, GameObject currentWeapon, GameObject[] coverPos, Trait aiTrait, float coverDist)
+    public void AggressionStartStateInfo(Sc_AIStatesManagerHierarchical stateManager, Sc_HFSMCommenMethods commenMethods, Sc_AIDirector directorAI, GameObject self, GameObject player, GameObject currentWeapon, Trait aiTrait, float coverDist)
     {
         this.stateManager = stateManager;
         this.commenMethods = commenMethods;
@@ -61,8 +61,12 @@ public class Sc_AggressionSLState : Sc_AIBaseStateHierarchical
         this.player = player;
         baseGunScript = currentWeapon.GetComponent<Sc_BaseGun>();
         this.aiTrait = aiTrait;
-        this.coverPositions = coverPos;
         this.coverDistance = coverDist;
+    }
+
+    public void ReciveAllCoverPoints(GameObject[] coverPos)
+    {
+        this.coverPositions = coverPos;
     }
 
     //Sets up the AI trait
@@ -76,7 +80,7 @@ public class Sc_AggressionSLState : Sc_AIBaseStateHierarchical
     to the player.It will then go through each cover positon in the map and if the distance between the AI and the cover position is less then the cover distance that has already
     been predetermined then it will decrease the decision Value by 1. It will then set the AI managers current decision value the the final one it has calculated and will also
     state to the directorAI that the current AI wishes to attack the player and to determine if there is space for it to do so.*/
-    public void WhenToAttack()
+    public IEnumerator WhenToAttack()
     {
         float distFromPlayer = Vector3.Distance(player.transform.position, stateManager.transform.position);
         float currentAttackRange = Random.Range(attackRange, attackRange - 3);
@@ -87,6 +91,7 @@ public class Sc_AggressionSLState : Sc_AIBaseStateHierarchical
         {
             decisionVal += 2;
         }
+        yield return new WaitForSeconds(0.1f);
         foreach (GameObject i in coverPositions)
         {
             float distFromCover = Vector3.Distance(stateManager.transform.position, i.transform.position);
@@ -105,6 +110,7 @@ public class Sc_AggressionSLState : Sc_AIBaseStateHierarchical
         directorAI.AIAttackAddList(self);
         decisionVal = 0;
         stateManager.StartCoroutine(AITakingTooLong());
+        yield return null;
     }
 
     //Forces the AI to change to the cover state if it takes to long to choose which state to change to.

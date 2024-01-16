@@ -44,13 +44,17 @@ public class Sc_CoverSLState : Sc_AIBaseStateHierarchical
     }
 
     //Recives important variables that are needed for the entire state to work properly.
-    public void CoverStartStateInfo(Sc_AIStatesManagerHierarchical stateManager, Sc_HFSMCommenMethods commonMethodsScript, GameObject self, GameObject player, GameObject currentWeapon, GameObject[] allCover)
+    public void CoverStartStateInfo(Sc_AIStatesManagerHierarchical stateManager, Sc_HFSMCommenMethods commonMethodsScript, GameObject self, GameObject player, GameObject currentWeapon)
     {
         this.stateManager = stateManager;
         this.commenMethods = commonMethodsScript;
         this.self = self;
         this.player = player;
         gunScript = currentWeapon.GetComponent<Sc_BaseGun>();
+    }
+
+    public void ReciveAllCoverPoints(GameObject[] allCover) 
+    {
         this.allCover = allCover;
     }
 

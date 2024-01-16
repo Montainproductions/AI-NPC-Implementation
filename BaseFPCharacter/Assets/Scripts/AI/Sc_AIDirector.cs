@@ -3,12 +3,16 @@ using System.Collections.Generic;
 using Unity.IO.LowLevel.Unsafe;
 using UnityEngine;
 using System.Linq;
+using Unity.VisualScripting;
 
 /* The Sc_AIDirector is the main script that grabs all of the current NPCs in the map and will decide how many AI NPCS can do certain tasks. This helps control the NPCs so that there arent to many enemies attack the player at the same time 
  */
 public class Sc_AIDirector : MonoBehaviour
 {
     public Sc_AIDirector Instance { get; set; }
+
+    [SerializeField]
+    private GameObject player;
 
     [SerializeField]
     private TypeOfAIToSpawn sco_HFSM;
@@ -35,9 +39,12 @@ public class Sc_AIDirector : MonoBehaviour
     public static List<Sc_AIStateManager> allEnemyAIManagerScript = new List<Sc_AIStateManager>();
     public static List<Sc_AIStatesManagerHierarchical> allEnemyAIManagerScriptHFSM = new List<Sc_AIStatesManagerHierarchical>();
 
+    [SerializeField]
+    private Sc_CoverandPatrolPoints[] coverPatrolPoints;
+
     //All possible spawn locations for new AI
     [SerializeField]
-    private GameObject[] spawnLocations;
+    private GameObject[] spawnLocations, patrolPoints, coverPoints;
 
     //The two types of AI (FSM, HFSM)
     [SerializeField]
@@ -181,9 +188,12 @@ public class Sc_AIDirector : MonoBehaviour
             if (hasHFSM)
             {
                 GameObject newAI = Instantiate(aiTypes[1], i.transform);
+                
                 allCurrentEnemy.Add(newAI);
                 allEnemyAIManagerScriptHFSM.Add(newAI.GetComponent<Sc_AIStatesManagerHierarchical>());
                 Sc_AIStatesManagerHierarchical stateManagerHFSM = allEnemyAIManagerScriptHFSM.Last();
+                stateManagerHFSM.SetUpPlayer(player);
+                stateManagerHFSM.SetUpPoints(i);
                 float randomValue = Random.Range(0.0f, 1.0f);
                 if (randomValue >= 0.75f)
                 {
@@ -212,6 +222,7 @@ public class Sc_AIDirector : MonoBehaviour
                 allCurrentEnemy.Add(newAI);
                 allEnemyAIManagerScript.Add(newAI.GetComponent<Sc_AIStateManager>());
                 Sc_AIStateManager stateManager = allEnemyAIManagerScript.Last();
+                stateManager.SetUpPoints(i);
                 float randomValue = Random.Range(0.0f, 1.0f);
                 if (randomValue >= 0.75f)
                 {

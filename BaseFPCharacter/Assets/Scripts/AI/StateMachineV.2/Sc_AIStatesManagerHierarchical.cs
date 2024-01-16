@@ -53,7 +53,6 @@ public class Sc_AIStatesManagerHierarchical : MonoBehaviour
     private Sc_AIDirector directorAI;
 
     //The player game object and weather they have been spotted
-    [SerializeField]
     private GameObject player;
     private Vector3 playerPosition;
     [HideInInspector]
@@ -73,12 +72,6 @@ public class Sc_AIStatesManagerHierarchical : MonoBehaviour
     //The value that the AI determines if they should go and attack the player or go to cover
     private float decisionValue = 0;
 
-    //Variables that are important for the patrol state
-    [Header("Patroling")]
-    //All the patrol points the AI can walk to and from
-    [SerializeField]
-    private GameObject[] patrolPoints;
-
     [Header("Idle")]
     [SerializeField]
     private float idleTimer;
@@ -91,9 +84,6 @@ public class Sc_AIStatesManagerHierarchical : MonoBehaviour
 
     //Variables important to the cover state
     [Header("Cover")]
-    //All cover positions that the player can use
-    [SerializeField]
-    private GameObject[] cover;
     //How far the AI is willing to run to cover
     [SerializeField]
     private float coverDistance;
@@ -123,17 +113,17 @@ public class Sc_AIStatesManagerHierarchical : MonoBehaviour
     // Start is called before the first frame update
     void Start()
     {
-        nonCombatFLState.NonCombatSetUp(this, directorAI, commenMethods, player, gameObject.transform, visionRange, visionConeAngle);
+        nonCombatFLState.NonCombatSetUp(this, directorAI, commenMethods, gameObject.transform, visionRange, visionConeAngle);
         alertFLState.AlertSetUp(this, directorAI, commenMethods, player, gameObject.transform, visionRange, visionConeAngle);
         combatFLState.CombatFLSetUp(this, directorAI, commenMethods, player, gameObject.transform, visionRange, visionConeAngle);
 
         commenMethods.CommenMethodSetUp(navMeshAgent, gameObject, player, audioSource, allFoiliage, lastAudioTimer, decisionTimer);
         //Sending important variables and objects to all of the states
-        patrolState.PatrolStartStateInfo(this, commenMethods, patrolPoints);
+        patrolState.PatrolStartStateInfo(this, commenMethods);
         idleState.IdleStartStateInfo(this, commenMethods, idleTimer);
-        aggressionDesicionState.AggressionStartStateInfo(this, commenMethods, directorAI, gameObject, player, currentWeapon, cover, aiTrait, coverDistance);
+        aggressionDesicionState.AggressionStartStateInfo(this, commenMethods, directorAI, gameObject, player, currentWeapon, aiTrait, coverDistance);
         attackState.AttackStartStateInfo(this, commenMethods, self, player, currentWeapon);
-        coverState.CoverStartStateInfo(this, commenMethods, self, player, currentWeapon, cover);
+        coverState.CoverStartStateInfo(this, commenMethods, self, player, currentWeapon);
 
         //The current player position for when entering a state
         playerPosition = player.transform.position;
@@ -183,6 +173,12 @@ public class Sc_AIStatesManagerHierarchical : MonoBehaviour
         currentSLState.EnterState(playerPosition);
     }
 
+    public void SetUpPlayer(GameObject player) 
+    { 
+        this.player = player;
+        StartCoroutine(nonCombatFLState.RecivePlayerGO(this.player));
+    }
+
     //Once the traits have been distributed and recived by the state manager then is passed to the required scripts
     public void SetUpTraits(Trait newAITrait, AudioClip[] audioClips)
     {
@@ -193,6 +189,20 @@ public class Sc_AIStatesManagerHierarchical : MonoBehaviour
         commenMethods.SetUpTrait(aiTrait, audioClips);
         searchState.SetUpTrait(aiTrait);
         aggressionDesicionState.SetUpTrait(aiTrait);
+    }
+
+    public void SetUpPoints(GameObject spawnPointsOj) 
+    {
+        Sc_CoverandPatrolPoints spawnPointScript= spawnPointsOj.GetComponent<Sc_CoverandPatrolPoints>();
+        StartCoroutine(patrolState.RecivePatrolPoints(spawnPointScript.ReturnPatrolPoints()));
+        aggressionDesicionState.ReciveAllCoverPoints(spawnPointScript.ReturnCoverPoints());
+        coverState.ReciveAllCoverPoints(spawnPointScript.ReturnCoverPoints());
+    }
+
+    //Sets the AIs decision value
+    public void SetDecisionValue(float value)
+    {
+        decisionValue = value;
     }
 
     //Changes state if it was recently hit by a bullet/damaged
@@ -212,17 +222,13 @@ public class Sc_AIStatesManagerHierarchical : MonoBehaviour
         StartCoroutine(commenMethods.PlayRandomAudioOneShot(lowerLevelIncl, higherLevelIncl));
     }
 
-    //Sets the AIs decision value
-    public void SetDecisionValue(float value)
-    {
-        decisionValue = value;
-    }
-
     //returns the AIs decision value
     public float ReturnDecisionValue()
     {
         return decisionValue;
     }
+
+    ///The next section is setting up the animation system to properly transition between the various animations that exist.
 
     //Current action which is used for some UI so that the user can better determine what each individual AI is doing.
     public void SetCurrentAction(string action)
