@@ -42,7 +42,7 @@ public class Sc_CoverState : Sc_AIBaseState
     }
 
     //Recives important variables that are needed for the entire state to work properly.
-    public void CoverStartStateInfo(Sc_AIStateManager stateManager, Sc_CommonMethods commonMethodsScript, Sc_Player_Movement playerMovementScript, GameObject self, GameObject player, GameObject currentWeapon, GameObject[] allCover, float visionRange, float visionConeAngle)
+    public void CoverStartStateInfo(Sc_AIStateManager stateManager, Sc_CommonMethods commonMethodsScript, Sc_Player_Movement playerMovementScript, GameObject self, GameObject player, GameObject currentWeapon, float visionRange, float visionConeAngle)
     {
         this.stateManager = stateManager;
         this.commonMethodsScript = commonMethodsScript;
@@ -50,9 +50,13 @@ public class Sc_CoverState : Sc_AIBaseState
         this.self = self;
         this.player = player;
         this.currentWeapon = currentWeapon;
-        this.allCover = allCover;
         this.visionRange = visionRange;
         this.visionConeAngle = visionConeAngle;
+    }
+
+    public void SetUpCoverPoints(GameObject[] allCover)
+    {
+        this.allCover = allCover;
     }
 
     //If the player leaves the AIs line of site then it will stop trying to go to cover and start to search for the player.

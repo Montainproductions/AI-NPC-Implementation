@@ -1,5 +1,6 @@
 using System.Collections;
 using System.Collections.Generic;
+using Unity.VisualScripting;
 using UnityEngine;
 using UnityEngine.AI;
 using UnityEngine.InputSystem.HID;
@@ -41,14 +42,18 @@ public class Sc_PatrolState : Sc_AIBaseState
     }
 
 
-    public void PatrolStartStateInfo(Sc_AIStateManager stateManager, Sc_CommonMethods aiCommonMethods, Sc_Player_Movement playerMovementScript, GameObject[] allPatrolPoints, float distRange, float visionAngleRange, float audioDist)
+    public void PatrolStartStateInfo(Sc_AIStateManager stateManager, Sc_CommonMethods aiCommonMethods, Sc_Player_Movement playerMovementScript, float distRange, float visionAngleRange, float audioDist)
     {
         this.stateManager = stateManager;
         this.aiCommonMethods = aiCommonMethods;
         this.playerMovementScript = playerMovementScript;
-        this.allPatrolPoints = allPatrolPoints;
         visionRange = distRange;
         visionConeAngle = visionAngleRange;
+    }
+
+    public void SetUpPatrolPoints(GameObject[] patrolPoint)
+    {
+        this.allPatrolPoints = patrolPoint;
     }
 
     public void ChooseRandomPatrolPos()
@@ -57,7 +62,7 @@ public class Sc_PatrolState : Sc_AIBaseState
         for (int i = 0; i < 5; i++)
         {
             //Debug.Log(allPatrolPoints[Random.Range(0, allPatrolPoints.Length)]);
-            patrolPoints[i] = allPatrolPoints[Random.Range(0, allPatrolPoints.Length)];
+            patrolPoints[i] = allPatrolPoints[Random.Range(0, allPatrolPoints.Length-1)];
         }
         currentPos = 0;
         Patroling();

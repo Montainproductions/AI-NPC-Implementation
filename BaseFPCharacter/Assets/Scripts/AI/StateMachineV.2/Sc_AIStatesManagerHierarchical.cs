@@ -49,7 +49,6 @@ public class Sc_AIStatesManagerHierarchical : MonoBehaviour
     private NavMeshAgent navMeshAgent;
 
     //Director AI that controls all of the AI
-    [SerializeField]
     private Sc_AIDirector directorAI;
 
     //The player game object and weather they have been spotted
@@ -173,12 +172,6 @@ public class Sc_AIStatesManagerHierarchical : MonoBehaviour
         currentSLState.EnterState(playerPosition);
     }
 
-    public void SetUpPlayer(GameObject player) 
-    { 
-        this.player = player;
-        StartCoroutine(nonCombatFLState.RecivePlayerGO(this.player));
-    }
-
     //Once the traits have been distributed and recived by the state manager then is passed to the required scripts
     public void SetUpTraits(Trait newAITrait, AudioClip[] audioClips)
     {
@@ -191,8 +184,13 @@ public class Sc_AIStatesManagerHierarchical : MonoBehaviour
         aggressionDesicionState.SetUpTrait(aiTrait);
     }
 
-    public void SetUpPoints(GameObject spawnPointsOj) 
+    public void SetUpInfoDirector(Sc_AIDirector directorScript, GameObject player,GameObject spawnPointsOj) 
     {
+        directorAI = directorScript;
+
+        this.player = player;
+        StartCoroutine(nonCombatFLState.RecivePlayerGO(this.player));
+
         Sc_CoverandPatrolPoints spawnPointScript= spawnPointsOj.GetComponent<Sc_CoverandPatrolPoints>();
         StartCoroutine(patrolState.RecivePatrolPoints(spawnPointScript.ReturnPatrolPoints()));
         aggressionDesicionState.ReciveAllCoverPoints(spawnPointScript.ReturnCoverPoints());

@@ -42,7 +42,6 @@ public class Sc_AIStateManager : MonoBehaviour
     private NavMeshAgent navMeshAgent;
     
     //Director AI that controls all of the AI
-    [SerializeField]
     private Sc_AIDirector directorAI;
 
     //The player game object and weather they have been spotted
@@ -50,8 +49,6 @@ public class Sc_AIStateManager : MonoBehaviour
     private GameObject player;
     [HideInInspector]
     public bool playerNoticed;
-
-    private Sc_Health aiHealthScript;
 
     //Set of timers and ranges that determine how the AI percives the player and for how long they will be searching.
     [SerializeField]
@@ -61,12 +58,6 @@ public class Sc_AIStateManager : MonoBehaviour
     //The value that the AI determines if they should go and attack the player or go to cover
     private float decisionValue = 0;
 
-    //Variables that are important for the patrol state
-    [Header("Patroling")]
-    //All the patrol points the AI can walk to and from
-    [SerializeField]
-    private GameObject[] patrolPoints;
-
     //All variables related to the attack state the player
     [Header("Attacking/Chasing")]
     //Current weapon gameobject
@@ -75,9 +66,6 @@ public class Sc_AIStateManager : MonoBehaviour
 
     //Variables important to the cover state
     [Header("Cover")]
-    //All cover positions that the player can use
-    [SerializeField]
-    private GameObject[] cover;
     //How far the AI is willing to run to cover
     [SerializeField]
     private float coverDistance;
@@ -121,16 +109,14 @@ public class Sc_AIStateManager : MonoBehaviour
         currentState = patrolState;
 
         //Sends crucial information of varabiles and scripts that each state needs before starting as it helps with the states to operate correctly.
-        patrolState.PatrolStartStateInfo(this, commonMethods, player.GetComponent<Sc_Player_Movement>(), patrolPoints, visionRange, visionConeAngle, audioRange);
+        patrolState.PatrolStartStateInfo(this, commonMethods, player.GetComponent<Sc_Player_Movement>(), visionRange, visionConeAngle, audioRange);
         attackState.AttackStartStateInfo(this, commonMethods, player.GetComponent<Sc_Player_Movement>(), gameObject, player, currentWeapon, navMeshAgent, visionRange, visionConeAngle);
-        aggressionDesicionState.AggressionStartStateInfo(this, directorAI, gameObject, player, currentWeapon, cover, navMeshAgent, coverDistance);
-        coverState.CoverStartStateInfo(this, commonMethods, player.GetComponent<Sc_Player_Movement>(), gameObject, player, currentWeapon, cover, visionRange, visionConeAngle);
+        aggressionDesicionState.AggressionStartStateInfo(this, directorAI, gameObject, player, currentWeapon, navMeshAgent, coverDistance);
+        coverState.CoverStartStateInfo(this, commonMethods, player.GetComponent<Sc_Player_Movement>(), gameObject, player, currentWeapon, visionRange, visionConeAngle);
         searchState.SearchStartStateInfo(this, player.GetComponent<Sc_Player_Movement>(), gameObject, player, searchFormats, navMeshAgent, visionRange, visionConeAngle);
         idleState.IdleStartStateInfo(this, player.GetComponent<Sc_Player_Movement>(), idleTimer, visionRange, visionConeAngle);
         
         currentState.EnterState(playerNoticed);
-
-        aiHealthScript = gameObject.GetComponent<Sc_Health>();
 
         //Sets animation to walking
         SetIsIdling(false);
@@ -170,6 +156,18 @@ public class Sc_AIStateManager : MonoBehaviour
     {
         currentState = state;
         currentState.EnterState(playerNoticed);
+    }
+
+    public void SetUpInfoDirector(Sc_AIDirector directorScript, GameObject player, GameObject spawnPoint)
+    {
+        directorAI = directorScript;
+
+        this.player = player;
+
+        Sc_CoverandPatrolPoints spawnPointScript = spawnPoint.GetComponent<Sc_CoverandPatrolPoints>();
+        patrolState.SetUpPatrolPoints(spawnPointScript.ReturnPatrolPoints());
+        aggressionDesicionState.SetUpCoverPoints(spawnPointScript.ReturnCoverPoints());
+        coverState.SetUpCoverPoints(spawnPointScript.ReturnCoverPoints());
     }
 
     public void SetUpTraits(Trait newAITrait, AudioClip[] audioClips)

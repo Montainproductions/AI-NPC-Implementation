@@ -4,6 +4,7 @@ using Unity.IO.LowLevel.Unsafe;
 using UnityEngine;
 using System.Linq;
 using Unity.VisualScripting;
+using static UnityEditor.Experimental.GraphView.GraphView;
 
 /* The Sc_AIDirector is the main script that grabs all of the current NPCs in the map and will decide how many AI NPCS can do certain tasks. This helps control the NPCs so that there arent to many enemies attack the player at the same time 
  */
@@ -192,8 +193,7 @@ public class Sc_AIDirector : MonoBehaviour
                 allCurrentEnemy.Add(newAI);
                 allEnemyAIManagerScriptHFSM.Add(newAI.GetComponent<Sc_AIStatesManagerHierarchical>());
                 Sc_AIStatesManagerHierarchical stateManagerHFSM = allEnemyAIManagerScriptHFSM.Last();
-                stateManagerHFSM.SetUpPlayer(player);
-                stateManagerHFSM.SetUpPoints(i);
+                stateManagerHFSM.SetUpInfoDirector(this, player, i);
                 float randomValue = Random.Range(0.0f, 1.0f);
                 if (randomValue >= 0.75f)
                 {
@@ -222,7 +222,7 @@ public class Sc_AIDirector : MonoBehaviour
                 allCurrentEnemy.Add(newAI);
                 allEnemyAIManagerScript.Add(newAI.GetComponent<Sc_AIStateManager>());
                 Sc_AIStateManager stateManager = allEnemyAIManagerScript.Last();
-                stateManager.SetUpPoints(i);
+                stateManager.SetUpInfoDirector(this, player, i);
                 float randomValue = Random.Range(0.0f, 1.0f);
                 if (randomValue >= 0.75f)
                 {

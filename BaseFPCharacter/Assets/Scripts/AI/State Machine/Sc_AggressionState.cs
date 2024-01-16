@@ -63,22 +63,25 @@ public class Sc_AggressionState : Sc_AIBaseState
     }
 
     //Reciving all the important information that the state needs to operate
-    public void AggressionStartStateInfo(Sc_AIStateManager stateManager, Sc_AIDirector directorAI, GameObject self, GameObject player, GameObject currentWeapon, GameObject[] coverPos, NavMeshAgent navMeshAgent, float coverDist)
+    public void AggressionStartStateInfo(Sc_AIStateManager stateManager, Sc_AIDirector directorAI, GameObject self, GameObject player, GameObject currentWeapon, NavMeshAgent navMeshAgent, float coverDist)
     {
         this.stateManager = stateManager;
         this.directorAI = directorAI;
         this.self = self;
         this.player = player;
         baseGunScript = currentWeapon.GetComponent<Sc_BaseGun>();
-        this.coverPositions = coverPos;
         this.navMeshAgent = navMeshAgent;
         this.coverDistance = coverDist;
+    }
+
+    public void SetUpCoverPoints(GameObject[] coverPos)
+    {
+        this.coverPositions = coverPos;
     }
 
     public void SetUpTrait(Trait newAITrait)
     {
         this.aiTrait = newAITrait;
-        Debug.Log(""+ aiTrait.ReturnAgressionValue());
     }
 
     /*This method determines the AIs decision value. If the AIs is close enough to the player and their weapons range is less then the distance then it will increase the value by 2.
