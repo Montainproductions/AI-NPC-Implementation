@@ -1792,8 +1792,6 @@ MonoBehaviour:
   self: {fileID: 4352401733236440282}
   commenMethods: {fileID: 6107870738269397784}
   navMeshAgent: {fileID: 4352401733236440285}
-  directorAI: {fileID: 2460812123129524718, guid: 9a1b04fd93715f84585c30af5c65b4ea, type: 3}
-  player: {fileID: 6646797674794803052, guid: 81ce49f96577d844ab806a3654e6ae19, type: 3}
   playerNoticed: 0
   audioSource: {fileID: 6107870738269397790}
   lastAudioTimer: 4.5
@@ -1802,30 +1800,8 @@ MonoBehaviour:
   audioRange: 60
   alertedTimer: 30
   decisionTimer: 15
-  patrolPoints:
-  - {fileID: 0}
-  - {fileID: 0}
-  - {fileID: 0}
-  - {fileID: 0}
-  - {fileID: 0}
-  - {fileID: 0}
   idleTimer: 20
   currentWeapon: {fileID: 3794450821250293630}
-  cover:
-  - {fileID: 0}
-  - {fileID: 0}
-  - {fileID: 0}
-  - {fileID: 0}
-  - {fileID: 0}
-  - {fileID: 0}
-  - {fileID: 0}
-  - {fileID: 0}
-  - {fileID: 0}
-  - {fileID: 0}
-  - {fileID: 0}
-  - {fileID: 0}
-  - {fileID: 0}
-  - {fileID: 0}
   coverDistance: 20
   showActions: 1
   actionUIText: {fileID: 4705434155568450886}
@@ -1900,7 +1876,7 @@ CapsuleCollider:
   m_Radius: 0.8
   m_Height: 2.9
   m_Direction: 1
-  m_Center: {x: 0, y: 0.3, z: 0}
+  m_Center: {x: 0, y: 0.5, z: 0}
 --- !u!95 &6107870738269397786
 Animator:
   serializedVersion: 4

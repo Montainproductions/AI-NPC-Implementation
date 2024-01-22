@@ -38,6 +38,8 @@ public class Sc_BaseGun : MonoBehaviour {
     // Start is called before the first frame update
     void Start()
     {
+        player = GameObject.FindGameObjectWithTag("Player");
+
         currentMaxAmmo = maxAmmo;
         currentMaxAmmo -= maxClipAmmo;
         currentAmmoAmount = maxClipAmmo;

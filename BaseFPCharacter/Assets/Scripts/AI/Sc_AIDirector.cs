@@ -188,7 +188,7 @@ public class Sc_AIDirector : MonoBehaviour
         {
             if (hasHFSM)
             {
-                GameObject newAI = Instantiate(aiTypes[1], i.transform);
+                GameObject newAI = Instantiate(aiTypes[1], new Vector3(i.transform.position.x, 0.5f, i.transform.position.z), Quaternion.identity);
                 
                 allCurrentEnemy.Add(newAI);
                 allEnemyAIManagerScriptHFSM.Add(newAI.GetComponent<Sc_AIStatesManagerHierarchical>());

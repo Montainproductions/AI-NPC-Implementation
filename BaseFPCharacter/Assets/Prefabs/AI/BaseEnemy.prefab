@@ -728,7 +728,6 @@ MonoBehaviour:
   aiAudioSource: {fileID: 3535069998013017123}
   commonMethods: {fileID: 780441598457401939}
   navMeshAgent: {fileID: 5355143908986894846}
-  directorAI: {fileID: 2460812123129524718, guid: 9a1b04fd93715f84585c30af5c65b4ea, type: 3}
   player: {fileID: 6646797674794803052, guid: 81ce49f96577d844ab806a3654e6ae19, type: 3}
   playerNoticed: 0
   visionRange: 55
@@ -737,9 +736,7 @@ MonoBehaviour:
   alertedTimer: 30
   decisionTimer: 20
   idleTimer: 25
-  patrolPoints: []
   currentWeapon: {fileID: 4800562019042892381}
-  cover: []
   coverDistance: 20
   lastSeenTimer: 0
   searchFormats: []
@@ -803,7 +800,7 @@ NavMeshAgent:
   m_AutoBraking: 1
   m_AutoRepath: 1
   m_Height: 2.6
-  m_BaseOffset: 1
+  m_BaseOffset: 0.95
   m_WalkableMask: 4294967295
   m_ObstacleAvoidanceType: 4
 --- !u!136 &3366765922595931412
@@ -819,7 +816,7 @@ CapsuleCollider:
   m_Radius: 0.8
   m_Height: 2.8
   m_Direction: 1
-  m_Center: {x: 0, y: 0.3, z: 0}
+  m_Center: {x: 0, y: 0.45, z: 0}
 --- !u!95 &2518665856785081913
 Animator:
   serializedVersion: 4
