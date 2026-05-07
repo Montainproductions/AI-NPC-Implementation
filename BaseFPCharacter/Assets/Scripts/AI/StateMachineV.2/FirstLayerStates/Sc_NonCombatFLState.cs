@@ -40,6 +40,9 @@ public class Sc_NonCombatFLState : Sc_AIBaseStateHierarchical
 
     public override void UpdateState()
     {
+        Debug.Log(player.ToString());
+        Debug.Log(aitransform);
+
         distPlayer = Vector3.Distance(player.transform.position, aitransform.position);
         angleToPlayer = Vector3.Angle(aitransform.forward, player.transform.position - aitransform.position);
 
@@ -47,7 +50,7 @@ public class Sc_NonCombatFLState : Sc_AIBaseStateHierarchical
         playerBehindWall = Physics.Raycast(aitransform.position, direction, out hit, visionRange - 5, layerMask);
     }
 
-    public void NonCombatSetUp(Sc_AIStatesManagerHierarchical stateManager, Sc_AIDirector directorAI, Sc_HFSMCommenMethods commenMethods, Transform aitransform, float visionRange, float visionConeAngle)
+    public void NonCombatSetUp(Sc_AIStatesManagerHierarchical stateManager, Sc_AIDirector directorAI, Sc_HFSMCommenMethods commenMethods, Transform aitransform, float visionRange, float visionConeAngle, GameObject player)
     {
         this.stateManager = stateManager;
         this.directorAI = directorAI;
@@ -55,6 +58,7 @@ public class Sc_NonCombatFLState : Sc_AIBaseStateHierarchical
         this.aitransform = aitransform;
         this.visionRange = visionRange;
         this.visionConeAngle = visionConeAngle;
+        this.player = player;
     }
 
     public IEnumerator RecivePlayerGO(GameObject player)
@@ -79,7 +83,7 @@ public class Sc_NonCombatFLState : Sc_AIBaseStateHierarchical
             directorAI.PlayerFound(stateManager.gameObject);
             stateManager.playerNoticed = true;
             
-            stateManager.SwitchFLState(stateManager.alertFLState);
+            stateManager.SwitchFLState("Alert");
             stateManager.SwitchSLState(stateManager.alertedState);
             //Debug.Log("Player First Seen");
             yield break;

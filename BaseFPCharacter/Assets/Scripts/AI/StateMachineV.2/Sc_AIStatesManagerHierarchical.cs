@@ -14,7 +14,7 @@ public class Sc_AIStatesManagerHierarchical : MonoBehaviour
 
     //All first layer states. First layer reperesents the bigger states that may contain multiple smaller states. This first layer is meant to represent general activites that the AI is trying to complete. The non combate state contains the patroling and idle states, the alerted first layer state contains the alerted and search states, finally the first layer combat state contains the aggression desicion, attack and cover states. 
     [HideInInspector]
-    public Sc_AIBaseStateHierarchical currentFLState;
+    public int currentFLStateSwitchCase;
     [HideInInspector]
     public Sc_NonCombatFLState nonCombatFLState = new Sc_NonCombatFLState();
     [HideInInspector]
@@ -52,7 +52,7 @@ public class Sc_AIStatesManagerHierarchical : MonoBehaviour
     private Sc_AIDirector directorAI;
 
     //The player game object and weather they have been spotted
-    private GameObject player;
+    public GameObject player;
     private Vector3 playerPosition;
     [HideInInspector]
     public bool playerNoticed;
@@ -112,11 +112,12 @@ public class Sc_AIStatesManagerHierarchical : MonoBehaviour
     // Start is called before the first frame update
     void Start()
     {
-        nonCombatFLState.NonCombatSetUp(this, directorAI, commenMethods, gameObject.transform, visionRange, visionConeAngle);
+        nonCombatFLState.NonCombatSetUp(this, directorAI, commenMethods, gameObject.transform, visionRange, visionConeAngle, player);
         alertFLState.AlertSetUp(this, directorAI, commenMethods, player, gameObject.transform, visionRange, visionConeAngle);
         combatFLState.CombatFLSetUp(this, directorAI, commenMethods, player, gameObject.transform, visionRange, visionConeAngle);
 
         commenMethods.CommenMethodSetUp(navMeshAgent, gameObject, player, audioSource, allFoiliage, lastAudioTimer, decisionTimer);
+       
         //Sending important variables and objects to all of the states
         patrolState.PatrolStartStateInfo(this, commenMethods);
         idleState.IdleStartStateInfo(this, commenMethods, idleTimer);
@@ -128,37 +129,76 @@ public class Sc_AIStatesManagerHierarchical : MonoBehaviour
         playerPosition = player.transform.position;
 
         //Set first layer state to Non-Combate
-        currentFLState = nonCombatFLState;
+        currentFLStateSwitchCase = 0;
         //Sets starting state to patroling
         currentSLState = patrolState;
 
         //Starts the enter state of the current first layer and second layer of the state machine
-        currentFLState.EnterState(playerPosition);
+
+        if (currentFLStateSwitchCase == 0)
+        {
+            nonCombatFLState.EnterState(playerPosition);
+        }
         currentSLState.EnterState(playerPosition);
     }
 
     // Update is called once per frame
     void Update()
     {
-        currentFLState.UpdateState();
-        currentSLState.UpdateState();
+        string nameOfFS = "";
 
-        Debug.Log(currentFLState + " " + currentSLState);
+
+        if (currentFLStateSwitchCase == 0)
+        {
+            nonCombatFLState.UpdateState();
+            nameOfFS = "Non combat state";
+        } else if (currentFLStateSwitchCase == 1)
+        {
+            alertFLState.UpdateState();
+            nameOfFS = "Alert state";
+        }
+        else if (currentFLStateSwitchCase == 2)
+        {
+            combatFLState.UpdateState();
+            nameOfFS = "Combate state";
+        }
+        else if (currentFLStateSwitchCase < 0)
+        {
+            nameOfFS = "Not a valid state";
+        }
+        currentSLState.UpdateState();
 
         //If the UI text should be updated
         if (showActions)
         {
-            stateText.SetText(currentFLState.ToString() + " " + currentSLState.ToString() + "   " + currentAction);
+            stateText.SetText(nameOfFS + " " + currentSLState.ToString() + "   " + currentAction);
         }
     }
 
     //Switches the first layer in the HFSM
-    public void SwitchFLState(Sc_AIBaseStateHierarchical state)
+    public void SwitchFLState(string stateString)
     {
         playerPosition = player.transform.position;
-        
-        currentFLState = state;
-        currentFLState.EnterState(playerPosition);
+
+        if (stateString == "NonCombat")
+        {
+            currentFLStateSwitchCase = 0;
+            nonCombatFLState.EnterState(playerPosition);
+        }
+        else if (stateString == "Alert")
+        {
+            currentFLStateSwitchCase = 1;
+            alertFLState.EnterState(playerPosition);
+        }
+        else if (stateString == "Combat")
+        {
+            currentFLStateSwitchCase = 2;
+            combatFLState.EnterState(playerPosition);
+        }
+        else
+        {
+            currentFLStateSwitchCase = -1;
+        }
     }
 
     //Switches the second layer in the HFSM
@@ -208,9 +248,9 @@ public class Sc_AIStatesManagerHierarchical : MonoBehaviour
     {
         PlayRandomAudioOneShot(0, 2);
         //Debug.Log("Speaking");
-        if (currentFLState != combatFLState)
+        if (currentFLStateSwitchCase != 2)
         {
-            SwitchFLState(combatFLState);
+            SwitchFLState("Combat");
             SwitchSLState(aggressionDesicionState);
         }
     }

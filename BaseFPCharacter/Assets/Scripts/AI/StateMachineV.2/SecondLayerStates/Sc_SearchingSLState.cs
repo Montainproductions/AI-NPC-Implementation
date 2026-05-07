@@ -120,7 +120,7 @@ public class Sc_SearchingSLState : Sc_AIBaseStateHierarchical
     {
         commenMethods.LookRandomDirections(searchTimer);
         yield return new WaitForSeconds(searchTimer);
-        stateManager.SwitchFLState(stateManager.nonCombatFLState);
+        stateManager.SwitchFLState("NonCombat");
         stateManager.SwitchSLState(stateManager.patrolState);
         yield return null;
     }

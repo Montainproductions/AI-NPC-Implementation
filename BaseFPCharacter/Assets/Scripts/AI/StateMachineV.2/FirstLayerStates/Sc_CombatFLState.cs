@@ -68,7 +68,7 @@ public class Sc_CombatFLState : Sc_AIBaseStateHierarchical
             directorAI.PlayerFound(stateManager.gameObject);
             stateManager.playerNoticed = true;
 
-            stateManager.SwitchFLState(stateManager.alertFLState);
+            stateManager.SwitchFLState("Alert");
             stateManager.SwitchSLState(stateManager.alertedState);
             //Debug.Log("Player First Seen");
             yield break;

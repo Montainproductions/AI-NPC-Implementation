@@ -88,7 +88,7 @@ public class Sc_AlertFLState : Sc_AIBaseStateHierarchical
                 stateManager.playerNoticed = true;
                 directorAI.PlayerFoundHFSM(stateManager.gameObject);
             }
-            stateManager.SwitchFLState(stateManager.combatFLState);
+            stateManager.SwitchFLState("Combat");
             stateManager.SwitchSLState(stateManager.aggressionDesicionState);
             //Debug.Log("Player First Seen");
         }
@@ -96,7 +96,7 @@ public class Sc_AlertFLState : Sc_AIBaseStateHierarchical
         {
             yield return new WaitForSeconds(0.75f);
             stateManager.PlayRandomAudioOneShot(3, 5);
-            stateManager.SwitchFLState(stateManager.nonCombatFLState);
+            stateManager.SwitchFLState("NonCombat");
             stateManager.SwitchSLState(stateManager.patrolState);
         }
         yield return null;

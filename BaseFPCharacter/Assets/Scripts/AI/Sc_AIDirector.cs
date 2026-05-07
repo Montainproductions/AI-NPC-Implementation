@@ -263,7 +263,7 @@ public class Sc_AIDirector : MonoBehaviour
                 {
                     allEnemyAIManagerScriptHFSM[i].playerNoticed = true;
 
-                    allEnemyAIManagerScriptHFSM[i].SwitchFLState(allEnemyAIManagerScriptHFSM[i].combatFLState);
+                    allEnemyAIManagerScriptHFSM[i].SwitchFLState("Combat");
                     allEnemyAIManagerScriptHFSM[i].SwitchSLState(allEnemyAIManagerScriptHFSM[i].aggressionDesicionState);
                 }
                 //stateManager = null;
@@ -308,7 +308,7 @@ public class Sc_AIDirector : MonoBehaviour
                 //If too many enemy AIs are attacking the player then the current one will go to the cover state
                 if (currentAttacking >= maxAttacking)
                 {
-                    aiScript.SwitchFLState(aiScript.combatFLState);
+                    aiScript.SwitchFLState("Combat");
                     aiScript.SwitchSLState(aiScript.coverState);
                 }
                 //If the current desicion value of the enemy is greater than the average value of all enemies then the enemy will have a 75% chance of going to the attack state or a 25% chance to go to the cover state.
@@ -320,14 +320,14 @@ public class Sc_AIDirector : MonoBehaviour
                     {
                         //Debug.Log("Attacking");
                         //stateManager.SwitchState(stateManager.attackState);
-                        aiScript.SwitchFLState(aiScript.combatFLState);
+                        aiScript.SwitchFLState("Combat");
                         aiScript.SwitchSLState(aiScript.attackState);
                         currentAttacking++;
                     }
                     else
                     {
                         //Debug.Log("Lower");
-                        aiScript.SwitchFLState(aiScript.combatFLState);
+                        aiScript.SwitchFLState("Combat");
                         aiScript.SwitchSLState(aiScript.coverState);
                     }
                 }
@@ -338,14 +338,14 @@ public class Sc_AIDirector : MonoBehaviour
                     {
                         //Debug.Log("Attacking part 2");
                         //stateManager.SwitchState(stateManager.attackState);
-                        aiScript.SwitchFLState(aiScript.combatFLState);
+                        aiScript.SwitchFLState("Combat");
                         aiScript.SwitchSLState(aiScript.attackState);
                         currentAttacking++;
                     }
                     else
                     {
                         //Debug.Log("Lower Part 2");
-                        aiScript.SwitchFLState(aiScript.combatFLState);
+                        aiScript.SwitchFLState("Combat");
                         aiScript.SwitchSLState(aiScript.coverState);
                     }
                 }
@@ -438,15 +438,15 @@ public class Sc_AIDirector : MonoBehaviour
         {
             if (allCurrentEnemy[i] == null) { continue; }
             //yield return new WaitForSeconds(1.0f);
-            //Debug.Log(allCurrentEnemy[i]);
+            Debug.Log(hasHFSM);
             if (hasHFSM)
             {
-                if (Vector3.Distance(allCurrentEnemy[i].transform.position, positionOfShot) < audioRange && (allEnemyAIManagerScriptHFSM[i].currentFLState == allEnemyAIManagerScriptHFSM[i].nonCombatFLState || allEnemyAIManagerScriptHFSM[i].currentFLState == allEnemyAIManagerScriptHFSM[i].alertFLState))
+                if (Vector3.Distance(allCurrentEnemy[i].transform.position, positionOfShot) < audioRange && (allEnemyAIManagerScriptHFSM[i].currentFLStateSwitchCase == 0 || allEnemyAIManagerScriptHFSM[i].currentFLStateSwitchCase == 1))
                 {
                     allEnemyAIManagerScriptHFSM[i].PlayRandomAudioOneShot(6, 8);
                     //Debug.Log("Player Heard");
                     allEnemyAIManagerScriptHFSM[i].playerNoticed = true;
-                    allEnemyAIManagerScriptHFSM[i].SwitchFLState(allEnemyAIManagerScriptHFSM[i].combatFLState);
+                    allEnemyAIManagerScriptHFSM[i].SwitchFLState("Combat");
                     allEnemyAIManagerScriptHFSM[i].SwitchSLState(allEnemyAIManagerScriptHFSM[i].aggressionDesicionState);
                 }
             }
