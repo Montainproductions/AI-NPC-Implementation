@@ -3,10 +3,11 @@ using UnityEngine;
 [CreateAssetMenu(fileName = "GunInfo", menuName = "Scriptable Objects/GunInfo")]
 public class GunInfo : ScriptableObject
 {
-    string gunName, ammoType;
+    public string gunName, ammoType;
 
-    float amountOfClips, currentAmmoInClip, maxAmmoInClip;
+    public float maxAmountInClip, maxAmountOfClips;
 
-    float fireRate;
+    public float fireRate;
 
+    public float reloadTime;
 }
