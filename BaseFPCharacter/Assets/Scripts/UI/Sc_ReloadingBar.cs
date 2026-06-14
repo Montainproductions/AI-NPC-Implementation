@@ -1,9 +1,11 @@
+using System;
 using System.Collections;
 using System.Collections.Generic;
 using TMPro;
 using UnityEngine;
 using UnityEngine.InputSystem;
 using UnityEngine.UI;
+using static UnityEditor.Timeline.TimelinePlaybackControls;
 
 public class Sc_ReloadingBar : MonoBehaviour
 {
@@ -35,7 +37,11 @@ public class Sc_ReloadingBar : MonoBehaviour
     {
         alreadyReloading = false;
         progressBar.SetActive(false);
-        reloadTimer = currentGun.ReturnReloadTimer();
+        if (currentGun != null)
+        {
+            reloadTimer = currentGun.ReturnReloadTimer();
+        }
+        BindEvents();
     }
 
     // Update is called once per frame
@@ -59,6 +65,15 @@ public class Sc_ReloadingBar : MonoBehaviour
         }
     }
 
+    public void BindEvents()
+    {
+        PlayerInventory.reloadEvent += ReloadItem;
+    }
+
+    public void UnbindEvent()
+    {
+        PlayerInventory.reloadEvent -= ReloadItem;
+    }
     public void Action_performed(InputAction.CallbackContext context)
     {
         Debug.Log("Reloading");
@@ -71,5 +86,23 @@ public class Sc_ReloadingBar : MonoBehaviour
                 //ProgressBar();
             }
         }
+    }
+
+    public void ReloadItem()
+    {
+        Debug.Log("Reloading");
+            Debug.Log("Start Reloading");
+            if (!alreadyReloading || currentGun.ReturnCurrentAmmo() < currentGun.ReturnMaxClipAmmo())
+            {
+                alreadyReloading = true;
+                //ProgressBar();
+            }
+        
+    }
+
+    public void OnDestroy()
+    {
+        playerInputActions.Player.Reload.started -= Action_performed;
+        playerInputActions.Player.Reload.canceled -= Action_performed;
     }
 }

@@ -41,13 +41,18 @@ public class Sc_Attacking : MonoBehaviour{
         {
             playerInputActions = new PlayerInputActions();
             playerInputActions.Player.Enable();
-            playerInputActions.Player.Attacking.performed += Attacking_performed;
+            playerInputActions.Player.Primary.performed += Attacking_performed;
             playerInputActions.Player.Reload.performed += Reload_preformed;
         }
     }
 
     public void Start()
     {
+        if (currentGun == null)
+        {
+            return;
+        }
+
         baseGunScript = currentGun.GetComponent<Sc_BaseGun>();
     }
 
@@ -83,7 +88,7 @@ public class Sc_Attacking : MonoBehaviour{
             Sc_Basic_UI.Instance.CanAttackUI();
             yield return null;
         }
-        else if (canShootAttack && !baseGunScript.shotRecently)
+        else if (canShootAttack && (baseGunScript != null && !baseGunScript.shotRecently))
         {
             //Debug.Log("Attacking");
             StartCoroutine(baseGunScript.ShotFired());
@@ -123,7 +128,7 @@ public class Sc_Attacking : MonoBehaviour{
     {
         if (attackForPlayer)
         {
-            playerInputActions.Player.Attacking.performed -= Attacking_performed;
+            playerInputActions.Player.Primary.performed -= Attacking_performed;
             playerInputActions.Player.Reload.performed -= Reload_preformed;
         }
     }

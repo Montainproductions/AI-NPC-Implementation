@@ -5,27 +5,25 @@ using UnityEngine;
 public class Sc_Bullet : MonoBehaviour{
     private GameObject player;
 
-    private bool playerGun;
+    private string fromWho;
 
     private float dmgFromBullet;
+
+    [SerializeField]
+    private float bulletSpeed;
+
+    [SerializeField]
+    private Rigidbody rb;
 
     public void Start()
     {
         StartCoroutine(BulletAlive());
+        rb.GetComponent<Rigidbody>().AddRelativeForce(Vector3.forward * bulletSpeed, ForceMode.Impulse);
     }
 
     //Will set the damage of the bullet for when it impacts an object with health
-    public void SetDamageAmount(bool playerGun, float damage){
-        this.playerGun = playerGun;
-        dmgFromBullet = damage;
-    }
-
-    //Will set the damage of the bullet for when it impacts an object with health
-    public void SetDamageAmount(GameObject player, bool playerGun, float damage)
-    {
-        this.player = player;
-        //Debug.Log(player);
-        this.playerGun = playerGun;
+    public void SetDamageAmount(string sourceOfBullet, float damage){
+        fromWho = sourceOfBullet;
         dmgFromBullet = damage;
     }
 
@@ -40,14 +38,13 @@ public class Sc_Bullet : MonoBehaviour{
         //Debug.Log(other.gameObject);
         //Damages an enemy if it has health
 
-        if (other.gameObject.tag == "Enemy" && playerGun) {
-            Debug.Log("Enemy Hit");
+        if (other.gameObject.tag == "Enemy") {
             other.gameObject.GetComponent<Sc_Health>().TakeDamage(dmgFromBullet);
             Destroy(gameObject);
         }
-        else if (other.gameObject.tag == "Player" && !playerGun)
+        else if (other.gameObject.tag == "Player")
         {
-            player.GetComponent<Sc_Health>().TakeDamage(dmgFromBullet);
+            other.gameObject.GetComponent<Sc_Health>().TakeDamage(dmgFromBullet);
             Destroy(gameObject);
         }
         else if(other.gameObject.tag == "Walls" || other.gameObject.tag == "Cover") {

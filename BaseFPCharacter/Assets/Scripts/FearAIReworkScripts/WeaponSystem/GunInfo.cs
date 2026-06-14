@@ -7,7 +7,7 @@ public class GunInfo : ScriptableObject
 
     public float maxAmountInClip, maxAmountOfClips;
 
-    public float fireRate;
+    public float fireRate, timeBetweenShots, timeBetweenFireRates;
 
     public float reloadTime;
 }

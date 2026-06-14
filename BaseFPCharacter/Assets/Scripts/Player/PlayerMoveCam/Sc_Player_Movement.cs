@@ -37,7 +37,7 @@ public class Sc_Player_Movement : MonoBehaviour{
     public Transform groundCheck; //The position of the ground check
     public LayerMask groundMask; //The layer of the ground that it will check
     private float groundDistance; //How close to the ground can the player get before stoping to fall
-    private bool isGrounded, jumping; //Bools for if the player is touching the ground or if its jumping
+    private bool isGrounded; //Bools for if the player is touching the ground or if its jumping
 
     [SerializeField]
     [Tooltip("Is crouching allowed?")]
@@ -68,7 +68,6 @@ public class Sc_Player_Movement : MonoBehaviour{
     void Start(){
         //Jumping
         groundDistance = 0.1f;
-        jumping = false;
 
         isCrouching = false;
         //Hiding
@@ -76,32 +75,32 @@ public class Sc_Player_Movement : MonoBehaviour{
     }
 
     // Update is called once per frame
-    void Update(){Movement();}
+    void Update(){
+        Movement();
+    }
+
+    private void FixedUpdate()
+    {
+        PhysicsMovment();
+    }
 
     //The main movement script in charge of allowing the player to move around, jumping and crouching
     public void Movement(){
         //Recives the values from the player input system to determine movement of character
         inputVector = playerInputActions.Player.Movement.ReadValue<Vector2>();
         inputVector = Vector2.ClampMagnitude(inputVector, 1f);
+    }
 
+    public void PhysicsMovment()
+    {
         //Checks if the player is touching the ground
         isGrounded = Physics.CheckSphere(groundCheck.position, groundDistance, groundMask);
-        //Debug.Log(isGrounded);
-        //Debug.Log(jumping);
-        //Debug.Log(transform.up);
-
-        //Jumping method
-        Jump();
-
-        //Crouching method
-        Crouching();
 
         desiredVelocity = new Vector3(inputVector.x, 0f, inputVector.y) * maxSpeed; //Max speed of character
         float maxSpeedChange = acceleration * Time.deltaTime; //How much the current speed changes over time
         velocity.x = Mathf.MoveTowards(velocity.x, desiredVelocity.x, maxSpeedChange); //Slowly increase current velocity in the x direction untill max is reached
         velocity.z = Mathf.MoveTowards(velocity.z, desiredVelocity.z, maxSpeedChange); //Slowly increase current velocity in the z direction untill max is reached
         Vector3 displacement = velocity * Time.deltaTime; //Distance the player will be moved by
-        //transform.position += displacement;
 
         movement = transform.right * displacement.x + transform.up * displacement.y + transform.forward * displacement.z; //Distance moved depending on world vectors
         transform.position += movement; //Move character
@@ -110,15 +109,12 @@ public class Sc_Player_Movement : MonoBehaviour{
     public void Jump(){
         //If the player is allowed to jump, is currently jumping and is grounded then it will jump
         if(!canJump) return;
-        if(!jumping) return;
 
         //If the player is touching the ground then add force to the player
         if (isGrounded){
             //Debug.Log("Jumping high");
             rb.AddForce(Vector3.up * jumpingPower,ForceMode.Impulse);
         }
-
-        jumping = false;
     }
 
     public void Crouching(){
@@ -180,18 +176,18 @@ public class Sc_Player_Movement : MonoBehaviour{
     //Input action for pressing space
     public void Jump_Performed(InputAction.CallbackContext context){
         if (!context.performed) return;
-        //Debug.Log("Jumping");
-        jumping = true;
+        Jump();
     }
 
     //Input action for pressing left shift
     private void Crouch_performed(InputAction.CallbackContext context){
         if(context.performed){ //Start crouching
-            //Debug.Log("Crouching");
             isCrouching = true;
-        }else if(context.canceled){ //Stop crouching
-            //Debug.Log("Standing up");
+            Crouching();
+        }
+        else if(context.canceled){ //Stop crouching
             isCrouching = false;
+            Crouching();
         }
     }
 }
