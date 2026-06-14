@@ -5,9 +5,11 @@ public class GunInfo : ScriptableObject
 {
     public string gunName, ammoType;
 
-    public float maxAmountInClip, maxAmountOfClips;
+    public int maxAmountInClip, maxAmountOfClips;
 
     public float fireRate, timeBetweenShots, timeBetweenFireRates;
 
     public float reloadTime;
+
+    public bool isAllowedToReload;
 }

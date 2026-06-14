@@ -4,9 +4,9 @@ using UnityEngine;
 using UnityEngine.InputSystem;
 using TMPro;
 
-public class Sc_Basic_UI : MonoBehaviour{
+public class Basic_UI : MonoBehaviour{
     //Singleton
-    public static Sc_Basic_UI Instance { get; private set; }
+    public static Basic_UI Instance { get; private set; }
 
     //The player input system
     private PlayerInputActions playerInputActions;
@@ -26,8 +26,7 @@ public class Sc_Basic_UI : MonoBehaviour{
     private TextMeshProUGUI healthTextUI;
 
     [SerializeField]
-    private GameObject currentAmmo;
-    private TextMeshProUGUI ammoTextUI;
+    private TextMeshProUGUI currentAmmoInClipUIText;
 
     public void Awake(){
         Instance = this;
@@ -47,7 +46,7 @@ public class Sc_Basic_UI : MonoBehaviour{
             mainGame.SetActive(true);
             CanAttackUI();
             healthTextUI = healthInt.GetComponent<TextMeshProUGUI>();
-            ammoTextUI = currentAmmo.GetComponent<TextMeshProUGUI>();
+            BindEvents();
         }
         else
         {
@@ -61,27 +60,41 @@ public class Sc_Basic_UI : MonoBehaviour{
         
     }
 
+    public void BindEvents()
+    {
+        Gun.ammoUsed += AmmoUsed;
+    }
+
+    public void UnbindEvent()
+    {
+        Gun.ammoUsed -= AmmoUsed;
+    }
+
+    public void AmmoUsed(int currentAmmoInClip, int currentAmountOfClips)
+    {
+        if (!inMenu) {
+            SetCurrentAmmo(currentAmmoInClip, currentAmountOfClips);
+        }
+    }
+
     public void NewHealth(float currentHealth) {
         int health = (int)currentHealth;
         healthTextUI.SetText(health.ToString());
     }
 
-    public void SetCurrentAmmo(float currentAmmo, float maxCurrentAmmo)
+    public void SetCurrentAmmo(float currentAmmoInsideClip, float amountOfClipsLeft)
     {
-        //Debug.Log(currentAmmo + maxCurrentAmmo);
-        ammoTextUI.SetText(currentAmmo.ToString() + "/" + maxCurrentAmmo.ToString());
+        currentAmmoInClipUIText.SetText(currentAmmoInsideClip.ToString() + "/" + amountOfClipsLeft.ToString());
     }
 
     //Activates the green square to signify that the player can melee
     public void CanAttackUI(){
-        //Debug.Log("Can attack");
         canAttack.SetActive(true);
         cantAttack.SetActive(false);
     }
 
     //Activates red square to signify that the player can not melee
     public void CantAttackUI(){
-        //Debug.Log("Cant attack");
         canAttack.SetActive(false);
         cantAttack.SetActive(true);
     }

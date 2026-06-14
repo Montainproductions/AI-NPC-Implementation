@@ -19,7 +19,7 @@ public class PlayerInventory : MonoBehaviour
 
     private int primaryUtilityAmount, secondaryUtilityAmount;
 
-    public static Action reloadEvent;
+    public static Action<GunInfo> reloadEvent;
 
     [SerializeField]
     private CharacterData characterData;
@@ -78,7 +78,7 @@ public class PlayerInventory : MonoBehaviour
         if (currentMainHands[currentItemsPosition].GetComponent<Gun>())
         {
             currentGunScript = currentMainHands[currentItemsPosition].GetComponent<Gun>();
-            currentGunScript.IsBeingHeld(characterData.fullTagList[0]);
+            currentGunScript.IsBeingHeld(characterData.fullTagList[0], true);
         }
     }
 
@@ -103,9 +103,11 @@ public class PlayerInventory : MonoBehaviour
 
     public void PrimaryAction(InputAction.CallbackContext context)
     {
+        if (!context.performed) { return; }
         if (currentMainHands[currentItemsPosition] == null) { return; }
+        if (currentGunScript == null) { return; }
         
-        if (currentGunScript){ currentGunScript.PrimaryAction(); }
+        currentGunScript.PrimaryAction();
     }
 
     public void SecondaryAction(InputAction.CallbackContext context)
@@ -115,10 +117,11 @@ public class PlayerInventory : MonoBehaviour
 
     public void ReloadAction(InputAction.CallbackContext context)
     {
-        if (context.started)
-        {
-            reloadEvent?.Invoke();
-        }
+        if (!context.performed) { return; }
+        if (currentMainHands[currentItemsPosition] == null) { return; }
+        if (currentGunScript == null){ return; }
+        
+        reloadEvent?.Invoke(currentGunScript.GetGunInfo());
     }
 
     public void InspectWeapon(InputAction.CallbackContext context)
@@ -132,5 +135,6 @@ public class PlayerInventory : MonoBehaviour
         playerInputActions.Player.Secondary.performed -= SecondaryAction;
         playerInputActions.Player.Reload.performed -= ReloadAction;
         playerInputActions.Player.Inspecting.performed -= InspectWeapon;
+        UnbindEvent();
     }
 }

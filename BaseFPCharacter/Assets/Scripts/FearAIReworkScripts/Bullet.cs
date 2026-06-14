@@ -2,7 +2,7 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
-public class Sc_Bullet : MonoBehaviour{
+public class Bullet : MonoBehaviour{
     private GameObject player;
 
     private string fromWho;
@@ -18,6 +18,11 @@ public class Sc_Bullet : MonoBehaviour{
     public void Start()
     {
         StartCoroutine(BulletAlive());
+        BulletRelease();
+    }
+
+    public void BulletRelease()
+    {
         rb.GetComponent<Rigidbody>().AddRelativeForce(Vector3.forward * bulletSpeed, ForceMode.Impulse);
     }
 
@@ -29,7 +34,7 @@ public class Sc_Bullet : MonoBehaviour{
 
     IEnumerator BulletAlive()
     {
-        yield return new WaitForSeconds(0.7f);
+        yield return new WaitForSeconds(0.3f);
         Destroy(gameObject);
         yield return null;
     }

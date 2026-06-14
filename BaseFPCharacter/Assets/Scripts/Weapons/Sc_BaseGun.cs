@@ -51,7 +51,7 @@ public class Sc_BaseGun : MonoBehaviour {
     {
         if (isPlayerGun)
         {
-            Sc_Basic_UI.Instance.SetCurrentAmmo(currentAmmoAmount, currentMaxAmmo);
+            Basic_UI.Instance.SetCurrentAmmo(currentAmmoAmount, currentMaxAmmo);
         }
     }
 
@@ -78,7 +78,7 @@ public class Sc_BaseGun : MonoBehaviour {
                 currentAmmoAmount--;
                 GameObject newBullet = Instantiate(spawnBullet, barrolHole.transform);
                 
-                newBullet.GetComponent<Sc_Bullet>().SetDamageAmount("Team A", 20);
+                newBullet.GetComponent<Bullet>().SetDamageAmount("Team A", 20);
                 
                 //Debug.Log(currentAmmoAmount);
                 audioSC.Play();

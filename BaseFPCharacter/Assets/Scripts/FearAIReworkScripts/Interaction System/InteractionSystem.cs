@@ -18,6 +18,9 @@ public class InteractionSystem : MonoBehaviour
     [SerializeField]
     private GameObject playerCamera;
 
+    [SerializeField]
+    private float maxDistanceForInteraction;
+
     public static Action interactingWithInteractible;
     public static Action<string, GameObject> onLook;
 
@@ -40,15 +43,8 @@ public class InteractionSystem : MonoBehaviour
     // Start is called once before the first execution of Update after the MonoBehaviour is created
     void Start()
     {
-        
         layerMask = LayerMask.GetMask("Interactible");
         StartCoroutine(CheckInteractible());
-    }
-
-    // Update is called once per frame
-    void Update()
-    {
-
     }
 
     IEnumerator CheckInteractible()
@@ -58,7 +54,7 @@ public class InteractionSystem : MonoBehaviour
         //Debug.Log("Searching");
         Vector3 origin = playerCamera.transform.position;
         Vector3 direction = playerCamera.transform.forward;
-        if (Physics.Raycast(origin, direction, out RaycastHit mainHit, 20, layerMask))
+        if (Physics.Raycast(origin, direction, out RaycastHit mainHit, maxDistanceForInteraction, layerMask))
         {
             //Debug.DrawLine(origin, direction, Color.green);
             raycastHit = mainHit;
@@ -86,5 +82,10 @@ public class InteractionSystem : MonoBehaviour
         if (raycastHit.collider == null){ return; }
 
         interactingWithInteractible?.Invoke();
+    }
+
+    public void OnDestroy()
+    {
+        playerInputActions.Player.Interact.performed -= InteractPerformed;
     }
 }

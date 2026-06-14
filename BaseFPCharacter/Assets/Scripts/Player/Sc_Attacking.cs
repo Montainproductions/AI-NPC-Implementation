@@ -83,9 +83,9 @@ public class Sc_Attacking : MonoBehaviour{
     public IEnumerator Attacking(){
         if (canMeleeAttack)
         {
-            Sc_Basic_UI.Instance.CantAttackUI();
+            Basic_UI.Instance.CantAttackUI();
             yield return new WaitForSeconds(attackTimer);
-            Sc_Basic_UI.Instance.CanAttackUI();
+            Basic_UI.Instance.CanAttackUI();
             yield return null;
         }
         else if (canShootAttack && (baseGunScript != null && !baseGunScript.shotRecently))

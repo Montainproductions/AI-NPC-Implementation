@@ -49,7 +49,7 @@ public class Sc_Health : MonoBehaviour{
     void Update(){
         if (updateHealthUI)
         {
-            Sc_Basic_UI.Instance.NewHealth(currentHealth);
+            Basic_UI.Instance.NewHealth(currentHealth);
         }
         
             Healing();
@@ -100,7 +100,7 @@ public class Sc_Health : MonoBehaviour{
 
         if (updateHealthUI)
         {
-            Sc_Basic_UI.Instance.NewHealth(currentHealth);
+            Basic_UI.Instance.NewHealth(currentHealth);
         }
 
         if (currentHealth <= 1) {

@@ -18,18 +18,18 @@ public class InteractionItem : MonoBehaviour
 
     public void Start()
     {
-        BindToInteractions();
+        BindEvent();
         beingLookedAt = false;
         pickUpUI.SetActive(beingLookedAt);
     }
 
-    public void BindToInteractions()
+    public void BindEvent()
     {
         InteractionSystem.onLook += IsLookedAt;
         InteractionSystem.interactingWithInteractible += InteractOnItem;
     }
 
-    public void UnbindToInteraction()
+    public void UnbindEvent()
     {
         InteractionSystem.onLook -= IsLookedAt;
         InteractionSystem.interactingWithInteractible -= InteractOnItem;
@@ -61,5 +61,10 @@ public class InteractionItem : MonoBehaviour
     public void ShowPickUpInfo()
     {
         pickUpUI.SetActive(beingLookedAt);
+    }
+
+    public void OnDestroy()
+    {
+        UnbindEvent();
     }
 }

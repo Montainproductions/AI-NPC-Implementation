@@ -1,3 +1,4 @@
+using System;
 using System.Collections;
 using UnityEngine;
 
@@ -6,7 +7,7 @@ public class Gun : MonoBehaviour
     [SerializeField]
     private GunInfo gunInfo;
 
-    private float currentAmountOfAmmoInClip, currentAmountOfClips;
+    private int currentAmmoInClip, currentAmountOfClips;
 
     private bool canReload, shotRecently;
 
@@ -19,23 +20,34 @@ public class Gun : MonoBehaviour
     [SerializeField]
     private AudioSource audioSC;
 
+    public static Action<int, int> ammoUsed;
+
     public void Start()
     {
         beingHeld = false;
         shotRecently = false;
 
-
-        currentAmountOfAmmoInClip = gunInfo.maxAmountInClip;
+        currentAmmoInClip = gunInfo.maxAmountInClip;
         currentAmountOfClips = gunInfo.maxAmountOfClips;
+    }
+
+    public void BindEvents()
+    {
+        PlayerInventory.reloadEvent += ReloadAction;
+    }
+
+    public void UnbindEvent()
+    {
+        PlayerInventory.reloadEvent -= ReloadAction;
     }
 
     public void PrimaryAction()
     {
         if (!beingHeld){ return; }
-
-        if (canReload && currentAmountOfAmmoInClip <= 0)
+        
+        if (currentAmmoInClip <= 0)
         {
-            Reload();
+            Debug.Log("No bullets left");
             return;
         }
 
@@ -44,25 +56,28 @@ public class Gun : MonoBehaviour
 
     public IEnumerator FiringWeapon()
     {
-        if (!shotRecently)
+        if (shotRecently) { yield return null;}
+
+        shotRecently = true;
+        for (int i = 0; i < gunInfo.fireRate; i++)
         {
-            shotRecently = true;
-            for (int i = 0; i < gunInfo.fireRate; i++)
-            {
-                if (currentAmountOfAmmoInClip <= 0){ yield return null; }
+            if (currentAmmoInClip <= 0){ break; }
 
-                currentAmountOfAmmoInClip--;
-                GameObject newBullet = Instantiate(prefabBullet, gunExit.transform);
+            currentAmmoInClip--;
 
-                newBullet.GetComponent<Sc_Bullet>().SetDamageAmount(heldByWhichTeam, 20);
+            //Basic_UI.Instance.AmmoUsed(currentAmmoInClip, currentAmountOfClips);
+            ammoUsed?.Invoke(currentAmmoInClip, currentAmountOfClips);
 
-                audioSC.Play();
+            GameObject newBullet = Instantiate(prefabBullet, gunExit.transform);
 
-                yield return new WaitForSeconds(gunInfo.timeBetweenShots);
-            }
-            yield return new WaitForSeconds(gunInfo.timeBetweenFireRates);
-            shotRecently = false;
+            newBullet.GetComponent<Bullet>().SetDamageAmount(heldByWhichTeam, 20);
+
+            audioSC.Play();
+
+            yield return new WaitForSeconds(gunInfo.timeBetweenShots);
         }
+        yield return new WaitForSeconds(gunInfo.timeBetweenFireRates);
+        shotRecently = false;
 
         yield return null;
     }
@@ -72,11 +87,18 @@ public class Gun : MonoBehaviour
 
     }
 
+    public void ReloadAction(GunInfo infoGun)
+    {
+        if (!gunInfo.isAllowedToReload && currentAmmoInClip > 0) { return; }
+
+        StartCoroutine(Reload());
+    }
+
     public IEnumerator Reload()
     {
         canReload = false;
         float reloadTimer = 0;
-        float timeDifference = 0.2f;
+        float timeDifference = 0.1f;
         while (reloadTimer < gunInfo.reloadTime)
         {
             yield return new WaitForSeconds(timeDifference);
@@ -84,13 +106,24 @@ public class Gun : MonoBehaviour
         }
 
         currentAmountOfClips--;
-        currentAmountOfAmmoInClip = gunInfo.maxAmountInClip;
+        currentAmmoInClip = gunInfo.maxAmountInClip;
+
+        ammoUsed?.Invoke(currentAmmoInClip, currentAmountOfClips);
     }
 
-    public void IsBeingHeld(string whichTeam = "")
+    public void IsBeingHeld(string whichTeam, bool isPlayer)
     {
         heldByWhichTeam = whichTeam;
 
         beingHeld = !beingHeld;
+
+        if (isPlayer && beingHeld)
+        {
+            ammoUsed?.Invoke(currentAmmoInClip, currentAmountOfClips);
+        }
+
+        BindEvents();
     }
+
+    public GunInfo GetGunInfo() {  return gunInfo; }
 }

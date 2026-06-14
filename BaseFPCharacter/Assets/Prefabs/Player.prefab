@@ -261,7 +261,6 @@ GameObject:
   - component: {fileID: 6646797674794803051}
   - component: {fileID: 6646797674794803062}
   - component: {fileID: 6646797674794803063}
-  - component: {fileID: 1793502380870240587}
   - component: {fileID: 952770033173165762}
   - component: {fileID: 4986244507347450300}
   - component: {fileID: 4038469996218409009}
@@ -420,26 +419,6 @@ MonoBehaviour:
     serializedVersion: 2
     m_Bits: 8
   canCrouch: 1
---- !u!114 &1793502380870240587
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 6646797674794803052}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: be38122669d211b40af45125d5f3f59f, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  attackForPlayer: 1
-  playerBox: {fileID: 6646797673753478752}
-  canMeleeAttack: 0
-  damping: 6
-  meleeDamage: 8
-  attackTimer: 8
-  canShootAttack: 1
-  currentGun: {fileID: 0}
 --- !u!114 &952770033173165762
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -484,6 +463,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::PlayerItemsHandInfo
   handPosition: {fileID: 3931928549552591948}
+  characterData: {fileID: 11400000, guid: 0223cf9d77e4a954e80c03fb9254def1, type: 2}
 --- !u!114 &6329079206858032855
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -497,6 +477,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::InteractionSystem
   playerCamera: {fileID: 6646797674624269430}
+  maxDistanceForInteraction: 1.75
 --- !u!1 &6646797675293489075
 GameObject:
   m_ObjectHideFlags: 0
