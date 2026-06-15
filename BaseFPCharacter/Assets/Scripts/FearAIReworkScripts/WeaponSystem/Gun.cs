@@ -1,6 +1,7 @@
 using System;
 using System.Collections;
 using UnityEngine;
+using UnityEngine.UIElements;
 
 public class Gun : MonoBehaviour
 {
@@ -15,7 +16,10 @@ public class Gun : MonoBehaviour
     private string heldByWhichTeam;
 
     [SerializeField]
-    private GameObject prefabBullet, gunExit;
+    private GameObject prefabBullet;
+
+    [SerializeField]
+    private Transform gunExit;
 
     [SerializeField]
     private AudioSource audioSC;
@@ -68,10 +72,9 @@ public class Gun : MonoBehaviour
             //Basic_UI.Instance.AmmoUsed(currentAmmoInClip, currentAmountOfClips);
             ammoUsed?.Invoke(currentAmmoInClip, currentAmountOfClips);
 
-            GameObject newBullet = Instantiate(prefabBullet, gunExit.transform);
+            GameObject newBullet = Instantiate(prefabBullet, gunExit.position, gunExit.rotation);
 
             newBullet.GetComponent<Bullet>().SetDamageAmount(heldByWhichTeam, 20);
-
             audioSC.Play();
 
             yield return new WaitForSeconds(gunInfo.timeBetweenShots);
@@ -115,7 +118,7 @@ public class Gun : MonoBehaviour
     {
         heldByWhichTeam = whichTeam;
 
-        beingHeld = !beingHeld;
+        beingHeld = true;
 
         if (isPlayer && beingHeld)
         {
@@ -123,6 +126,12 @@ public class Gun : MonoBehaviour
         }
 
         BindEvents();
+    }
+
+    public void NoLongerBeingHeld()
+    {
+        beingHeld = false;
+        UnbindEvent();
     }
 
     public GunInfo GetGunInfo() {  return gunInfo; }

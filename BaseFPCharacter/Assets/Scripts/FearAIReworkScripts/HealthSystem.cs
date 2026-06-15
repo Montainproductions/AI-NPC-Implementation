@@ -42,13 +42,15 @@ public class HealthSystem : MonoBehaviour
 
     void Death()
     {
-
+        Destroy(this);
     }
 
-    void GetHit(float healthDamage)
+    public void GetHit(float healthDamage)
     {
         recentlyHit = true;
         currentHealth -= healthDamage;
+
+        Debug.Log(currentHealth);
 
         if (currentHealth <= 0)
         {
@@ -59,7 +61,7 @@ public class HealthSystem : MonoBehaviour
             //LowHealthUI();
         }
 
-            StartCoroutine(TimerBeforeRecentlyHitReset());
+        StartCoroutine(TimerBeforeRecentlyHitReset());
     }
 
     IEnumerator TimerBeforeRecentlyHitReset()

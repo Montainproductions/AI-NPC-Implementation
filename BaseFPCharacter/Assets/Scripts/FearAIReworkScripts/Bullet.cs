@@ -5,7 +5,7 @@ using UnityEngine;
 public class Bullet : MonoBehaviour{
     private GameObject player;
 
-    private string fromWho;
+    private string fromWhichTeam;
 
     private float dmgFromBullet;
 
@@ -23,12 +23,12 @@ public class Bullet : MonoBehaviour{
 
     public void BulletRelease()
     {
-        rb.GetComponent<Rigidbody>().AddRelativeForce(Vector3.forward * bulletSpeed, ForceMode.Impulse);
+        rb.AddRelativeForce(Vector3.forward * bulletSpeed, ForceMode.Impulse);
     }
 
     //Will set the damage of the bullet for when it impacts an object with health
-    public void SetDamageAmount(string sourceOfBullet, float damage){
-        fromWho = sourceOfBullet;
+    public void SetDamageAmount(string teamSourceOfBullet, float damage){
+        fromWhichTeam = teamSourceOfBullet;
         dmgFromBullet = damage;
     }
 
@@ -40,20 +40,15 @@ public class Bullet : MonoBehaviour{
     }
 
     public void OnTriggerEnter(Collider other){
-        //Debug.Log(other.gameObject);
-        //Damages an enemy if it has health
+        CharacterGeneral charGeneral = other.gameObject.GetComponent<CharacterGeneral>();
+        if (charGeneral == null) { return; }
 
-        if (other.gameObject.tag == "Enemy") {
-            other.gameObject.GetComponent<Sc_Health>().TakeDamage(dmgFromBullet);
-            Destroy(gameObject);
-        }
-        else if (other.gameObject.tag == "Player")
-        {
-            other.gameObject.GetComponent<Sc_Health>().TakeDamage(dmgFromBullet);
-            Destroy(gameObject);
-        }
-        else if(other.gameObject.tag == "Walls" || other.gameObject.tag == "Cover") {
-            Destroy(gameObject);
-        }
+        List<string> mainTag = charGeneral.GetCharacterData().fullTagList;
+        
+        if (mainTag == null) { return; }
+
+        if (mainTag[0] == "Damagable" && mainTag[1] != fromWhichTeam) { other.gameObject.GetComponent<HealthSystem>().GetHit(dmgFromBullet); }
+
+        Destroy(gameObject);
     }
 }
