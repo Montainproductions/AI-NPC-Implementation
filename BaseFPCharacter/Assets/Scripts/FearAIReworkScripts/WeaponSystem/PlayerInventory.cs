@@ -9,6 +9,8 @@ public class PlayerInventory : MonoBehaviour
 
     private PlayerInputActions playerInputActions;
 
+    private int currentPoints;
+
     [SerializeField]
     private Transform handPosition, secondaryWeaponPosition;
 
@@ -75,11 +77,13 @@ public class PlayerInventory : MonoBehaviour
     public void BindEvents()
     {
         InteractionItem.passingInteractibleToPlayer += AquireItem;
+        NonPlayerCharacter.onKilled += EliminationPoints;
     }
 
     public void UnbindEvent()
     {
         InteractionItem.passingInteractibleToPlayer -= AquireItem;
+        NonPlayerCharacter.onKilled -= EliminationPoints;
     }
 
     public void AquireItem(GameObject itemBeingAquired)
@@ -98,7 +102,7 @@ public class PlayerInventory : MonoBehaviour
         if (currentMainHands[currentItemsPosition].GetComponent<Gun>())
         {
             currentGunScript = currentMainHands[currentItemsPosition].GetComponent<Gun>();
-            currentGunScript.IsBeingHeld(characterData.fullTagList[0], true);
+            currentGunScript.IsBeingHeld(characterData.fullTagList[1], true);
         }
     }
 
@@ -165,8 +169,13 @@ public class PlayerInventory : MonoBehaviour
         if (currentMainHands[currentItemsPosition].GetComponent<Gun>())
         {
             currentGunScript = currentMainHands[currentItemsPosition].GetComponent<Gun>();
-            currentGunScript.IsBeingHeld(characterData.fullTagList[0], true);
+            currentGunScript.IsBeingHeld(characterData.fullTagList[1], true);
         }
+    }
+
+    public void EliminationPoints(int points)
+    {
+        currentPoints += points;
     }
 
     public void OnDestroy()

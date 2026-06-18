@@ -40,21 +40,32 @@ public class HealthSystem : MonoBehaviour
         
     }
 
-    void Death()
+    void Death(string bodyPartHit, string fromWho)
     {
-        Destroy(this);
+        gameObject.GetComponent<NonPlayerCharacter>().WhatKilledThem(bodyPartHit, fromWho);
+        Destroy(gameObject);
     }
 
-    public void GetHit(float healthDamage)
+    public void GetHit(float healthDamage, string bodyPartHit, string fromWho)
     {
         recentlyHit = true;
-        currentHealth -= healthDamage;
 
-        Debug.Log(currentHealth);
+        switch (bodyPartHit)
+        {
+            case "Head":
+                currentHealth -= (healthDamage*2); 
+                break;
+            case "MainBody":
+                currentHealth -= (healthDamage*1.4f);
+                break;
+            default:
+                currentHealth -= healthDamage;
+                break;
+        }
 
         if (currentHealth <= 0)
         {
-            Death();
+            Death(bodyPartHit, fromWho);
             return;
         }else if (currentHealth <= (maxHealth * 0.2))
         {

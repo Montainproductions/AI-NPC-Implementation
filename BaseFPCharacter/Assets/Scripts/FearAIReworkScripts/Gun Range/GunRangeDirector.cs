@@ -1,49 +1,100 @@
+using System;
 using System.Collections;
 using UnityEngine;
 
 public class GunRangeDirector : MonoBehaviour
 {
     [SerializeField]
-    private BoxCollider[] spawnLocationsForTargets;
+    private Transform[] spawnLocationsForTargets;
+
+    [SerializeField]
+    private GameObject[] lightObjectsForWarning;
+
+    public static Action<int, float> setLightsActive;
 
     [SerializeField]
     private GameObject targetPrefabs;
 
-    private bool targetAlreadySpawned;
-
     [SerializeField]
     private float timeBetweenSpawns;
 
+    [SerializeField]
+    private int maxAmountOfTargets, currentAmountOfTargets;
 
+    private bool gunRangeActive;
 
     // Start is called once before the first execution of Update after the MonoBehaviour is created
     void Start()
     {
-        StartCoroutine(SpawnTarget());
+        gunRangeActive = false;
     }
 
-    public void TargetTakenDown()
+    public void BindEvent()
     {
+        NonPlayerCharacter.onKilled += TargetTakenDown;
+    }
+
+    public void UnbindEvent()
+    {
+        NonPlayerCharacter.onKilled -= TargetTakenDown;
+    }
+
+    public void StartGunRange()
+    {
+        gunRangeActive = true;
+        StartCoroutine(GunRangeLaneActive());
+    }
+
+    public void TargetTakenDown(int points)
+    {
+        StartCoroutine(GunRangeLaneActive());
+    }
+
+    public IEnumerator GunRangeLaneActive()
+    {
+        if (!gunRangeActive){ yield return null; }
+
         StartCoroutine(SpawnTarget());
+
+        yield return null;
+    }
+
+    public void EndGunRange()
+    {
+        gunRangeActive = false;
     }
 
     public IEnumerator SpawnTarget()
     {
-        int areaToSpawn = Random.Range(0, 4);
+        UnbindEvent();
 
-        Bounds bounds = spawnLocationsForTargets[areaToSpawn].bounds;
+        Debug.Log("Spawning Target");
+        int locationToSpawn = UnityEngine.Random.Range(0, 3);
 
-        // Generate a random position within the bounds
-        Vector3 randomPosition = new Vector3(
-            Random.Range(bounds.min.x, bounds.max.x),
-            -0.5f,
-            Random.Range(bounds.min.z, bounds.max.z)
-        );
+        setLightsActive?.Invoke(locationToSpawn, timeBetweenSpawns);
 
         yield return new WaitForSeconds(timeBetweenSpawns);
 
-        Instantiate(targetPrefabs, randomPosition, Quaternion.identity);
+        Instantiate(targetPrefabs, spawnLocationsForTargets[locationToSpawn].position, Quaternion.identity);
+        
+        BindEvent();
 
         yield return null;
+    }
+
+    public void OnCollisionEnter(Collision collision)
+    {
+        Debug.Log("Item entered");
+        StartGunRange();
+    }
+
+    public void OnCollisionExit(Collision collision)
+    {
+        EndGunRange();
+    }
+
+    private void OnDestroy()
+    {
+        UnbindEvent();
     }
 }

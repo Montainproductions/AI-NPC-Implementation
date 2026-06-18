@@ -74,7 +74,7 @@ public class Gun : MonoBehaviour
 
             GameObject newBullet = Instantiate(prefabBullet, gunExit.position, gunExit.rotation);
 
-            newBullet.GetComponent<Bullet>().SetDamageAmount(heldByWhichTeam, 20);
+            newBullet.GetComponent<Bullet>().SetBulletInfo(heldByWhichTeam, 20);
             audioSC.Play();
 
             yield return new WaitForSeconds(gunInfo.timeBetweenShots);
@@ -92,7 +92,7 @@ public class Gun : MonoBehaviour
 
     public void ReloadAction(GunInfo infoGun)
     {
-        if (!gunInfo.isAllowedToReload && currentAmmoInClip > 0) { return; }
+        if ((!gunInfo.isAllowedToReload && currentAmmoInClip > 0) || currentAmountOfClips <= 0) { return; }
 
         StartCoroutine(Reload());
     }

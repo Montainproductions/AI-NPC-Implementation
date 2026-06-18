@@ -78,7 +78,7 @@ public class Sc_BaseGun : MonoBehaviour {
                 currentAmmoAmount--;
                 GameObject newBullet = Instantiate(spawnBullet, barrolHole.transform);
                 
-                newBullet.GetComponent<Bullet>().SetDamageAmount("Team A", 20);
+                newBullet.GetComponent<Bullet>().SetBulletInfo("Team A", 20);
                 
                 //Debug.Log(currentAmmoAmount);
                 audioSC.Play();

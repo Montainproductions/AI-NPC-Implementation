@@ -10,6 +10,8 @@ TagManager:
   - LevelChange
   - Foilage
   - Interactible
+  - MainBody
+  - Head
   layers:
   - Default
   - TransparentFX

@@ -3,9 +3,9 @@ using System.Collections.Generic;
 using UnityEngine;
 
 public class Bullet : MonoBehaviour{
-    private GameObject player;
+    private int maxPassThrough, currentPassThrough;
 
-    private string fromWhichTeam;
+    private string gunSource;
 
     private float dmgFromBullet;
 
@@ -27,28 +27,34 @@ public class Bullet : MonoBehaviour{
     }
 
     //Will set the damage of the bullet for when it impacts an object with health
-    public void SetDamageAmount(string teamSourceOfBullet, float damage){
-        fromWhichTeam = teamSourceOfBullet;
-        dmgFromBullet = damage;
+    public void SetBulletInfo(string gunSource, float baseDamage){
+        this.gunSource = gunSource;
+        dmgFromBullet = baseDamage;
     }
 
     IEnumerator BulletAlive()
     {
-        yield return new WaitForSeconds(0.3f);
+        yield return new WaitForSeconds(2f);
         Destroy(gameObject);
         yield return null;
     }
 
     public void OnTriggerEnter(Collider other){
-        CharacterGeneral charGeneral = other.gameObject.GetComponent<CharacterGeneral>();
+        CharacterGeneral charGeneral = other.gameObject.GetComponentInParent<CharacterGeneral>();
+        Debug.Log(other.name);
+
         if (charGeneral == null) { return; }
 
         List<string> mainTag = charGeneral.GetCharacterData().fullTagList;
         
         if (mainTag == null) { return; }
 
-        if (mainTag[0] == "Damagable" && mainTag[1] != fromWhichTeam) { other.gameObject.GetComponent<HealthSystem>().GetHit(dmgFromBullet); }
+        if (mainTag[0] == "Damagable") {
+            Debug.Log("Damagable Item Found");
+            other.gameObject.GetComponentInParent<HealthSystem>().GetHit(dmgFromBullet, other.gameObject.tag, gunSource); 
+        }
 
-        Destroy(gameObject);
+        if(currentPassThrough >= maxPassThrough || other.gameObject.tag == "Wall") { Destroy(gameObject); }
+        else { currentPassThrough++; }
     }
 }

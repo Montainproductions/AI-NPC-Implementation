@@ -37,7 +37,7 @@ public class Sc_HeadBobbing : MonoBehaviour{
     void Update(){
         if(!canBob) return; //If the player isnt allowed to have a bobbing head then stop
         //Some fancy sine movment for the camera so it is moving up and down at a constant rate
-        if(Mathf.Abs(controller.desiredVelocity.x) > 0.1f || Mathf.Abs(controller.desiredVelocity.z) > 0.1f){
+        if(Mathf.Abs(controller.GetVelocity().x) > 0.1f || Mathf.Abs(controller.GetVelocity().z) > 0.1f){
             //Player is moving
             timer += Time.deltaTime * walkingBobbingSpeed;
             transform.localPosition = new Vector3(transform.localPosition.x, defaultPosY + Mathf.Sin(timer) * bobbingAmount, transform.localPosition.z);

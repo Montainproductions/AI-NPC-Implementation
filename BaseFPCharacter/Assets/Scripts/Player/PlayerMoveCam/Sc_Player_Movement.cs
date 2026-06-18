@@ -20,8 +20,7 @@ public class Sc_Player_Movement : MonoBehaviour{
     [Range(0f, 100f)]
     private float acceleration;
     private Vector3 movement, velocity; //Vec3 Variables for determining where and at what rate will the player be moving at.
-    [HideInInspector]
-    public Vector3 desiredVelocity; //Vec3 variable for the speed of character (Is public so the head bobbing script can grab the variable
+    private Vector3 desiredVelocity; //Vec3 variable for the speed of character (Is public so the head bobbing script can grab the variable
     private Rigidbody rb; //RigidBody
 
     private Vector2 inputVector; //The input vectors 
@@ -130,6 +129,10 @@ public class Sc_Player_Movement : MonoBehaviour{
         }
     }
 
+    public Vector3 GetVelocity()
+    {
+        return velocity;
+    }
     public bool ReturnIsHidden()
     {
         return isHidden;
@@ -161,15 +164,11 @@ public class Sc_Player_Movement : MonoBehaviour{
         {
             maxSpeed = maxSpeed * 1.3f;
             acceleration = acceleration * 1.2f;
-            Sc_HeadBobbing.Instance.SetBobbingAmount(0.13f);
-            Sc_HeadBobbing.Instance.SetBobbingSpeed(13);
         }
         else if (context.canceled)
         {
             maxSpeed = maxSpeed / 1.3f;
             acceleration = acceleration / 1.2f;
-            Sc_HeadBobbing.Instance.SetBobbingAmount(0.08f);
-            Sc_HeadBobbing.Instance.SetBobbingSpeed(11);
         }
     }
 
