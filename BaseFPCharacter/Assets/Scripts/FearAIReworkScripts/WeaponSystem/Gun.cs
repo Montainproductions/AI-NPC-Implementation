@@ -26,6 +26,8 @@ public class Gun : MonoBehaviour
 
     public static Action<int, int> ammoUsed;
 
+    private GameObject newBullet;
+
     public void Start()
     {
         beingHeld = false;
@@ -49,11 +51,7 @@ public class Gun : MonoBehaviour
     {
         if (!beingHeld){ return; }
         
-        if (currentAmmoInClip <= 0)
-        {
-            Debug.Log("No bullets left");
-            return;
-        }
+        if (currentAmmoInClip <= 0) { return; }
 
         StartCoroutine(FiringWeapon());
     }
@@ -72,7 +70,7 @@ public class Gun : MonoBehaviour
             //Basic_UI.Instance.AmmoUsed(currentAmmoInClip, currentAmountOfClips);
             ammoUsed?.Invoke(currentAmmoInClip, currentAmountOfClips);
 
-            GameObject newBullet = Instantiate(prefabBullet, gunExit.position, gunExit.rotation);
+            newBullet = Instantiate(prefabBullet, gunExit.position, gunExit.rotation);
 
             newBullet.GetComponent<Bullet>().SetBulletInfo(heldByWhichTeam, 20);
             audioSC.Play();

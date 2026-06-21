@@ -14,7 +14,9 @@ public class Sc_Player_Camera : MonoBehaviour{
 
     //Camera variab;es
     public Camera playerCamera;
-    public float mouseSensativity, mouseX, mouseY;
+    public float mouseSensativity;
+    private float mouseX, mouseY;
+
     public Transform playerBody;
     public float xRotation = 0f;
 
@@ -25,18 +27,13 @@ public class Sc_Player_Camera : MonoBehaviour{
         //Sets up the player input system
         playerInputActions = new PlayerInputActions();
         playerInputActions.Player.Enable();
+        playerInputActions.Player.Mouse.performed += Mouse_performed;
     }
 
     // Start is called before the first frame update
     void Start(){
         inUI = false;
         Cursor.lockState = CursorLockMode.Locked;
-    }
-
-    // Update is called once per frame
-    void Update(){
-        //The camera so that the player can look around with the mouse
-        Camera();
     }
 
     public void UIMouse(){
@@ -46,6 +43,8 @@ public class Sc_Player_Camera : MonoBehaviour{
         if (inUI) { Cursor.lockState = CursorLockMode.None; }
         else { Cursor.lockState = CursorLockMode.Locked; }
     }
+
+    private void Mouse_performed(InputAction.CallbackContext context){ Camera(); }
 
     //Method in charge of knowing how the mouse moves and also moves the camera respectivly
     public void Camera(){

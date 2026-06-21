@@ -19,9 +19,11 @@ public class GunRangeDirector : MonoBehaviour
     private float timeBetweenSpawns;
 
     [SerializeField]
-    private int maxAmountOfTargets, currentAmountOfTargets;
+    private int maxAmountOfTargets;
 
     private bool gunRangeActive;
+
+    private int locationToSpawn, currentAmountOfTargets;
 
     // Start is called once before the first execution of Update after the MonoBehaviour is created
     void Start()
@@ -68,8 +70,9 @@ public class GunRangeDirector : MonoBehaviour
     {
         UnbindEvent();
 
-        Debug.Log("Spawning Target");
-        int locationToSpawn = UnityEngine.Random.Range(0, 3);
+        locationToSpawn = UnityEngine.Random.Range(0, 3);
+
+        Debug.Log(locationToSpawn);
 
         setLightsActive?.Invoke(locationToSpawn, timeBetweenSpawns);
 
@@ -82,13 +85,12 @@ public class GunRangeDirector : MonoBehaviour
         yield return null;
     }
 
-    public void OnCollisionEnter(Collision collision)
+    public void OnTriggerEnter(Collider collision)
     {
-        Debug.Log("Item entered");
         StartGunRange();
     }
 
-    public void OnCollisionExit(Collision collision)
+    public void OnTriggerExit(Collider collision)
     {
         EndGunRange();
     }

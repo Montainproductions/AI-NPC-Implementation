@@ -412,7 +412,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   maxSpeed: 6.5
-  acceleration: 7
+  acceleration: 11
   canJump: 1
   jumpingPower: 5
   groundCheck: {fileID: 6646797675293489074}

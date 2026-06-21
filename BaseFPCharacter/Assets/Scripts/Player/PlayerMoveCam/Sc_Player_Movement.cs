@@ -45,6 +45,8 @@ public class Sc_Player_Movement : MonoBehaviour{
 
     private bool isHidden;
 
+    private Vector3 displacement;
+
     //HeadBobbing
     //https://sharpcoderblog.com/blog/head-bobbing-effect-in-unity-3d
 
@@ -99,7 +101,7 @@ public class Sc_Player_Movement : MonoBehaviour{
         float maxSpeedChange = acceleration * Time.deltaTime; //How much the current speed changes over time
         velocity.x = Mathf.MoveTowards(velocity.x, desiredVelocity.x, maxSpeedChange); //Slowly increase current velocity in the x direction untill max is reached
         velocity.z = Mathf.MoveTowards(velocity.z, desiredVelocity.z, maxSpeedChange); //Slowly increase current velocity in the z direction untill max is reached
-        Vector3 displacement = velocity * Time.deltaTime; //Distance the player will be moved by
+        displacement = velocity * Time.deltaTime; //Distance the player will be moved by
 
         movement = transform.right * displacement.x + transform.up * displacement.y + transform.forward * displacement.z; //Distance moved depending on world vectors
         transform.position += movement; //Move character
@@ -133,6 +135,7 @@ public class Sc_Player_Movement : MonoBehaviour{
     {
         return velocity;
     }
+
     public bool ReturnIsHidden()
     {
         return isHidden;
@@ -162,13 +165,13 @@ public class Sc_Player_Movement : MonoBehaviour{
     {
         if (context.performed)
         {
-            maxSpeed = maxSpeed * 1.3f;
-            acceleration = acceleration * 1.2f;
+            maxSpeed = maxSpeed * 1.5f;
+            acceleration = acceleration * 1.4f;
         }
         else if (context.canceled)
         {
-            maxSpeed = maxSpeed / 1.3f;
-            acceleration = acceleration / 1.2f;
+            maxSpeed = maxSpeed / 1.5f;
+            acceleration = acceleration / 1.4f;
         }
     }
 

@@ -13,20 +13,15 @@ public class Sc_HeadBobbing : MonoBehaviour{
     [SerializeField]
     [Tooltip("Height power that will control how high the character can jump.")]
     [Range(0f, 100f)]
-    private float walkingBobbingSpeed = 14f;
+    private float walkingBobbingSpeed;
     [SerializeField]
     [Tooltip("Amount the camera will bob when walking.")]
     [Range(0f, 1f)]
-    private float bobbingAmount = 0.05f;
+    private float bobbingAmount;
     [SerializeField]
     private Sc_Player_Movement controller;
     private float defaultPosY = 0; //Current position of camera
     private float timer = 0; //Timer for camera restart
-
-    public void Awake()
-    {
-        Instance = this;
-    }
 
     // Start is called before the first frame update
     void Start(){
@@ -37,7 +32,7 @@ public class Sc_HeadBobbing : MonoBehaviour{
     void Update(){
         if(!canBob) return; //If the player isnt allowed to have a bobbing head then stop
         //Some fancy sine movment for the camera so it is moving up and down at a constant rate
-        if(Mathf.Abs(controller.GetVelocity().x) > 0.1f || Mathf.Abs(controller.GetVelocity().z) > 0.1f){
+        if(Mathf.Abs(controller.GetVelocity().x) > 0.2f || Mathf.Abs(controller.GetVelocity().z) > 0.2f){
             //Player is moving
             timer += Time.deltaTime * walkingBobbingSpeed;
             transform.localPosition = new Vector3(transform.localPosition.x, defaultPosY + Mathf.Sin(timer) * bobbingAmount, transform.localPosition.z);
@@ -46,15 +41,5 @@ public class Sc_HeadBobbing : MonoBehaviour{
             timer = 0;
             transform.localPosition = new Vector3(transform.localPosition.x, Mathf.Lerp(transform.localPosition.y, defaultPosY, Time.deltaTime * walkingBobbingSpeed), transform.localPosition.z);
         }
-    }
-
-    public void SetBobbingAmount(float newBobbingAmount)
-    {
-        bobbingAmount = newBobbingAmount;
-    }
-
-    public void SetBobbingSpeed(float newBobbingSpeed)
-    {
-        walkingBobbingSpeed = newBobbingSpeed;
     }
 }

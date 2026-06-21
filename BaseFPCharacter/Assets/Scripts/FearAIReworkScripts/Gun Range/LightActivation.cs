@@ -8,6 +8,11 @@ public class LightActivation : MonoBehaviour
     [SerializeField]
     private int activationPosition;
 
+    private float elapsed = 0f;
+
+    private float start = 0.0f;
+    private float end = 0.0f;
+
     // Start is called once before the first execution of Update after the MonoBehaviour is created
     void Start()
     {
@@ -35,22 +40,22 @@ public class LightActivation : MonoBehaviour
     {
         Light lightSource = gameObject.GetComponent<Light>();
 
-        float elapsed = 0f;
+        elapsed = 0f;
 
-        float start = 0.0f;
-        float end = 0.0f;
+        start = 0.0f;
+        end = 0.0f;
 
         for (int i = 0; i < 4; i++)
         {
             if (i%2 == 0)
             {
                 start = lightSource.intensity;
-                end = lightSource.intensity / 3;
+                end = lightSource.intensity / 4;
             }
             else
             {
-                start = lightSource.intensity / 3;
-                end = lightSource.intensity;
+                start = lightSource.intensity;
+                end = lightSource.intensity * 4;
             }
             
             elapsed = 0;
@@ -59,7 +64,7 @@ public class LightActivation : MonoBehaviour
             {
                 elapsed += Time.deltaTime;
 
-                float progress = elapsed / timeBeforeActivation;
+                float progress = elapsed / (timeBeforeActivation*2);
 
                 lightSource.intensity = Mathf.Lerp(start, end, progress);
                 yield return null;
