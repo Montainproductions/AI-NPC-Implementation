@@ -22,8 +22,7 @@ public class Basic_UI : MonoBehaviour{
     private GameObject canAttack, cantAttack;
 
     [SerializeField]
-    private GameObject healthInt;
-    private TextMeshProUGUI healthTextUI;
+    private TextMeshProUGUI pointsTextUI;
 
     [SerializeField]
     private TextMeshProUGUI currentAmmoInClipUIText;
@@ -45,7 +44,7 @@ public class Basic_UI : MonoBehaviour{
             mainMenu.SetActive(false);
             mainGame.SetActive(true);
             CanAttackUI();
-            healthTextUI = healthInt.GetComponent<TextMeshProUGUI>();
+
             BindEvents();
         }
         else
@@ -77,9 +76,8 @@ public class Basic_UI : MonoBehaviour{
         }
     }
 
-    public void NewHealth(float currentHealth) {
-        int health = (int)currentHealth;
-        healthTextUI.SetText(health.ToString());
+    public void SetPoints(int points) {
+        pointsTextUI.SetText(points.ToString());
     }
 
     public void SetCurrentAmmo(float currentAmmoInsideClip, float amountOfClipsLeft)

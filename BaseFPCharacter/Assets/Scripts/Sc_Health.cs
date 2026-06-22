@@ -47,12 +47,7 @@ public class Sc_Health : MonoBehaviour{
 
     // Update is called once per frame
     void Update(){
-        if (updateHealthUI)
-        {
-            Basic_UI.Instance.NewHealth(currentHealth);
-        }
-        
-            Healing();
+        Healing();
         if (currentHealth <= 1)
         { 
             Debug.Log("No more health");
@@ -96,11 +91,6 @@ public class Sc_Health : MonoBehaviour{
         }else if (isHFSM)
         {
             gameObject.GetComponent<Sc_AIStatesManagerHierarchical>().RecentlyHit();
-        }
-
-        if (updateHealthUI)
-        {
-            Basic_UI.Instance.NewHealth(currentHealth);
         }
 
         if (currentHealth <= 1) {

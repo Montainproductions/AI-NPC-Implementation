@@ -227,8 +227,6 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   playerCamera: {fileID: 6646797674624269428}
   mouseSensativity: 10
-  mouseX: 0
-  mouseY: 0
   playerBody: {fileID: 6646797674794803048}
   xRotation: 0
 --- !u!114 &6646797674624269425
@@ -476,6 +474,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: a4493b8827ad27e4c8f6e0f52fb0f632, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::PlayerItemsHandInfo
+  currentPoints: 500
   handPosition: {fileID: 4179851211428527127}
   secondaryWeaponPosition: {fileID: 3815801727191099813}
   characterData: {fileID: 11400000, guid: 0223cf9d77e4a954e80c03fb9254def1, type: 2}
@@ -691,6 +690,10 @@ PrefabInstance:
       propertyPath: 'm_ActiveFontFeatures.Array.data[0]'
       value: 1801810542
       objectReference: {fileID: 0}
+    - target: {fileID: 3597960624120026290, guid: d7fcd743e8032ca4fb3d4f771da7cfe5, type: 3}
+      propertyPath: m_IsActive
+      value: 0
+      objectReference: {fileID: 0}
     - target: {fileID: 4301541588606197860, guid: d7fcd743e8032ca4fb3d4f771da7cfe5, type: 3}
       propertyPath: 'm_ActiveFontFeatures.Array.data[0]'
       value: 1801810542
@@ -698,6 +701,10 @@ PrefabInstance:
     - target: {fileID: 5519350564682468022, guid: d7fcd743e8032ca4fb3d4f771da7cfe5, type: 3}
       propertyPath: 'm_ActiveFontFeatures.Array.data[0]'
       value: 1801810542
+      objectReference: {fileID: 0}
+    - target: {fileID: 7007691513514410907, guid: d7fcd743e8032ca4fb3d4f771da7cfe5, type: 3}
+      propertyPath: m_IsActive
+      value: 1
       objectReference: {fileID: 0}
     - target: {fileID: 7530717273690330300, guid: d7fcd743e8032ca4fb3d4f771da7cfe5, type: 3}
       propertyPath: m_AnchoredPosition.x

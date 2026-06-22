@@ -9,6 +9,7 @@ public class PlayerInventory : MonoBehaviour
 
     private PlayerInputActions playerInputActions;
 
+    [SerializeField]
     private int currentPoints;
 
     [SerializeField]
@@ -41,6 +42,8 @@ public class PlayerInventory : MonoBehaviour
     void Start()
     {
         currentItemsPosition = 0;
+
+        Basic_UI.Instance.SetPoints(currentPoints);
 
         BindEvents();
     }
@@ -176,6 +179,7 @@ public class PlayerInventory : MonoBehaviour
     public void EliminationPoints(int points)
     {
         currentPoints += points;
+        Basic_UI.Instance.SetPoints(currentPoints);
     }
 
     public void OnDestroy()
