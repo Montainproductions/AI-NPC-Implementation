@@ -89,14 +89,18 @@ public class PlayerInventory : MonoBehaviour
         NonPlayerCharacter.onKilled -= EliminationPoints;
     }
 
-    public void AquireItem(GameObject itemBeingAquired)
+    public void AquireItem(GameObject itemBeingAquired, int pointsCost, bool pickupable)
     {
         if (itemBeingAquired == null)
         {
             Debug.Log("Weapon Inventory ERROR: weapon given is null");
         }
 
-        if(currentMainHands[0] == null) { currentItemsPosition = 0; }
+        currentPoints -= pointsCost;
+
+        if (!pickupable){ return;  }
+        
+        if (currentMainHands[0] == null) { currentItemsPosition = 0; }
         else if (currentMainHands[1] == null) { currentItemsPosition = 1; }
 
         currentMainHands[currentItemsPosition] = itemBeingAquired;
@@ -180,6 +184,11 @@ public class PlayerInventory : MonoBehaviour
     {
         currentPoints += points;
         Basic_UI.Instance.SetPoints(currentPoints);
+    }
+
+    public int GetPlayerPoints()
+    {
+        return currentPoints;
     }
 
     public void OnDestroy()

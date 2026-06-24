@@ -1,22 +1,21 @@
 using UnityEngine;
 
-public class ZombiesGameMode : MonoBehaviour
+public class RoundEnemyDirector : MonoBehaviour
 {
-
-    private int zombieMaxHP, roundHPIncreaseChange;
-    private int zombiesLeftToSpawn, maxZombiesToSpawn, zombiesSpawnedIn, totalZombiesSpawnedIn;
+    private int enemyMaxHP, roundHPIncreaseChange;
+    private int enemiesLeftToSpawn, maxEnemiesToSpawn, enemiesSpawnedIn;
     private int[] speedOfZombies;
 
     // Start is called once before the first execution of Update after the MonoBehaviour is created
     void Start()
     {
-        
+
     }
 
     // Update is called once per frame
     void Update()
     {
-        
+
     }
 
     public void StartRound()
@@ -30,12 +29,13 @@ public class ZombiesGameMode : MonoBehaviour
 
     }
 
-    public void ZombieKilled()
+    public void EnemyKilled()
     {
-        if (zombiesLeftToSpawn > 0)
+        if (enemiesLeftToSpawn > 0 && maxEnemiesToSpawn < enemiesSpawnedIn)
         {
             SpawnZombie();
-        }else if (zombiesLeftToSpawn <= 0 && zombiesSpawnedIn <= 0)
+        }
+        else if (enemiesLeftToSpawn <= 0 && enemiesSpawnedIn <= 0)
         {
             EndRound();
         }

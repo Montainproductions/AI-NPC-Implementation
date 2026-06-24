@@ -211,6 +211,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 0b23ad9e30c43fd46a1179d6da8a573a, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::InteractionItem
+  scriptableObjectToInteract: {fileID: 0}
   pickUpUI: {fileID: 5922123186387528260}
   gunScript: {fileID: 4350739423946639661}
   canvasRotation: {fileID: 1579416671500107765}

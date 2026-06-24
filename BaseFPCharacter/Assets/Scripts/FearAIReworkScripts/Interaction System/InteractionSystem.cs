@@ -21,7 +21,7 @@ public class InteractionSystem : MonoBehaviour
     [SerializeField]
     private float maxDistanceForInteraction;
 
-    public static Action interactingWithInteractible;
+    public static Action<int> interactingWithInteractible;
     public static Action<string, GameObject> onLook;
 
     private void Awake()
@@ -81,7 +81,7 @@ public class InteractionSystem : MonoBehaviour
 
         if (raycastHit.collider == null){ return; }
 
-        interactingWithInteractible?.Invoke();
+        interactingWithInteractible?.Invoke(PlayerInventory.Instance.GetPlayerPoints());
     }
 
     public void OnDestroy()

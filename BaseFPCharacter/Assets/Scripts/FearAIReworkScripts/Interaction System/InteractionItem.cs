@@ -1,8 +1,11 @@
 using UnityEngine;
 using System;
+using TMPro;
 
 public class InteractionItem : MonoBehaviour
 {
+    public BuyableObject scriptableObjectToInteract;
+
     [SerializeField]
     private GameObject pickUpUI;
 
@@ -11,7 +14,9 @@ public class InteractionItem : MonoBehaviour
 
     private bool beingLookedAt;
 
-    public static Action<GameObject> passingInteractibleToPlayer;
+    public static Action<GameObject, int, bool> passingInteractibleToPlayer;
+
+    public static Action<int> doorOpened;
 
     [SerializeField]
     private ItemCanvasFollowPlayerCamera canvasRotation;
@@ -35,18 +40,31 @@ public class InteractionItem : MonoBehaviour
         InteractionSystem.interactingWithInteractible -= InteractOnItem;
     }
 
-    public void InteractOnItem()
+    public void InteractOnItem(int playerPoints)
     {
         if (!beingLookedAt){ return; }
 
-        if (gunScript != null){ passingInteractibleToPlayer?.Invoke(gameObject); }
+        if (scriptableObjectToInteract == null) { Debug.Log("No object Info"); return; }
+
+        if (scriptableObjectToInteract.pointsCost >  playerPoints) { Debug.Log("Costs more then what the player has"); return; }
+
+        bool pickupable = false;
+
+        if (gunScript != null){ pickupable = false; }
+
+        if (scriptableObjectToInteract.action == "BuyableDoor") { 
+            pickupable = true;
+
+            doorOpened?.Invoke(scriptableObjectToInteract.objectID);
+        }
+
+        passingInteractibleToPlayer?.Invoke(gameObject, scriptableObjectToInteract.pointsCost, pickupable);
     }
 
     public void IsLookedAt(string givenName, GameObject newCamera)
     {
         if (gameObject.name == givenName)
         {
-            //Debug.Log("Item being looked at");
             beingLookedAt = true;
             canvasRotation.SetCamera(newCamera);
         }
@@ -55,11 +73,13 @@ public class InteractionItem : MonoBehaviour
             beingLookedAt = false;
             canvasRotation.SetCamera(null);
         }
+
         ShowPickUpInfo();
     }
 
     public void ShowPickUpInfo()
     {
+        pickUpUI.GetComponentInChildren<TextMeshProUGUI>().text = scriptableObjectToInteract.name;
         pickUpUI.SetActive(beingLookedAt);
     }
 
