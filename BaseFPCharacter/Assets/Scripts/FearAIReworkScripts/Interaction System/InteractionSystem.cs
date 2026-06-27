@@ -22,7 +22,7 @@ public class InteractionSystem : MonoBehaviour
     private float maxDistanceForInteraction;
 
     public static Action<int> interactingWithInteractible;
-    public static Action<string, GameObject> onLook;
+    public static Action<int> onLook;
 
     private void Awake()
     {
@@ -51,28 +51,18 @@ public class InteractionSystem : MonoBehaviour
     {
         yield return new WaitForSeconds(0.25f);
 
-        //Debug.Log("Searching");
         Vector3 origin = playerCamera.transform.position;
         Vector3 direction = playerCamera.transform.forward;
         if (Physics.Raycast(origin, direction, out RaycastHit mainHit, maxDistanceForInteraction, layerMask))
         {
-            //Debug.DrawLine(origin, direction, Color.green);
             raycastHit = mainHit;
 
             InteractionItem interactibleScript = raycastHit.transform.gameObject.GetComponent<InteractionItem>();
-            if (interactibleScript != null)
-            {
-                //Debug.Log("An item is being looked at");
-                onLook?.Invoke(interactibleScript.name, playerCamera);
-            }
+            if (interactibleScript != null) { onLook?.Invoke(interactibleScript.scriptableObjectToInteract.objectID); }
         }
-        else
-        {
-            //Debug.DrawRay(origin, direction * 20, Color.red);
-            onLook?.Invoke("", null);
-        }
+        else { onLook?.Invoke(-1); }
 
-            StartCoroutine(CheckInteractible());
+        StartCoroutine(CheckInteractible());
     }
 
     private void InteractPerformed(InputAction.CallbackContext context)

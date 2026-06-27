@@ -41,7 +41,6 @@ public class Bullet : MonoBehaviour{
 
     public void OnTriggerEnter(Collider other){
         CharacterGeneral charGeneral = other.gameObject.GetComponentInParent<CharacterGeneral>();
-        Debug.Log(other.name);
 
         if (charGeneral == null) { return; }
 
@@ -50,7 +49,6 @@ public class Bullet : MonoBehaviour{
         if (mainTag == null) { return; }
 
         if (mainTag[0] == "Damagable") {
-            Debug.Log("Damagable Item Found");
             other.gameObject.GetComponentInParent<HealthSystem>().GetHit(dmgFromBullet, other.gameObject.tag, gunSource); 
         }
 

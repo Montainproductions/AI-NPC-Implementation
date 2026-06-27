@@ -19,11 +19,11 @@ TagManager:
   - Ground
   - Water
   - UI
-  - Player
+  - Interactible
   - Cover
   - Enemy
   - Walls
-  - Interactible
+  - Player
   - Bullet
   - 
   - 

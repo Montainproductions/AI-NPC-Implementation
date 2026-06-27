@@ -27,6 +27,11 @@ public class Basic_UI : MonoBehaviour{
     [SerializeField]
     private TextMeshProUGUI currentAmmoInClipUIText;
 
+    [SerializeField]
+    private GameObject holdFText;
+
+    private string textOfInteractible = "";
+
     public void Awake(){
         Instance = this;
 
@@ -44,6 +49,7 @@ public class Basic_UI : MonoBehaviour{
             mainMenu.SetActive(false);
             mainGame.SetActive(true);
             CanAttackUI();
+            ShowPickUpInfo(false,"",0);
 
             BindEvents();
         }
@@ -54,19 +60,16 @@ public class Basic_UI : MonoBehaviour{
         }
     }
 
-    // Update is called once per frame
-    void Update(){
-        
-    }
-
     public void BindEvents()
     {
         Gun.ammoUsed += AmmoUsed;
+        InteractionItem.itemBeingLookedAt += ShowPickUpInfo;
     }
 
     public void UnbindEvent()
     {
         Gun.ammoUsed -= AmmoUsed;
+        InteractionItem.itemBeingLookedAt -= ShowPickUpInfo;
     }
 
     public void AmmoUsed(int currentAmmoInClip, int currentAmountOfClips)
@@ -97,12 +100,27 @@ public class Basic_UI : MonoBehaviour{
         cantAttack.SetActive(true);
     }
 
+    public void ShowPickUpInfo(bool beingLookedAt, string action, int pointCost)
+    {
+
+        if (beingLookedAt)
+        {
+
+            if (action == "Buyable Door") { textOfInteractible = "Press F to open door. [" + pointCost + "]"; }
+            else if (action == "Pickupable") { textOfInteractible = "Press F to pick up."; }
+            else if (action == "MysteryBox") { textOfInteractible = "Press F to role box roullete. [" + pointCost + "]"; }
+        }
+
+        holdFText.GetComponentInChildren<TextMeshProUGUI>().text = textOfInteractible;
+        holdFText.SetActive(beingLookedAt);
+    }
+
     private void Escape_performed(InputAction.CallbackContext context)
     {
         if (!inMenu && context.performed)
         {
             pauseActive = !pauseActive;
-            //Sc_Player_Camera.Instance.UIMouse();
+
             pausedMenu.SetActive(pauseActive);
         }
     }

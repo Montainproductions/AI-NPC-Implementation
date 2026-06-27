@@ -1,31 +1,30 @@
 using UnityEngine;
 using System;
 using TMPro;
+using Unity.VisualScripting;
 
 public class InteractionItem : MonoBehaviour
 {
     public BuyableObject scriptableObjectToInteract;
 
     [SerializeField]
-    private GameObject pickUpUI;
-
-    [SerializeField]
     private Gun gunScript;
 
     private bool beingLookedAt;
+    string action = "";
+    int pointCost = 0;
 
     public static Action<GameObject, int, bool> passingInteractibleToPlayer;
 
     public static Action<int> doorOpened;
 
-    [SerializeField]
-    private ItemCanvasFollowPlayerCamera canvasRotation;
+    public static Action<bool, string, int> itemBeingLookedAt;
 
     public void Start()
     {
         BindEvent();
+
         beingLookedAt = false;
-        pickUpUI.SetActive(beingLookedAt);
     }
 
     public void BindEvent()
@@ -42,7 +41,7 @@ public class InteractionItem : MonoBehaviour
 
     public void InteractOnItem(int playerPoints)
     {
-        if (!beingLookedAt){ return; }
+        if (!beingLookedAt) { return; }
 
         if (scriptableObjectToInteract == null) { Debug.Log("No object Info"); return; }
 
@@ -61,26 +60,23 @@ public class InteractionItem : MonoBehaviour
         passingInteractibleToPlayer?.Invoke(gameObject, scriptableObjectToInteract.pointsCost, pickupable);
     }
 
-    public void IsLookedAt(string givenName, GameObject newCamera)
+    public void IsLookedAt(int givenID)
     {
-        if (gameObject.name == givenName)
+        beingLookedAt = false;
+        action = "";
+        pointCost = 0;
+
+        Debug.Log("Given Id: " + givenID);
+        Debug.Log("Scriptable Object ID: " + scriptableObjectToInteract.objectID);
+
+        if (scriptableObjectToInteract.objectID == givenID)
         {
             beingLookedAt = true;
-            canvasRotation.SetCamera(newCamera);
-        }
-        else
-        {
-            beingLookedAt = false;
-            canvasRotation.SetCamera(null);
+            action = scriptableObjectToInteract.action;
+            pointCost = scriptableObjectToInteract.pointsCost;
         }
 
-        ShowPickUpInfo();
-    }
-
-    public void ShowPickUpInfo()
-    {
-        pickUpUI.GetComponentInChildren<TextMeshProUGUI>().text = scriptableObjectToInteract.name;
-        pickUpUI.SetActive(beingLookedAt);
+        itemBeingLookedAt?.Invoke(beingLookedAt, action, pointCost);
     }
 
     public void OnDestroy()

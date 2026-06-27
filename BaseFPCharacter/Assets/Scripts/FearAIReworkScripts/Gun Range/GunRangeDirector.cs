@@ -72,8 +72,6 @@ public class GunRangeDirector : MonoBehaviour
 
         locationToSpawn = UnityEngine.Random.Range(0, 3);
 
-        Debug.Log(locationToSpawn);
-
         setLightsActive?.Invoke(locationToSpawn, timeBetweenSpawns);
 
         yield return new WaitForSeconds(timeBetweenSpawns);
