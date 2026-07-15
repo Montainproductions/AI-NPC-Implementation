@@ -1,4 +1,8 @@
 using System;
+using System.Collections;
+using System.Collections.Generic;
+using UnityEditor.PackageManager;
+using UnityEditor.SceneManagement;
 using UnityEngine;
 using UnityEngine.InputSystem;
 using UnityEngine.InputSystem.HID;
@@ -10,7 +14,7 @@ public class PlayerInventory : MonoBehaviour
     private PlayerInputActions playerInputActions;
 
     [SerializeField]
-    private int currentPoints;
+    private int currentPoints, startingPoints;
 
     [SerializeField]
     private Transform handPosition, secondaryWeaponPosition;
@@ -20,7 +24,7 @@ public class PlayerInventory : MonoBehaviour
 
     private Gun currentGunScript;
 
-    private int primaryUtilityAmount, secondaryUtilityAmount;
+    private int primaryUtilityAmount, maxPrimaryUtility, secondaryUtilityAmount, maxSecondaryUtility;
 
     public static Action<GunInfo> reloadEvent;
 
@@ -29,6 +33,15 @@ public class PlayerInventory : MonoBehaviour
 
     public void Awake()
     {
+        if (Instance != null && Instance != this)
+        {
+            Destroy(this.gameObject);
+        }
+        else
+        {
+            Instance = this;
+        }
+
         playerInputActions = new PlayerInputActions();
         playerInputActions.Player.Enable();
         playerInputActions.Player.Primary.performed += PrimaryAction;
@@ -80,13 +93,15 @@ public class PlayerInventory : MonoBehaviour
     public void BindEvents()
     {
         InteractionItem.passingInteractibleToPlayer += AquireItem;
-        NonPlayerCharacter.onKilled += EliminationPoints;
+        GameMode_Match.matchStart += RestartGame;
+        NonPlayerCharacter.onKilled += ChangePoints;
     }
 
     public void UnbindEvent()
     {
         InteractionItem.passingInteractibleToPlayer -= AquireItem;
-        NonPlayerCharacter.onKilled -= EliminationPoints;
+        GameMode_Match.matchStart += RestartGame;
+        NonPlayerCharacter.onKilled -= ChangePoints;
     }
 
     public void AquireItem(GameObject itemBeingAquired, int pointsCost, bool pickupable)
@@ -96,7 +111,7 @@ public class PlayerInventory : MonoBehaviour
             Debug.Log("Weapon Inventory ERROR: weapon given is null");
         }
 
-        currentPoints -= pointsCost;
+        ChangePoints(-pointsCost);
 
         if (!pickupable){ return;  }
         
@@ -106,9 +121,10 @@ public class PlayerInventory : MonoBehaviour
         currentMainHands[currentItemsPosition] = itemBeingAquired;
         currentMainHands[currentItemsPosition].transform.position = handPosition.position;
 
+        //Gun tempGunScript = currentMainHands[currentItemsPosition].GetComponent<Gun>();
         if (currentMainHands[currentItemsPosition].GetComponent<Gun>())
         {
-            currentGunScript = currentMainHands[currentItemsPosition].GetComponent<Gun>();
+            currentGunScript = currentMainHands[currentItemsPosition].GetComponent<Gun>(); ;
             currentGunScript.IsBeingHeld(characterData.fullTagList[1], true);
         }
     }
@@ -150,6 +166,7 @@ public class PlayerInventory : MonoBehaviour
     {
 
     }
+
     public void ChangeWeaponAction(InputAction.CallbackContext context)
     {
         if (!context.performed) { return; }
@@ -180,9 +197,39 @@ public class PlayerInventory : MonoBehaviour
         }
     }
 
-    public void EliminationPoints(int points)
+    public void RestartGame(GameObject[] startingWeaponsPrefab)
+    {
+        StartCoroutine(RestartGameCorutine(startingWeaponsPrefab));
+    }
+
+    public IEnumerator RestartGameCorutine(GameObject[] startingWeaponsPrefab)
+    {
+        primaryUtilityAmount = (int)MathF.Floor(maxPrimaryUtility / 2);
+        secondaryUtilityAmount = 0;
+
+        if (startingWeaponsPrefab[0] != null)
+        {
+            AquireItem(Instantiate(startingWeaponsPrefab[0], handPosition), 0, true);
+        }
+
+        if (startingWeaponsPrefab[1] != null)
+        {
+            AquireItem(Instantiate(startingWeaponsPrefab[1], handPosition), 0, true);
+        }
+
+        yield return new WaitForSeconds(0.01f);
+
+        currentPoints = startingPoints;
+    }
+
+    public void ChangePoints(int points)
     {
         currentPoints += points;
+        SetPointsUI();
+    }
+
+    public void SetPointsUI()
+    {
         Basic_UI.Instance.SetPoints(currentPoints);
     }
 

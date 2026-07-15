@@ -187,8 +187,8 @@ Transform:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 4321021143764189679}
   serializedVersion: 2
-  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: -0.656, y: 0.931, z: 0}
+  m_LocalRotation: {x: -0.37331915, y: 0.61778057, z: 0.41826868, w: 0.5513903}
+  m_LocalPosition: {x: -36.03525, y: 2.8309155, z: -24.235973}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children:
@@ -212,9 +212,8 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::InteractionItem
   scriptableObjectToInteract: {fileID: 0}
-  pickUpUI: {fileID: 5922123186387528260}
   gunScript: {fileID: 4350739423946639661}
-  canvasRotation: {fileID: 1579416671500107765}
+  toBeDelete: 0
 --- !u!65 &8876398207935709768
 BoxCollider:
   m_ObjectHideFlags: 0
@@ -529,24 +528,8 @@ PrefabInstance:
     m_AddedGameObjects: []
     m_AddedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: 0e86f7b908b70c64ebf3055e5ef2f63c, type: 3}
---- !u!114 &1579416671500107765 stripped
-MonoBehaviour:
-  m_CorrespondingSourceObject: {fileID: 8361657023350085713, guid: 0e86f7b908b70c64ebf3055e5ef2f63c, type: 3}
-  m_PrefabInstance: {fileID: 7053100851379398564}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 5922123186387528260}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 1738f4cd6ea32ee48a79d6a21eecc55f, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: Assembly-CSharp::ItamCanvasFollowPlayerCamera
 --- !u!224 &4632420184097886251 stripped
 RectTransform:
   m_CorrespondingSourceObject: {fileID: 2425201902061385615, guid: 0e86f7b908b70c64ebf3055e5ef2f63c, type: 3}
-  m_PrefabInstance: {fileID: 7053100851379398564}
-  m_PrefabAsset: {fileID: 0}
---- !u!1 &5922123186387528260 stripped
-GameObject:
-  m_CorrespondingSourceObject: {fileID: 3732989807794769376, guid: 0e86f7b908b70c64ebf3055e5ef2f63c, type: 3}
   m_PrefabInstance: {fileID: 7053100851379398564}
   m_PrefabAsset: {fileID: 0}

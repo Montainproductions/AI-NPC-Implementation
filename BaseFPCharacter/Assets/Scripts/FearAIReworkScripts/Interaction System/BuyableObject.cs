@@ -6,5 +6,5 @@ public class BuyableObject : ScriptableObject
     public string name;
     public int pointsCost;
     public string action;
-    public int objectID;
+    public int objectID, commonId;
 }

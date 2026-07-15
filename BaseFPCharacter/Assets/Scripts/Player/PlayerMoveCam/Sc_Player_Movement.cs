@@ -52,7 +52,14 @@ public class Sc_Player_Movement : MonoBehaviour{
 
     //Sets up the singleton, player input and the rb component
     public void Awake(){
-        Instance = this;
+        if (Instance != null && Instance != this)
+        {
+            Destroy(this.gameObject);
+        }
+        else
+        {
+            Instance = this;
+        }
 
         playerInputActions = new PlayerInputActions();
         playerInputActions.Player.Enable();
@@ -86,10 +93,9 @@ public class Sc_Player_Movement : MonoBehaviour{
     }
 
     //The main movement script in charge of allowing the player to move around, jumping and crouching
-    public void Movement(){
-        //Recives the values from the player input system to determine movement of character
-        inputVector = playerInputActions.Player.Movement.ReadValue<Vector2>();
-        inputVector = Vector2.ClampMagnitude(inputVector, 1f);
+    public void Movement()
+    {
+            inputVector = Vector2.ClampMagnitude(playerInputActions.Player.Movement.ReadValue<Vector2>(), 1f);
     }
 
     public void PhysicsMovment()
@@ -97,14 +103,15 @@ public class Sc_Player_Movement : MonoBehaviour{
         //Checks if the player is touching the ground
         isGrounded = Physics.CheckSphere(groundCheck.position, groundDistance, groundMask);
 
-        desiredVelocity = new Vector3(inputVector.x, 0f, inputVector.y) * maxSpeed; //Max speed of character
-        float maxSpeedChange = acceleration * Time.deltaTime; //How much the current speed changes over time
-        velocity.x = Mathf.MoveTowards(velocity.x, desiredVelocity.x, maxSpeedChange); //Slowly increase current velocity in the x direction untill max is reached
-        velocity.z = Mathf.MoveTowards(velocity.z, desiredVelocity.z, maxSpeedChange); //Slowly increase current velocity in the z direction untill max is reached
-        displacement = velocity * Time.deltaTime; //Distance the player will be moved by
+        Vector3 worldInput = transform.right * inputVector.x + transform.forward * inputVector.y;
+        Vector3 desiredVelocity = worldInput * maxSpeed;
 
-        movement = transform.right * displacement.x + transform.up * displacement.y + transform.forward * displacement.z; //Distance moved depending on world vectors
-        transform.position += movement; //Move character
+        Vector3 velocity = rb.linearVelocity;
+        float maxSpeedChange = acceleration * Time.fixedDeltaTime;
+        velocity.x = Mathf.MoveTowards(velocity.x, desiredVelocity.x, maxSpeedChange);
+        velocity.z = Mathf.MoveTowards(velocity.z, desiredVelocity.z, maxSpeedChange);
+
+        rb.linearVelocity = velocity;
     }
 
     public void Jump(){
@@ -113,7 +120,6 @@ public class Sc_Player_Movement : MonoBehaviour{
 
         //If the player is touching the ground then add force to the player
         if (isGrounded){
-            //Debug.Log("Jumping high");
             rb.AddForce(Vector3.up * jumpingPower,ForceMode.Impulse);
         }
     }
@@ -165,13 +171,13 @@ public class Sc_Player_Movement : MonoBehaviour{
     {
         if (context.performed)
         {
-            maxSpeed = maxSpeed * 1.5f;
-            acceleration = acceleration * 1.4f;
+            maxSpeed = maxSpeed * 1.7f;
+            acceleration = acceleration * 1.45f;
         }
         else if (context.canceled)
         {
-            maxSpeed = maxSpeed / 1.5f;
-            acceleration = acceleration / 1.4f;
+            maxSpeed = maxSpeed / 1.7f;
+            acceleration = acceleration / 1.45f;
         }
     }
 

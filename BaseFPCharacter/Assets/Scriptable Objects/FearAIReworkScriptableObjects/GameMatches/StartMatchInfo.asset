@@ -9,11 +9,6 @@ MonoBehaviour:
   m_GameObject: {fileID: 0}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 726c6328033a57f499867edaab1efe71, type: 3}
-  m_Name: Door3
-  m_EditorClassIdentifier: Assembly-CSharp::BuyableObject
-  name: Onepickapable
-  pointsCost: 875
-  action: Buyable Door
-  objectID: 2
-  commonId: 1
+  m_Script: {fileID: 11500000, guid: 7321944f641f4a44e8ba9de771a7a68c, type: 3}
+  m_Name: StartMatchInfo
+  m_EditorClassIdentifier: Assembly-CSharp::StartMatchInfo

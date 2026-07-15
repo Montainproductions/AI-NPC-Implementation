@@ -356,8 +356,9 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 0b23ad9e30c43fd46a1179d6da8a573a, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::InteractionItem
-  scriptableObjectToInteract: {fileID: 11400000, guid: fd4815def2be9b4438afa0befeb050d6, type: 2}
+  scriptableObjectToInteract: {fileID: 11400000, guid: 2d6d237a49be76d42acfb91c9c431fd8, type: 2}
   gunScript: {fileID: 0}
+  toBeDelete: 0
 --- !u!1 &34140282
 GameObject:
   m_ObjectHideFlags: 0
@@ -709,6 +710,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: Assembly-CSharp::InteractionItem
   scriptableObjectToInteract: {fileID: 11400000, guid: 84777e3c8d9e4fb4887c9353a82ed968, type: 2}
   gunScript: {fileID: 0}
+  toBeDelete: 0
 --- !u!1 &42092536
 GameObject:
   m_ObjectHideFlags: 0
@@ -1528,6 +1530,11 @@ MeshFilter:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 214484337}
   m_Mesh: {fileID: 10202, guid: 0000000000000000e000000000000000, type: 0}
+--- !u!1 &264713504 stripped
+GameObject:
+  m_CorrespondingSourceObject: {fileID: 6646797674794803052, guid: 81ce49f96577d844ab806a3654e6ae19, type: 3}
+  m_PrefabInstance: {fileID: 959019197}
+  m_PrefabAsset: {fileID: 0}
 --- !u!1 &320864574
 GameObject:
   m_ObjectHideFlags: 0
@@ -4263,7 +4270,7 @@ GameObject:
   - component: {fileID: 803447520}
   - component: {fileID: 803447519}
   - component: {fileID: 803447518}
-  m_Layer: 0
+  m_Layer: 3
   m_Name: Cube (1)
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -4375,7 +4382,7 @@ GameObject:
   - component: {fileID: 818442700}
   - component: {fileID: 818442699}
   - component: {fileID: 818442698}
-  m_Layer: 0
+  m_Layer: 3
   m_Name: Cube
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -4637,6 +4644,12 @@ MonoBehaviour:
   - {fileID: 1127170847}
   - {fileID: 1283555214}
   - {fileID: 15740875}
+  players:
+  - {fileID: 264713504}
+  matcheTypes:
+  - {fileID: 11400000, guid: e3973de6f65f34641ab6f7ecfe18a9d1, type: 2}
+  - {fileID: 11400000, guid: 1c88ad0947a1d8348b3c912e3840b449, type: 2}
+  startMatchInfo: {fileID: 11400000, guid: 46202c27e5022894f9039e46a7b7f422, type: 2}
 --- !u!114 &839084429
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -5902,7 +5915,8 @@ PrefabInstance:
       value: 10
       objectReference: {fileID: 0}
     m_RemovedComponents: []
-    m_RemovedGameObjects: []
+    m_RemovedGameObjects:
+    - {fileID: 3524924473060610601, guid: 81ce49f96577d844ab806a3654e6ae19, type: 3}
     m_AddedGameObjects: []
     m_AddedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: 81ce49f96577d844ab806a3654e6ae19, type: 3}
@@ -6539,7 +6553,7 @@ GameObject:
   - component: {fileID: 1087715150}
   - component: {fileID: 1087715149}
   - component: {fileID: 1087715148}
-  m_Layer: 0
+  m_Layer: 3
   m_Name: Plane
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -6974,8 +6988,9 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 0b23ad9e30c43fd46a1179d6da8a573a, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::InteractionItem
-  scriptableObjectToInteract: {fileID: 11400000, guid: 84777e3c8d9e4fb4887c9353a82ed968, type: 2}
+  scriptableObjectToInteract: {fileID: 11400000, guid: fd4815def2be9b4438afa0befeb050d6, type: 2}
   gunScript: {fileID: 0}
+  toBeDelete: 0
 --- !u!1 &1149009406
 GameObject:
   m_ObjectHideFlags: 0
@@ -8447,6 +8462,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: Assembly-CSharp::InteractionItem
   scriptableObjectToInteract: {fileID: 11400000, guid: 3aab2eda99b9048488724eb05a98cc06, type: 2}
   gunScript: {fileID: 0}
+  toBeDelete: 0
 --- !u!1 &1286939750
 GameObject:
   m_ObjectHideFlags: 0
@@ -8907,7 +8923,7 @@ GameObject:
   - component: {fileID: 1406006877}
   - component: {fileID: 1406006876}
   - component: {fileID: 1406006875}
-  m_Layer: 0
+  m_Layer: 3
   m_Name: Cube
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -11483,7 +11499,7 @@ GameObject:
   - component: {fileID: 1802559210}
   - component: {fileID: 1802559209}
   - component: {fileID: 1802559208}
-  m_Layer: 0
+  m_Layer: 3
   m_Name: Cube (2)
   m_TagString: Untagged
   m_Icon: {fileID: 0}

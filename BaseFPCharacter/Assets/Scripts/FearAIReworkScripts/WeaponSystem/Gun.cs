@@ -12,7 +12,7 @@ public class Gun : MonoBehaviour
 
     private bool canReload, shotRecently;
 
-    private bool beingHeld;
+    private bool beingHeld = false;
     private string heldByWhichTeam;
 
     [SerializeField]
@@ -28,11 +28,9 @@ public class Gun : MonoBehaviour
 
     private GameObject newBullet;
 
-    public void Start()
+    public void Awake()
     {
-        beingHeld = false;
         shotRecently = false;
-
         currentAmmoInClip = gunInfo.maxAmountInClip;
         currentAmountOfClips = gunInfo.maxAmountOfClips;
     }
@@ -50,7 +48,7 @@ public class Gun : MonoBehaviour
     public void PrimaryAction()
     {
         if (!beingHeld){ return; }
-        
+
         if (currentAmmoInClip <= 0) { return; }
 
         StartCoroutine(FiringWeapon());
@@ -118,7 +116,7 @@ public class Gun : MonoBehaviour
 
         beingHeld = true;
 
-        if (isPlayer && beingHeld)
+        if (isPlayer)
         {
             ammoUsed?.Invoke(currentAmmoInClip, currentAmountOfClips);
         }

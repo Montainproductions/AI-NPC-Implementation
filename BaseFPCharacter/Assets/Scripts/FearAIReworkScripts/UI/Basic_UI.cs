@@ -80,12 +80,12 @@ public class Basic_UI : MonoBehaviour{
     }
 
     public void SetPoints(int points) {
-        pointsTextUI.SetText(points.ToString());
+        pointsTextUI.SetText($"{points}");
     }
 
-    public void SetCurrentAmmo(float currentAmmoInsideClip, float amountOfClipsLeft)
+    public void SetCurrentAmmo(int currentAmmoInsideClip, int amountOfClipsLeft)
     {
-        currentAmmoInClipUIText.SetText(currentAmmoInsideClip.ToString() + "/" + amountOfClipsLeft.ToString());
+        currentAmmoInClipUIText.SetText($"{currentAmmoInsideClip} / {amountOfClipsLeft}");
     }
 
     //Activates the green square to signify that the player can melee
@@ -105,10 +105,9 @@ public class Basic_UI : MonoBehaviour{
 
         if (beingLookedAt)
         {
-
-            if (action == "Buyable Door") { textOfInteractible = "Press F to open door. [" + pointCost + "]"; }
+            if (action == "Buyable Door") { textOfInteractible = $"Press F to open door. [{pointCost}]"; }
             else if (action == "Pickupable") { textOfInteractible = "Press F to pick up."; }
-            else if (action == "MysteryBox") { textOfInteractible = "Press F to role box roullete. [" + pointCost + "]"; }
+            else if (action == "MysteryBox") { textOfInteractible = $"Press F to role box roullete. [{pointCost}]"; }
         }
 
         holdFText.GetComponentInChildren<TextMeshProUGUI>().text = textOfInteractible;

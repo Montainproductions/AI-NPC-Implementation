@@ -20,9 +20,17 @@ public class Sc_Player_Camera : MonoBehaviour{
     public Transform playerBody;
     public float xRotation = 0f;
 
+    private float horizontal, vertical;
+
     public void Awake(){
-        //Setting up singleton
-        Instance = this;
+        if (Instance != null && Instance != this)
+        {
+            Destroy(this.gameObject);
+        }
+        else
+        {
+            Instance = this;
+        }
 
         //Sets up the player input system
         playerInputActions = new PlayerInputActions();
@@ -44,17 +52,16 @@ public class Sc_Player_Camera : MonoBehaviour{
         else { Cursor.lockState = CursorLockMode.Locked; }
     }
 
-    private void Mouse_performed(InputAction.CallbackContext context){ Camera(); }
-
     //Method in charge of knowing how the mouse moves and also moves the camera respectivly
-    public void Camera(){
+    public void Mouse_performed(InputAction.CallbackContext context)
+    {
         //Aquires the vector 2 values for the mouse current position
-        float horizontal = playerInputActions.Player.Mouse.ReadValue<Vector2>().x;
-        float vertical = playerInputActions.Player.Mouse.ReadValue<Vector2>().y;
+        horizontal = playerInputActions.Player.Mouse.ReadValue<Vector2>().x;
+        vertical = playerInputActions.Player.Mouse.ReadValue<Vector2>().y;
 
         //The relative distance the camera will need to rotate
-        mouseX = horizontal * mouseSensativity * Time.deltaTime;
-        mouseY = vertical * mouseSensativity * Time.deltaTime;
+        mouseX = horizontal * mouseSensativity;
+        mouseY = vertical * mouseSensativity;
 
         //Moving the camera in the y direction and clamping it so that it dosent go to far up or down
         xRotation -= mouseY;

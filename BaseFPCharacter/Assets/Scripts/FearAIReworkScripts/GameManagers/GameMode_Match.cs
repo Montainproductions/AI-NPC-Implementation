@@ -1,11 +1,26 @@
 using UnityEngine;
 using System.Collections.Generic;
+using System;
 
 public class GameMode_Match : MonoBehaviour
 {
     public static GameMode_Match Instance { get; private set; }
 
     public List<InteractionItem> buyableObjects = new List<InteractionItem>();
+
+    private int currentRound = 0, typeOfMatch = 0;
+
+    private int amountOfPlayers = 1;
+
+    [SerializeField]
+    private GameObject[] players;
+
+    [SerializeField]
+    private MatchType[] matcheTypes;
+    
+    public StartMatchInfo startMatchInfo;
+
+    public static Action<GameObject[]> matchStart;
 
     private void Awake()
     {
@@ -17,6 +32,13 @@ public class GameMode_Match : MonoBehaviour
         {
             Instance = this;
         }
+
+        BindEvent();
+    }
+
+    public void Start()
+    {
+        StartMatch(0);
     }
 
     public void BindEvent()
@@ -29,16 +51,44 @@ public class GameMode_Match : MonoBehaviour
         InteractionItem.doorOpened -= RemoveAreaDoors;
     }
 
-    public void RemoveAreaDoors(int idOfAreaDoor)
+    public void RemoveAreaDoors(int commonId)
     {
-        for (int i = 0; i < buyableObjects.Count; i++)
+        for (int i = buyableObjects.Count - 1; i >= 0; i--)
         {
-            if (buyableObjects[i].scriptableObjectToInteract.objectID != idOfAreaDoor) { continue; }
+            if (buyableObjects[i].scriptableObjectToInteract.commonId == commonId) { buyableObjects[i].toBeDelete = true; }
 
-            GameObject doorToRemove = buyableObjects[i].transform.parent.gameObject;
-
-            buyableObjects.RemoveAt(i);
+            if (buyableObjects[i].toBeDelete)
+            {
+                GameObject doorToRemove = buyableObjects[i].transform.gameObject;
+                Destroy(doorToRemove);
+                buyableObjects.RemoveAt(i);
+            }
         }
     }
 
+    public int GetCurrentRound() {  return currentRound; }
+
+    public void IncreaseCurrentRound() {  currentRound++; }
+
+    public void SetCurrentRound(int newRound) { currentRound = newRound; }
+
+    public int GetAmountOfPlayers() {  return amountOfPlayers; }
+
+    public void StartMatch(int typeOfMatchReciving)
+    {
+        typeOfMatch = typeOfMatchReciving;
+
+        RoundEnemyDirector.Instance.SetTypeOfEnemies(typeOfMatch);
+
+        amountOfPlayers = players.Length;
+
+
+        matchStart?.Invoke(matcheTypes[0].startingWeaponPlayer);
+        
+    }
+
+    private void OnDestroy()
+    {
+        UnbindEvent();
+    }
 }

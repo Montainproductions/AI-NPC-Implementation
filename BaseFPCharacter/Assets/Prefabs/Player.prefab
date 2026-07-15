@@ -226,7 +226,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   playerCamera: {fileID: 6646797674624269428}
-  mouseSensativity: 10
+  mouseSensativity: 0.1
   playerBody: {fileID: 6646797674794803048}
   xRotation: 0
 --- !u!114 &6646797674624269425

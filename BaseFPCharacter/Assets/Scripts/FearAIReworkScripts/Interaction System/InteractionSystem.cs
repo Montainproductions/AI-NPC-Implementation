@@ -49,7 +49,7 @@ public class InteractionSystem : MonoBehaviour
 
     IEnumerator CheckInteractible()
     {
-        yield return new WaitForSeconds(0.25f);
+        yield return new WaitForSeconds(0.3f);
 
         Vector3 origin = playerCamera.transform.position;
         Vector3 direction = playerCamera.transform.forward;
@@ -58,7 +58,9 @@ public class InteractionSystem : MonoBehaviour
             raycastHit = mainHit;
 
             InteractionItem interactibleScript = raycastHit.transform.gameObject.GetComponent<InteractionItem>();
-            if (interactibleScript != null) { onLook?.Invoke(interactibleScript.scriptableObjectToInteract.objectID); }
+            if (interactibleScript != null) {
+                onLook?.Invoke(interactibleScript.scriptableObjectToInteract.objectID);
+            }
         }
         else { onLook?.Invoke(-1); }
 

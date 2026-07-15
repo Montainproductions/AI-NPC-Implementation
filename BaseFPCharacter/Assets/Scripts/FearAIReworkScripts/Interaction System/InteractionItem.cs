@@ -10,9 +10,11 @@ public class InteractionItem : MonoBehaviour
     [SerializeField]
     private Gun gunScript;
 
-    private bool beingLookedAt;
+    private bool beingLookedAt, specificItemBeingLookedAt;
     string action = "";
     int pointCost = 0;
+
+    public bool toBeDelete = false;
 
     public static Action<GameObject, int, bool> passingInteractibleToPlayer;
 
@@ -41,20 +43,25 @@ public class InteractionItem : MonoBehaviour
 
     public void InteractOnItem(int playerPoints)
     {
-        if (!beingLookedAt) { return; }
+        if (!specificItemBeingLookedAt) { return; }
 
         if (scriptableObjectToInteract == null) { Debug.Log("No object Info"); return; }
 
         if (scriptableObjectToInteract.pointsCost >  playerPoints) { Debug.Log("Costs more then what the player has"); return; }
 
+        specificItemBeingLookedAt = false;
+        beingLookedAt = false;
+        action = "";
+        pointCost = 0;
+
+        itemBeingLookedAt?.Invoke(beingLookedAt, action, pointCost);
+
         bool pickupable = false;
 
-        if (gunScript != null){ pickupable = false; }
+        if (gunScript == null){ pickupable = true; }
 
-        if (scriptableObjectToInteract.action == "BuyableDoor") { 
-            pickupable = true;
-
-            doorOpened?.Invoke(scriptableObjectToInteract.objectID);
+        if (scriptableObjectToInteract.action == "Buyable Door") {
+            doorOpened?.Invoke(scriptableObjectToInteract.commonId);
         }
 
         passingInteractibleToPlayer?.Invoke(gameObject, scriptableObjectToInteract.pointsCost, pickupable);
@@ -62,21 +69,23 @@ public class InteractionItem : MonoBehaviour
 
     public void IsLookedAt(int givenID)
     {
-        beingLookedAt = false;
-        action = "";
-        pointCost = 0;
-
-        Debug.Log("Given Id: " + givenID);
-        Debug.Log("Scriptable Object ID: " + scriptableObjectToInteract.objectID);
-
-        if (scriptableObjectToInteract.objectID == givenID)
+        if (givenID != -1)
         {
             beingLookedAt = true;
-            action = scriptableObjectToInteract.action;
-            pointCost = scriptableObjectToInteract.pointsCost;
+            if (scriptableObjectToInteract.objectID == givenID)
+            {
+                specificItemBeingLookedAt = true;
+                action = scriptableObjectToInteract.action;
+                pointCost = scriptableObjectToInteract.pointsCost;
+            }
+        }else
+        {
+                beingLookedAt = false;
+                action = "";
+                pointCost = 0;
         }
 
-        itemBeingLookedAt?.Invoke(beingLookedAt, action, pointCost);
+            itemBeingLookedAt?.Invoke(beingLookedAt, action, pointCost);
     }
 
     public void OnDestroy()

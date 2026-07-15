@@ -13,6 +13,7 @@ MonoBehaviour:
   m_Name: Door2
   m_EditorClassIdentifier: Assembly-CSharp::BuyableObject
   name: ToSecondDoor
-  pointsCost: 1050
+  pointsCost: 500
   action: Buyable Door
   objectID: 1
+  commonId: 0
