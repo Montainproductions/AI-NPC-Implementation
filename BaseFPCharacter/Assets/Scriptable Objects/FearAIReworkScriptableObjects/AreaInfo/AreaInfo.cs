@@ -7,6 +7,4 @@ public class AreaInfo : ScriptableObject
     public int areaIndex;
 
     public int[] connectedAreasIndex;
-
-    public SpawningLocations[] spawnPoints;
 }

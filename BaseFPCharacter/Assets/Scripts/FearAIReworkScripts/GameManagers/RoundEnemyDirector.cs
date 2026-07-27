@@ -29,6 +29,9 @@ public class RoundEnemyDirector : MonoBehaviour
 
     public Action<int> spawnEnemy;
 
+    [SerializeField]
+    private Transform[] playerTransform;
+
     private void Awake()
     {
         if (Instance != null && Instance != this)
@@ -64,11 +67,13 @@ public class RoundEnemyDirector : MonoBehaviour
     public void BindEvent()
     {
         AreaChecker.checkArea += PlayersCurrentArea;
+        InteractionItem.doorOpened += NewSpawnersUnlocked;
     }
 
     public void UnBindEvent()
     {
         AreaChecker.checkArea -= PlayersCurrentArea;
+        InteractionItem.doorOpened -= NewSpawnersUnlocked;
     }
 
     public void StartRound()
@@ -127,7 +132,7 @@ public class RoundEnemyDirector : MonoBehaviour
         int spawnPositionIndex = UnityEngine.Random.Range(0, listOfSpawnLocations.Count);
         if (typeOfEnemy == 0)
         {
-            listOfSpawnLocations[spawnPositionIndex].SpawnZombie(zombiePrefab, enemyMaxHP);
+            listOfSpawnLocations[spawnPositionIndex].SpawnZombie(zombiePrefab, enemyMaxHP, playerTransform);
         }
     }
 
@@ -142,6 +147,7 @@ public class RoundEnemyDirector : MonoBehaviour
         foreach (AreaChecker area in allAreaInfos)
         {
             allAreaDictionary[area.areaInfo.areaIndex] = area;
+            Debug.Log(allAreaDictionary[area.areaInfo.areaIndex]);
         }
     }
 
@@ -154,16 +160,27 @@ public class RoundEnemyDirector : MonoBehaviour
         areasScriptsInEffect.Add(playerAreaInfo);
         foreach (int connectedIndex in playerAreaInfo.areaInfo.connectedAreasIndex)
         {
-            if (allAreaDictionary.TryGetValue(connectedIndex, out AreaChecker area) && area.AreaAvailable)
+            Debug.Log(connectedIndex);
+            if (allAreaDictionary.TryGetValue(connectedIndex, out AreaChecker area))
             {
+                Debug.Log(area.areaInfo.areaName);
+                Debug.Log(area.AreaAvailable);
                 areasScriptsInEffect.Add(area);
             }
         }
-
+        Debug.Log(areasScriptsInEffect[0].areaInfo.areaName);
         foreach (var area in areasScriptsInEffect)
         {
-            listOfSpawnLocations.AddRange(area.areaInfo.spawnPoints);
-            Debug.Log(area.areaInfo.spawnPoints);
+            listOfSpawnLocations.AddRange(area.spawnPoints);
+            Debug.Log(area.spawnPoints);
+        }
+    }
+
+    public void NewSpawnersUnlocked(int commonId, int areaID)
+    {
+        if (allAreaDictionary.TryGetValue(areaID, out AreaChecker area))
+        {
+            area.UpdatedAvailableSpawningPoints();
         }
     }
 }

@@ -18,7 +18,7 @@ public class InteractionItem : MonoBehaviour
 
     public static Action<GameObject, int, bool> passingInteractibleToPlayer;
 
-    public static Action<int> doorOpened;
+    public static Action<int, int> doorOpened;
 
     public static Action<bool, string, int> itemBeingLookedAt;
 
@@ -61,7 +61,7 @@ public class InteractionItem : MonoBehaviour
         if (gunScript == null){ pickupable = true; }
 
         if (scriptableObjectToInteract.action == "Buyable Door") {
-            doorOpened?.Invoke(scriptableObjectToInteract.commonId);
+            doorOpened?.Invoke(scriptableObjectToInteract.commonId, scriptableObjectToInteract.areaID);
         }
 
         passingInteractibleToPlayer?.Invoke(gameObject, scriptableObjectToInteract.pointsCost, pickupable);

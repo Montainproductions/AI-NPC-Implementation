@@ -8,7 +8,6 @@ public class Zombies : MonoBehaviour
     [SerializeField]
     private NavMeshAgent agent;
 
-    [SerializeField]
     private Transform[] allPlayerArray;
     private Transform closestPlayer;
 
@@ -44,5 +43,9 @@ public class Zombies : MonoBehaviour
         }
     }
 
+    public void SetPlayerTransforms(Transform[] allPlayerTransforms)
+    {
+        allPlayerArray = allPlayerTransforms;
+    }
     
 }

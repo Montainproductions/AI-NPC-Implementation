@@ -51,7 +51,7 @@ public class GameMode_Match : MonoBehaviour
         InteractionItem.doorOpened -= RemoveAreaDoors;
     }
 
-    public void RemoveAreaDoors(int commonId)
+    public void RemoveAreaDoors(int commonId, int areaID)
     {
         for (int i = buyableObjects.Count - 1; i >= 0; i--)
         {

@@ -8,7 +8,17 @@ public class AreaChecker : MonoBehaviour
 
     public bool AreaAvailable;
 
+    public SpawningLocations[] spawnPoints;
+
     public static Action<AreaChecker> checkArea;
+
+    public void UpdatedAvailableSpawningPoints()
+    {
+        for (int i = 0; i < spawnPoints.Length; i++)
+        {
+            spawnPoints[i].SpawningLocationBecomeAvailable();
+        }
+    }
 
     public void OnTriggerStay(Collider other)
     {
