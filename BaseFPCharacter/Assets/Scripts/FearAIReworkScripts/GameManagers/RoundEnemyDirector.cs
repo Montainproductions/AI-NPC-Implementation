@@ -22,7 +22,7 @@ public class RoundEnemyDirector : MonoBehaviour
     private GameObject zombiePrefab;
 
     private double enemyMaxHP = 0, roundHPIncreaseChange;
-    private int enemiesLeftToSpawn, maxEnemiesToSpawn = 6, enemiesSpawnedIn, maxEnemiesSpawnedIn = 20;
+    private int enemiesLeftToSpawn, enemiesSpawnedIn, maxEnemiesSpawnedIn = 20;
     private int[] speedOfZombies = new int[3];
 
     public Action newRound;
@@ -68,12 +68,31 @@ public class RoundEnemyDirector : MonoBehaviour
     {
         AreaChecker.checkArea += PlayersCurrentArea;
         InteractionItem.doorOpened += NewSpawnersUnlocked;
+        GameMode_Match.matchStart += StartMatch;
     }
 
     public void UnBindEvent()
     {
         AreaChecker.checkArea -= PlayersCurrentArea;
         InteractionItem.doorOpened -= NewSpawnersUnlocked;
+        GameMode_Match.matchStart -= StartMatch;
+    }
+
+    public void StartMatch(GameObject[] startingWeapons)
+    {
+        StartCoroutine(StartMatchCoroutine());
+    }
+
+    public IEnumerator StartMatchCoroutine()
+    {
+        yield return new WaitForEndOfFrame();
+
+        int commonIdNN = -1;
+        int areaID = 0;
+
+        NewSpawnersUnlocked(commonIdNN, areaID);
+
+        StartRound();
     }
 
     public void StartRound()
@@ -81,7 +100,6 @@ public class RoundEnemyDirector : MonoBehaviour
         GameMode_Match.Instance.IncreaseCurrentRound();
 
         int round = GameMode_Match.Instance.GetCurrentRound();
-
         if (round <= roundHPIncreaseChange)
         {
             enemyMaxHP += 100;
@@ -91,7 +109,8 @@ public class RoundEnemyDirector : MonoBehaviour
             enemyMaxHP *= 1.15;
         }
 
-        maxEnemiesToSpawn = (int)(0.35853 * (round) - 1.70944);
+        enemiesLeftToSpawn = (int)((0.0541695* MathF.Pow(round,2)) +1.75191 * round + 4.68158);
+        StartCoroutine(SpawningCheck());
     }
 
     public void EndRound()
@@ -107,17 +126,16 @@ public class RoundEnemyDirector : MonoBehaviour
 
     IEnumerator SpawningCheck()
     {
-        yield return new WaitForSeconds(0.1f);
-
-        if (enemiesLeftToSpawn <=0) { 
+        yield return new WaitForSeconds(2f);
+        if (enemiesSpawnedIn <= 0 && enemiesLeftToSpawn <=0) { 
             EndRound();
-            yield return null;
+            yield break;
         }
 
-        if (enemiesSpawnedIn >= maxEnemiesSpawnedIn)
+        if (enemiesSpawnedIn >= maxEnemiesSpawnedIn || enemiesLeftToSpawn <= 0)
         {
             StartCoroutine(SpawningCheck());
-            yield return null;
+            yield break;
         }
 
         SpawnEnemy();
@@ -146,8 +164,7 @@ public class RoundEnemyDirector : MonoBehaviour
         allAreaDictionary = new Dictionary<int, AreaChecker>();
         foreach (AreaChecker area in allAreaInfos)
         {
-            allAreaDictionary[area.areaInfo.areaIndex] = area;
-            Debug.Log(allAreaDictionary[area.areaInfo.areaIndex]);
+            allAreaDictionary[area.areaInfo.areaID] = area;
         }
     }
 
@@ -160,19 +177,14 @@ public class RoundEnemyDirector : MonoBehaviour
         areasScriptsInEffect.Add(playerAreaInfo);
         foreach (int connectedIndex in playerAreaInfo.areaInfo.connectedAreasIndex)
         {
-            Debug.Log(connectedIndex);
             if (allAreaDictionary.TryGetValue(connectedIndex, out AreaChecker area))
             {
-                Debug.Log(area.areaInfo.areaName);
-                Debug.Log(area.AreaAvailable);
                 areasScriptsInEffect.Add(area);
             }
         }
-        Debug.Log(areasScriptsInEffect[0].areaInfo.areaName);
         foreach (var area in areasScriptsInEffect)
         {
             listOfSpawnLocations.AddRange(area.spawnPoints);
-            Debug.Log(area.spawnPoints);
         }
     }
 

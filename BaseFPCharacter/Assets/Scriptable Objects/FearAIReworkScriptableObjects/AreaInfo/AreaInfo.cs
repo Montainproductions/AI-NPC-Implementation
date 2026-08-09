@@ -4,7 +4,7 @@ using UnityEngine;
 public class AreaInfo : ScriptableObject
 {
     public string areaName;
-    public int areaIndex;
+    public int areaID;
 
     public int[] connectedAreasIndex;
 }

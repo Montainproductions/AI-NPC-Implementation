@@ -6,6 +6,9 @@ public class SpawningLocations : MonoBehaviour
 
     public bool availableSpawningLocation = false;
 
+    public bool recentlySpawnedZombie = false;
+    public int timeBetweenSpawns = 1;
+
     public void SpawningLocationBecomeAvailable()
     {
         availableSpawningLocation = true;

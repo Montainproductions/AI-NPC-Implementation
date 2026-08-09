@@ -4978,6 +4978,8 @@ MonoBehaviour:
   m_EditorClassIdentifier: Assembly-CSharp::SpawningLocations
   area: 0
   availableSpawningLocation: 0
+  recentlySpawnedZombie: 0
+  timeBetweenSpawns: 1
 --- !u!1 &685173603
 GameObject:
   m_ObjectHideFlags: 0
@@ -7488,6 +7490,8 @@ MonoBehaviour:
   m_EditorClassIdentifier: Assembly-CSharp::SpawningLocations
   area: 0
   availableSpawningLocation: 0
+  recentlySpawnedZombie: 0
+  timeBetweenSpawns: 1
 --- !u!1 &946856836
 GameObject:
   m_ObjectHideFlags: 0
@@ -12136,6 +12140,8 @@ MonoBehaviour:
   m_EditorClassIdentifier: Assembly-CSharp::SpawningLocations
   area: 0
   availableSpawningLocation: 0
+  recentlySpawnedZombie: 0
+  timeBetweenSpawns: 1
 --- !u!1 &1325191405
 GameObject:
   m_ObjectHideFlags: 0
@@ -12492,7 +12498,7 @@ MonoBehaviour:
   m_Center: {x: 0, y: 2, z: 0}
   m_LayerMask:
     serializedVersion: 2
-    m_Bits: 4294967295
+    m_Bits: 3071
   m_UseGeometry: 0
   m_DefaultArea: 0
   m_GenerateLinks: 0
@@ -12501,7 +12507,7 @@ MonoBehaviour:
   m_OverrideTileSize: 0
   m_TileSize: 256
   m_OverrideVoxelSize: 0
-  m_VoxelSize: 0.083333336
+  m_VoxelSize: 0.18333334
   m_MinRegionArea: 2
   m_NavMeshData: {fileID: 23800000, guid: 80ab9bd27b50a5942b06de3c8ad28c71, type: 2}
   m_BuildHeightMesh: 0
@@ -13752,6 +13758,8 @@ MonoBehaviour:
   m_EditorClassIdentifier: Assembly-CSharp::SpawningLocations
   area: 0
   availableSpawningLocation: 0
+  recentlySpawnedZombie: 0
+  timeBetweenSpawns: 1
 --- !u!1 &1554486198
 GameObject:
   m_ObjectHideFlags: 0
@@ -16355,13 +16363,13 @@ Transform:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 1823431360}
   serializedVersion: 2
-  m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
-  m_LocalPosition: {x: -44.5, y: 1.48, z: -27.83}
-  m_LocalScale: {x: 3.9207208, y: 2.8829775, z: 9.371405}
+  m_LocalRotation: {x: -0, y: 0.04721079, z: -0, w: 0.998885}
+  m_LocalPosition: {x: -44.94, y: 1.48, z: -27.83}
+  m_LocalScale: {x: 4.3492556, y: 2.8829775, z: 9.371405}
   m_ConstrainProportionsScale: 0
   m_Children: []
   m_Father: {fileID: 1023530699}
-  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+  m_LocalEulerAnglesHint: {x: 0, y: 5.412, z: 0}
 --- !u!65 &1823431362
 BoxCollider:
   m_ObjectHideFlags: 0

@@ -17,3 +17,4 @@ MonoBehaviour:
   action: Buyable Door
   objectID: 3
   commonId: 2
+  areaID: 3

@@ -8,7 +8,7 @@ public class GameMode_Match : MonoBehaviour
 
     public List<InteractionItem> buyableObjects = new List<InteractionItem>();
 
-    private int currentRound = 0, typeOfMatch = 0;
+    private int currentRound, typeOfMatch = 0;
 
     private int amountOfPlayers = 1;
 
@@ -82,6 +82,7 @@ public class GameMode_Match : MonoBehaviour
 
         amountOfPlayers = players.Length;
 
+        currentRound = 0;
 
         matchStart?.Invoke(matcheTypes[0].startingWeaponPlayer);
         

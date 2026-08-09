@@ -16,3 +16,5 @@ MonoBehaviour:
   pointsCost: 500
   action: Buyable Door
   objectID: 0
+  commonId: 0
+  areaID: 1
