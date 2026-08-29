@@ -36,16 +36,15 @@ public class Bullet : MonoBehaviour{
     {
         yield return new WaitForSeconds(2f);
         Destroy(gameObject);
-        yield return null;
     }
 
     public void OnTriggerEnter(Collider other){
-        CharacterGeneral charGeneral = other.gameObject.GetComponentInParent<CharacterGeneral>();
+        List<string> mainTag = null;
 
-        if (charGeneral == null) { return; }
+        if (other.gameObject.GetComponentInParent<Zombies>() != null) {
+            mainTag = other.gameObject.GetComponentInParent<Zombies>().GetCharacterData().fullTagList;
+        }
 
-        List<string> mainTag = charGeneral.GetCharacterData().fullTagList;
-        
         if (mainTag == null) { return; }
 
         if (mainTag[0] == "Damagable") {

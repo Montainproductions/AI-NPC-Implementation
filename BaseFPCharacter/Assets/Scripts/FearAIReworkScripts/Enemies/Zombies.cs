@@ -2,9 +2,12 @@ using UnityEngine;
 using UnityEngine.AI;
 using System.Collections;
 
-public class Zombies : MonoBehaviour
+public class Zombies : CharacterGeneral
 {
     private double levelHealth;
+ 
+    public HealthSystem healthSystem;
+
     [SerializeField]
     private NavMeshAgent agent;
 
@@ -31,16 +34,7 @@ public class Zombies : MonoBehaviour
 
     public void SetHealth(double newHealth)
     {
-        levelHealth = newHealth;
-    }
-
-    public void AffectHealth(double amountToEffect)
-    {
-        levelHealth -= amountToEffect;
-        if (levelHealth <=0)
-        {
-
-        }
+        healthSystem.SetHealth(newHealth);
     }
 
     public void SetPlayerTransforms(Transform[] allPlayerTransforms)

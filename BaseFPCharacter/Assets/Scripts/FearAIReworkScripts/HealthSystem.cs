@@ -8,12 +8,12 @@ public class HealthSystem : MonoBehaviour
     [SerializeField]
     [Tooltip("Current health that the character has at any point.")]
     [Range(0, 1000)]
-    private float currentHealth;
+    private double currentHealth;
 
     [SerializeField]
     [Tooltip("Max health character can have at any point in time.")]
     [Range(0, 1000)]
-    private float maxHealth;
+    private double maxHealth;
 
     [SerializeField]
     [Tooltip("Can the character heal healingRate HP per second?")]
@@ -48,6 +48,8 @@ public class HealthSystem : MonoBehaviour
 
     public void GetHit(float healthDamage, string bodyPartHit, string fromWho)
     {
+        Debug.Log("Got Hit by: " + fromWho);
+        Debug.Log(" ");
         recentlyHit = true;
 
         switch (bodyPartHit)
@@ -63,6 +65,8 @@ public class HealthSystem : MonoBehaviour
                 break;
         }
 
+        Debug.Log("Current Health is: " + currentHealth);
+        Debug.Log(" ");
         if (currentHealth <= 0)
         {
             Death(bodyPartHit, fromWho);
@@ -101,12 +105,18 @@ public class HealthSystem : MonoBehaviour
         StartCoroutine(HealingOverTime());
     }
 
-    public float CurrentHealthValue()
+    public void SetHealth(double newMaxHealth)
+    {
+        maxHealth = newMaxHealth;
+        currentHealth = newMaxHealth;
+    }
+
+    public double CurrentHealthValue()
     {
         return currentHealth;
     }
 
-    public float MaxHealthValue()
+    public double MaxHealthValue()
     {
         return maxHealth;
     }

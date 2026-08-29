@@ -237,6 +237,7 @@ GameObject:
   - component: {fileID: 6889173839255441766}
   - component: {fileID: 2203661727839422535}
   - component: {fileID: 8788809136253113888}
+  - component: {fileID: 7299842650115971940}
   m_Layer: 0
   m_Name: ZombieBase
   m_TagString: Untagged
@@ -295,4 +296,22 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: db18c78f77012b6469157bebc8411b2a, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::Zombies
+  characterData: {fileID: 11400000, guid: 4dbfa7593bd2fd142ba8aba86418eca5, type: 2}
+  healthSystem: {fileID: 7299842650115971940}
   agent: {fileID: 2203661727839422535}
+--- !u!114 &7299842650115971940
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 9150063464675465558}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 8cf1f5e926363604fa07daf4d298fdb4, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::HealthSystem
+  currentHealth: 0
+  maxHealth: 100
+  healingOverTimeAllowed: 0
+  healingRate: 0
