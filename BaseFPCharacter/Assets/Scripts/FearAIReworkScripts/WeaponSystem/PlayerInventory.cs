@@ -26,10 +26,13 @@ public class PlayerInventory : MonoBehaviour
 
     private int primaryUtilityAmount, maxPrimaryUtility, secondaryUtilityAmount, maxSecondaryUtility;
 
-    public static Action<GunInfo> reloadEvent;
-
     [SerializeField]
     private CharacterData characterData;
+
+    [SerializeField]
+    private int pointsThroughOutMatch, totalkills, downs, revives;
+
+    public static Action<GunInfo> reloadEvent;
 
     public void Awake()
     {
@@ -220,11 +223,13 @@ public class PlayerInventory : MonoBehaviour
         yield return new WaitForSeconds(0.01f);
 
         currentPoints = startingPoints;
+        SetPointsUI();
     }
 
     public void ChangePoints(int points)
     {
         currentPoints += points;
+
         SetPointsUI();
     }
 
@@ -236,6 +241,11 @@ public class PlayerInventory : MonoBehaviour
     public int GetPlayerPoints()
     {
         return currentPoints;
+    }
+
+    public void EndMatch()
+    {
+
     }
 
     public void OnDestroy()

@@ -42,14 +42,19 @@ public class HealthSystem : MonoBehaviour
 
     void Death(string bodyPartHit, string fromWho)
     {
-        gameObject.GetComponent<NonPlayerCharacter>().WhatKilledThem(bodyPartHit, fromWho);
+        if (gameObject.GetComponent<PlayerInventory>() != null)
+        {
+            gameObject.GetComponent<PlayerInventory>().EndMatch();
+        }
+
+        if (gameObject.GetComponent<Zombies>() != null) {
+            gameObject.GetComponent<Zombies>().WhatKilledThem(bodyPartHit, fromWho); 
+        }
         Destroy(gameObject);
     }
 
     public void GetHit(float healthDamage, string bodyPartHit, string fromWho)
     {
-        Debug.Log("Got Hit by: " + fromWho);
-        Debug.Log(" ");
         recentlyHit = true;
 
         switch (bodyPartHit)
@@ -65,12 +70,10 @@ public class HealthSystem : MonoBehaviour
                 break;
         }
 
-        Debug.Log("Current Health is: " + currentHealth);
-        Debug.Log(" ");
         if (currentHealth <= 0)
         {
             Death(bodyPartHit, fromWho);
-            return;
+            //return;
         }else if (currentHealth <= (maxHealth * 0.2))
         {
             //LowHealthUI();

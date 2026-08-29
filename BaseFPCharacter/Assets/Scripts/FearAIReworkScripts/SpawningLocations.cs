@@ -17,7 +17,7 @@ public class SpawningLocations : MonoBehaviour
     public void SpawnZombie(GameObject prefabToSpawn, double health, Transform[] playerTransforms)
     {
         if (!availableSpawningLocation) { return; }
-        Debug.Log("Spawning Enemy");
+        //Debug.Log("Spawning Enemy");
         GameObject newZombie = Instantiate(prefabToSpawn, transform.position, transform.rotation);
         newZombie.GetComponent<Zombies>().SetHealth(health);
         newZombie.GetComponent<Zombies>().SetPlayerTransforms(playerTransforms);

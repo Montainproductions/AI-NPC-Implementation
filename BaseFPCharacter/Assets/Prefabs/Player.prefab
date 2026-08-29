@@ -475,9 +475,14 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::PlayerItemsHandInfo
   currentPoints: 500
+  startingPoints: 500
   handPosition: {fileID: 4179851211428527127}
   secondaryWeaponPosition: {fileID: 3815801727191099813}
   characterData: {fileID: 11400000, guid: 0223cf9d77e4a954e80c03fb9254def1, type: 2}
+  pointsThroughOutMatch: 0
+  totalkills: 0
+  downs: 0
+  revives: 0
 --- !u!114 &6329079206858032855
 MonoBehaviour:
   m_ObjectHideFlags: 0

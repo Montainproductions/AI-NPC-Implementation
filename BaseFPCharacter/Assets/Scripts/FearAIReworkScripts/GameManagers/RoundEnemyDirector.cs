@@ -21,7 +21,7 @@ public class RoundEnemyDirector : MonoBehaviour
     [SerializeField]
     private GameObject zombiePrefab;
 
-    private double enemyMaxHP = 0, roundHPIncreaseChange;
+    private double enemyMaxHP = 0, roundHPIncreaseChange = 12;
     private int enemiesLeftToSpawn, enemiesSpawnedIn, maxEnemiesSpawnedIn = 20;
     private int[] speedOfZombies = new int[3];
 

@@ -297,6 +297,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::Zombies
   characterData: {fileID: 11400000, guid: 4dbfa7593bd2fd142ba8aba86418eca5, type: 2}
+  pointsOnElimination: 3c0000007800000028000000
   healthSystem: {fileID: 7299842650115971940}
   agent: {fileID: 2203661727839422535}
 --- !u!114 &7299842650115971940

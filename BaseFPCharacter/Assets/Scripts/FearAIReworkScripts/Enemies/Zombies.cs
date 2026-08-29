@@ -2,7 +2,7 @@ using UnityEngine;
 using UnityEngine.AI;
 using System.Collections;
 
-public class Zombies : CharacterGeneral
+public class Zombies : NonPlayerCharacter
 {
     private double levelHealth;
  
@@ -34,6 +34,7 @@ public class Zombies : CharacterGeneral
 
     public void SetHealth(double newHealth)
     {
+        Debug.Log(newHealth);
         healthSystem.SetHealth(newHealth);
     }
 
